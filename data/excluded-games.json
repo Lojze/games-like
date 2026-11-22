@@ -1,0 +1,783 @@
+{
+  "reason": "single-feel-tag",
+  "count": 111,
+  "games": [
+    {
+      "slug": "astebreed",
+      "name": "Astebreed",
+      "feel_tags": [
+        "surreal"
+      ]
+    },
+    {
+      "slug": "audiosurf",
+      "name": "AudioSurf",
+      "feel_tags": [
+        "relaxing"
+      ]
+    },
+    {
+      "slug": "baba-is-you",
+      "name": "Baba Is You",
+      "feel_tags": [
+        "puzzle-heavy"
+      ]
+    },
+    {
+      "slug": "battlefield-1",
+      "name": "Battlefield 1",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "battlefield-3",
+      "name": "Battlefield 3",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "battlefield-bad-company-2",
+      "name": "Battlefield: Bad Company 2",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "battlefield-bad-company-2-vietnam-2",
+      "name": "Battlefield: Bad Company 2 - Vietnam",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "bayonetta",
+      "name": "Bayonetta",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "bionic-commando-rearmed",
+      "name": "Bionic Commando: Rearmed",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "bittrip-presents-runner2-future-legend-of-rhythm-a",
+      "name": "BIT.TRIP Presents... Runner2: Future Legend of Rhythm Alien",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "black-white",
+      "name": "Black & White",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "bug-princess",
+      "name": "Bug Princess",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "call-of-duty-united-offensive",
+      "name": "Call of Duty: United Offensive",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "castle-crashers",
+      "name": "Castle Crashers",
+      "feel_tags": [
+        "funny"
+      ]
+    },
+    {
+      "slug": "celeste",
+      "name": "Celeste",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "chained-echoes",
+      "name": "Chained Echoes",
+      "feel_tags": [
+        "exploration-driven"
+      ]
+    },
+    {
+      "slug": "cities-skylines",
+      "name": "Cities: Skylines",
+      "feel_tags": [
+        "funny"
+      ]
+    },
+    {
+      "slug": "command-conquer-3-tiberium-wars",
+      "name": "Command & Conquer 3: Tiberium Wars",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "commandos-2-men-of-courage",
+      "name": "Commandos 2: Men of Courage",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "crimzon-clover-world-ignition-2",
+      "name": "Crimzon Clover: World Ignition",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "crypt-of-the-necrodancer",
+      "name": "Crypt of the NecroDancer",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "cut-the-rope",
+      "name": "Cut the Rope",
+      "feel_tags": [
+        "puzzle-heavy"
+      ]
+    },
+    {
+      "slug": "darwinia",
+      "name": "Darwinia",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "day-of-the-tentacle-remastered",
+      "name": "Day of the Tentacle Remastered",
+      "feel_tags": [
+        "funny"
+      ]
+    },
+    {
+      "slug": "deathloop-2",
+      "name": "Deathloop",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "defcon",
+      "name": "DEFCON",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "devil-may-cry-5",
+      "name": "Devil May Cry 5",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "disciples-ii-galleans-return",
+      "name": "Disciples II: Gallean's Return",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "disco-elysium",
+      "name": "Disco Elysium",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "divinity-original-sin-enhanced-edition",
+      "name": "Divinity: Original Sin - Enhanced Edition",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "doom-eternal",
+      "name": "DOOM Eternal",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "dota-2",
+      "name": "Dota 2",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "dragon-quest-builders-2",
+      "name": "Dragon Quest Builders 2",
+      "feel_tags": [
+        "cute"
+      ]
+    },
+    {
+      "slug": "dragon-quest-xi",
+      "name": "DRAGON QUEST XI: Echoes of an Elusive Age",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "dying-light-the-following-enhanced-edition",
+      "name": "Dying Light: The Following - Enhanced Edition",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "empire-total-war",
+      "name": "Empire: Total War",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "f1-2020",
+      "name": "F1 2020",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "final-fantasy-xii-the-zodiac-age",
+      "name": "Final Fantasy XII: The Zodiac Age",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "flower",
+      "name": "Flower",
+      "feel_tags": [
+        "exploration-driven"
+      ]
+    },
+    {
+      "slug": "forza-motorsport",
+      "name": "Forza Motorsport (2005)",
+      "feel_tags": [
+        "narrative-choice"
+      ]
+    },
+    {
+      "slug": "freespace-2",
+      "name": "Freespace 2",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "frozen-synapse",
+      "name": "Frozen Synapse",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "game-dev-story",
+      "name": "Game Dev Story",
+      "feel_tags": [
+        "cute"
+      ]
+    },
+    {
+      "slug": "giana-sisters-rise-of-the-owlverlord-2",
+      "name": "Giana Sisters: Twisted Dreams - Rise of the Owlverlord",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "guacamelee-2",
+      "name": "Guacamelee! 2",
+      "feel_tags": [
+        "funny"
+      ]
+    },
+    {
+      "slug": "guacamelee-super-turbo-championship-edition",
+      "name": "Guacamelee! Super Turbo Championship Edition",
+      "feel_tags": [
+        "funny"
+      ]
+    },
+    {
+      "slug": "halo-combat-evolved",
+      "name": "Halo: Combat Evolved",
+      "feel_tags": [
+        "combat-focused"
+      ]
+    },
+    {
+      "slug": "hitman-2-silent-assassin",
+      "name": "Hitman 2: Silent Assassin",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "jet-set-radio-2012",
+      "name": "Jet Set Radio",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "labyrinth-2",
+      "name": "Labyrinth 2",
+      "feel_tags": [
+        "relaxing"
+      ]
+    },
+    {
+      "slug": "labyrinth-of-galleria-coven-of-dusk",
+      "name": "Labyrinth of Galleria: The Moon Society",
+      "feel_tags": [
+        "dark"
+      ]
+    },
+    {
+      "slug": "left-4-dead",
+      "name": "Left 4 Dead",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "mafia-the-city-of-lost-heaven",
+      "name": "Mafia: The City of Lost Heaven",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "mass-effect-3",
+      "name": "Mass Effect 3",
+      "feel_tags": [
+        "combat-focused"
+      ]
+    },
+    {
+      "slug": "medieval-total-war-collection",
+      "name": "Medieval: Total War - Collection",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "mega-man-legacy-collection-2",
+      "name": "Mega Man Legacy Collection / ロックマン クラシックス コレクション",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "mega-man-x-legacy-collection",
+      "name": "Mega Man X Legacy Collection",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "monkey-island-2-se",
+      "name": "Monkey Island 2 Special Edition: LeChuck’s Revenge",
+      "feel_tags": [
+        "funny"
+      ]
+    },
+    {
+      "slug": "monument-valley",
+      "name": "Monument Valley",
+      "feel_tags": [
+        "exploration-driven"
+      ]
+    },
+    {
+      "slug": "monument-valley-2",
+      "name": "Monument Valley 2",
+      "feel_tags": [
+        "puzzle-heavy"
+      ]
+    },
+    {
+      "slug": "moss",
+      "name": "Moss",
+      "feel_tags": [
+        "cute"
+      ]
+    },
+    {
+      "slug": "n-nplusplus",
+      "name": "N++ (NPLUSPLUS)",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "nba-2k16",
+      "name": "NBA 2K16",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "neon-white",
+      "name": "Neon White",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "nex-machina",
+      "name": "Nex Machina",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "orcs-must-die-unchained",
+      "name": "Orcs Must Die! Unchained",
+      "feel_tags": [
+        "funny"
+      ]
+    },
+    {
+      "slug": "pro-evolution-soccer-2018",
+      "name": "Pro Evolution Soccer 2018",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "quake",
+      "name": "Quake",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "resident-evil-2-2019",
+      "name": "Resident Evil 2",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "return-to-castle-wolfenstein",
+      "name": "Return to Castle Wolfenstein",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "rift",
+      "name": "RIFT",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "rimworld",
+      "name": "RimWorld",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "rise-of-nations-extended-edition",
+      "name": "Rise of Nations: Extended Edition",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "rocket-league",
+      "name": "Rocket League",
+      "feel_tags": [
+        "funny"
+      ]
+    },
+    {
+      "slug": "rogue-legacy-2",
+      "name": "Rogue Legacy 2",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "rome-total-war-collection",
+      "name": "Rome: Total War - Collection",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "sacrifice",
+      "name": "Sacrifice",
+      "feel_tags": [
+        "surreal"
+      ]
+    },
+    {
+      "slug": "saints-row-iv",
+      "name": "Saints Row IV",
+      "feel_tags": [
+        "funny"
+      ]
+    },
+    {
+      "slug": "sea-of-stars-2",
+      "name": "Sea of Stars",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "sid-meiers-civilization-iii-complete",
+      "name": "Sid Meier's Civilization III Complete",
+      "feel_tags": [
+        "exploration-driven"
+      ]
+    },
+    {
+      "slug": "sonic-adventure-2",
+      "name": "Sonic Adventure 2",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "spacechem",
+      "name": "SpaceChem",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "speedrunners",
+      "name": "SpeedRunners",
+      "feel_tags": [
+        "funny"
+      ]
+    },
+    {
+      "slug": "steamworld-dig-2",
+      "name": "SteamWorld Dig 2",
+      "feel_tags": [
+        "puzzle-heavy"
+      ]
+    },
+    {
+      "slug": "steinsgate-elite",
+      "name": "STEINS;GATE ELITE",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "sunless-skies",
+      "name": "Sunless Skies",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "super-hexagon",
+      "name": "Super Hexagon",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "team-fortress-2",
+      "name": "Team Fortress 2",
+      "feel_tags": [
+        "funny"
+      ]
+    },
+    {
+      "slug": "teenage-mutant-ninja-turtles-shredders-revenge",
+      "name": "Teenage Mutant Ninja Turtles: Shredder's Revenge",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "the-curse-of-monkey-island",
+      "name": "The Curse of Monkey Island",
+      "feel_tags": [
+        "funny"
+      ]
+    },
+    {
+      "slug": "the-legend-of-heroes-trails-in-the-sky",
+      "name": "The Legend of Heroes: Trails in the Sky",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "the-orange-box",
+      "name": "The Orange Box",
+      "feel_tags": [
+        "puzzle-heavy"
+      ]
+    },
+    {
+      "slug": "the-sims-3",
+      "name": "The Sims 3",
+      "feel_tags": [
+        "funny"
+      ]
+    },
+    {
+      "slug": "the-witcher-2-assassins-of-kings",
+      "name": "The Witcher 2: Assassins of Kings",
+      "feel_tags": [
+        "combat-focused"
+      ]
+    },
+    {
+      "slug": "titanfall",
+      "name": "Titanfall",
+      "feel_tags": [
+        "combat-focused"
+      ]
+    },
+    {
+      "slug": "tony-hawks-pro-skater-12",
+      "name": "Tony Hawk's Pro Skater 1 + 2",
+      "feel_tags": [
+        "punishing"
+      ]
+    },
+    {
+      "slug": "torchlight-ii",
+      "name": "Torchlight II",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "total-annihilation",
+      "name": "Total Annihilation",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "total-war-warhammer-ii",
+      "name": "Total War: WARHAMMER II",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "towerfall",
+      "name": "TowerFall Ascension",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "trials-evolution-gold-edition",
+      "name": "Trials Evolution: Gold Edition",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "tribes-ascend",
+      "name": "Tribes: Ascend",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "trine-2-complete-story",
+      "name": "Trine 2: Complete Story",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "tumblestone",
+      "name": "Tumblestone",
+      "feel_tags": [
+        "puzzle-heavy"
+      ]
+    },
+    {
+      "slug": "turbo-dismount",
+      "name": "Turbo Dismount",
+      "feel_tags": [
+        "funny"
+      ]
+    },
+    {
+      "slug": "unity-of-command-stalingrad-campaign",
+      "name": "Unity of Command: Stalingrad Campaign",
+      "feel_tags": [
+        "difficult"
+      ]
+    },
+    {
+      "slug": "unreal-tournament-2004-editors-choice-edition",
+      "name": "Unreal Tournament 2004: Editor's Choice Edition",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "valkyria-chronicles",
+      "name": "Valkyria Chronicles",
+      "feel_tags": [
+        "story-rich"
+      ]
+    },
+    {
+      "slug": "warhammer-40000-dawn-of-war-dark-crusade",
+      "name": "Warhammer 40,000: Dawn of War - Dark Crusade",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "warhammer-40k-dawn-of-war-ii",
+      "name": "Warhammer 40,000: Dawn of War II",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    },
+    {
+      "slug": "yakuza-kiwami-2",
+      "name": "Yakuza Kiwami 2",
+      "feel_tags": [
+        "atmospheric"
+      ]
+    }
+  ]
+}

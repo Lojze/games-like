@@ -1,0 +1,22 @@
+---
+/**
+ * 游戏封面：深色渐变块 + 游戏首字母永远在底层。
+ * - background_image 存在 → 图片绝对定位盖在渐变块上
+ * - 为空或加载失败 → 图片被隐藏/不渲染，自然露出渐变块与首字母，不出现破图图标
+ * 色相由 slug 稳定派生，让不同游戏的占位封面有区分度。
+ */
+interface Props {
+  name: string;
+  cover: string | null;
+  hue: number;
+}
+
+const { name, cover, hue } = Astro.props;
+const initial = (name.trim()[0] ?? '?').toUpperCase();
+const hue2 = (hue + 42) % 360;
+---
+
+<div class="cover-art" style={`--hue:${hue};--hue2:${hue2}`}>
+  <span class="cover-art__initial" aria-hidden="true">{initial}</span>
+  {cover ? <img src={cover} alt={name} loading="lazy" width="320" height="180" /> : null}
+</div>

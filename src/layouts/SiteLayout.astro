@@ -1,0 +1,62 @@
+---
+import Layout from './Layout.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  /** 详情页用窄栏，首页用宽栏 */
+  narrow?: boolean;
+}
+
+const { title, description, ogTitle, ogDescription, ogImage, narrow = false } = Astro.props;
+---
+
+<Layout
+  title={title}
+  description={description}
+  ogTitle={ogTitle}
+  ogDescription={ogDescription}
+  ogImage={ogImage}
+>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="/">
+        <span class="brand__mark" aria-hidden="true">G</span>
+        <span class="brand__text">Games by Feel</span>
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="/">Home</a>
+        <a href="/games-like/hades-2018/">Example picks</a>
+        <a href="https://rawg.io" target="_blank" rel="noopener noreferrer">RAWG ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class:list={['page-main', { 'page-main--narrow': narrow }]}>
+    <slot />
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <span>Discover games by how they feel, not by genre.</span>
+      <span>Powered by <a href="https://rawg.io" target="_blank" rel="noopener noreferrer">RAWG</a></span>
+    </div>
+  </footer>
+
+  <script>
+    // 封面图片加载失败时隐藏 <img>，露出底层的渐变块 + 首字母，避免破图图标
+    function guardCovers() {
+      document.querySelectorAll<HTMLImageElement>('.cover-art img').forEach((img) => {
+        const hide = () => img.classList.add('is-hidden');
+        img.addEventListener('error', hide, { once: true });
+        // 图片在脚本执行前就已失败（例如来自缓存）的情况
+        if (img.complete && img.naturalWidth === 0) hide();
+      });
+    }
+    guardCovers();
+    document.addEventListener('astro:page-load', guardCovers);
+  </script>
+</Layout>

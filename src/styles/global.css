@@ -1,0 +1,1415 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------
+   现代暗黑游戏风 —— 设计 token（Tailwind v4 @theme）
+   比 Steam / Epic 更干净：极深灰蓝底 + 稍亮的深灰卡片 + 青紫电竞高光
+   --------------------------------------------------------------- */
+@theme {
+  --color-ink: #0b1120;
+  --color-ink-soft: #101a2d;
+  --color-panel: #1e293b;
+  --color-panel-hi: #24334a;
+  --color-edge: #334155;
+  --color-frost: #f1f5f9;
+  --color-mist: #94a3b8;
+  --color-dim: #64748b;
+  --color-neon: #38bdf8;
+  --color-violet: #a78bfa;
+  --color-good: #4ade80;
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+
+  /* 与 @theme 同值显式兜底：即使 Tailwind 对未使用变量做 tree-shaking，
+     自定义 CSS 里的 var(--color-*) 也始终有值 */
+  --color-ink: #0b1120;
+  --color-ink-soft: #101a2d;
+  --color-panel: #1e293b;
+  --color-panel-hi: #24334a;
+  --color-edge: #334155;
+  --color-frost: #f1f5f9;
+  --color-mist: #94a3b8;
+  --color-dim: #64748b;
+  --color-neon: #38bdf8;
+  --color-violet: #a78bfa;
+  --color-good: #4ade80;
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  color: var(--color-frost);
+  background-color: var(--color-ink);
+  /* 顶部两团极淡的青/紫光晕，避免纯黑死板 */
+  background-image:
+    radial-gradient(900px 460px at 12% -12%, rgba(56, 189, 248, 0.13), transparent 70%),
+    radial-gradient(760px 420px at 92% -6%, rgba(167, 139, 250, 0.12), transparent 70%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: rgba(56, 189, 248, 0.3);
+  color: #fff;
+}
+
+/* ── 页面骨架 ───────────────────────────────────────────────── */
+.site-header {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(11, 17, 32, 0.72);
+  backdrop-filter: blur(12px);
+}
+
+.site-header__inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 1.02rem;
+  letter-spacing: -0.02em;
+}
+
+.brand__mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--color-neon), var(--color-violet));
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.4);
+  display: grid;
+  place-items: center;
+  color: #0b1120;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.brand__text {
+  background: linear-gradient(100deg, #ffffff 10%, #7dd3fc 58%, #c4b5fd 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  font-size: 0.88rem;
+  color: var(--color-mist);
+}
+
+.site-nav a {
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.site-nav a:hover {
+  color: var(--color-neon);
+}
+
+.page-main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 40px 24px 72px;
+}
+
+.page-main--narrow {
+  max-width: 820px;
+}
+
+.site-footer {
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
+  color: var(--color-dim);
+  font-size: 0.84rem;
+}
+
+.site-footer__inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 26px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.site-footer a {
+  color: var(--color-neon);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ── Hero ───────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 22px;
+  padding: 46px 44px 42px;
+  margin-bottom: 44px;
+  background:
+    radial-gradient(560px 260px at 8% 0%, rgba(56, 189, 248, 0.16), transparent 70%),
+    radial-gradient(520px 280px at 96% 100%, rgba(167, 139, 250, 0.14), transparent 70%),
+    linear-gradient(135deg, #17263f 0%, #0e1729 52%, #171432 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 20px 50px rgba(0, 0, 0, 0.34);
+}
+
+/* 极淡网格纹理，增加游戏 UI 的科技感 */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.055) 1px, transparent 1px);
+  background-size: 36px 36px;
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 88%);
+  mask-image: linear-gradient(to bottom, #000, transparent 88%);
+  pointer-events: none;
+}
+
+.hero__body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 34px;
+}
+
+.hero__copy {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.hero__art {
+  flex: 0 0 auto;
+}
+
+.hero__art .cover-art {
+  width: 168px;
+  height: 168px;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+.hero__art .cover-art__initial {
+  font-size: 4rem;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-neon);
+  margin: 0 0 16px;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 18px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--color-neon), var(--color-violet));
+}
+
+.hero__title {
+  margin: 0 0 16px;
+  font-size: clamp(2rem, 5.2vw, 3.35rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  background: linear-gradient(100deg, #ffffff 8%, #a5e0ff 52%, #cdb9ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 22px rgba(56, 189, 248, 0.22));
+}
+
+.hero__lead {
+  margin: 0;
+  max-width: 64ch;
+  color: #b9c7dc;
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+.hero__actions {
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* 静态搜索框（纯前端 UI） */
+.searchbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(520px, 100%);
+  padding: 7px 7px 7px 16px;
+  border-radius: 13px;
+  border: 1px solid rgba(148, 163, 184, 0.26);
+  background: rgba(11, 17, 32, 0.72);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.searchbox:focus-within {
+  border-color: rgba(56, 189, 248, 0.6);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+}
+
+.searchbox__icon {
+  flex: 0 0 auto;
+  color: var(--color-dim);
+  font-size: 1rem;
+}
+
+.searchbox input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--color-frost);
+  font: inherit;
+  font-size: 0.94rem;
+}
+
+.searchbox input::placeholder {
+  color: var(--color-dim);
+}
+
+.btn-primary {
+  flex: 0 0 auto;
+  border: 0;
+  cursor: pointer;
+  padding: 11px 20px;
+  border-radius: 11px;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #08131f;
+  background: linear-gradient(100deg, #7dd3fc, #a5b4fc);
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.24);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: 0 10px 26px rgba(56, 189, 248, 0.34);
+}
+
+.hero__hint {
+  margin: 14px 0 0;
+  font-size: 0.8rem;
+  color: var(--color-dim);
+}
+
+.hero__hint a {
+  color: #93c5fd;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(147, 197, 253, 0.4);
+}
+
+.hero__hint a:hover {
+  color: var(--color-neon);
+}
+
+/* ── 区块标题 ───────────────────────────────────────────────── */
+.section {
+  margin-top: 48px;
+}
+
+.section__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.section__title {
+  margin: 0;
+  font-size: 1.32rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section__title::before {
+  content: "";
+  width: 4px;
+  height: 20px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--color-neon), var(--color-violet));
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+}
+
+.section__note {
+  color: var(--color-dim);
+  font-size: 0.84rem;
+}
+
+/* ── 暗黑游戏卡片 ───────────────────────────────────────────── */
+.game-grid {
+  display: grid;
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  align-items: stretch;
+}
+
+.game-grid--recs {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.game-grid--popular {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* li 作为 grid item 撑满单元格，卡片才能等高、底部 Badge 才会对齐 */
+.game-grid > li {
+  display: flex;
+  min-width: 0;
+}
+
+.game-card {
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  gap: 15px;
+  align-items: stretch;
+  min-width: 0;
+  width: 100%;
+  padding: 15px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 15px;
+  background: linear-gradient(160deg, var(--color-panel) 0%, #182437 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 6px 18px rgba(0, 0, 0, 0.22);
+  text-decoration: none;
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    background 0.22s ease;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(56, 189, 248, 0.62);
+  background: linear-gradient(160deg, var(--color-panel-hi) 0%, #1b2a41 100%);
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(56, 189, 248, 0.2),
+    0 0 26px rgba(56, 189, 248, 0.16);
+}
+
+.game-card__info {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-card__title {
+  margin: 0 0 8px;
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--color-frost);
+  overflow-wrap: anywhere;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.game-card:hover .game-card__title {
+  color: #ffffff;
+  text-shadow: 0 0 16px rgba(125, 211, 252, 0.4);
+}
+
+.game-card__title a {
+  text-decoration: none;
+}
+
+.game-card__reason {
+  flex: 1 1 auto;
+  margin: 0 0 10px;
+  color: var(--color-mist);
+  font-size: 0.83rem;
+  line-height: 1.55;
+}
+
+/* 首页热门卡片：封面在上、文字在下 */
+.game-card--tile {
+  flex-direction: column;
+  gap: 12px;
+}
+
+.game-card--tile .cover-art {
+  width: 100%;
+  height: 148px;
+  border-radius: 10px;
+}
+
+.game-card--tile .game-card__title {
+  margin: 0 0 2px;
+  font-size: 0.98rem;
+}
+
+/* ── 封面：深色渐变块 + 首字母兜底 ──────────────────────────── */
+.cover-art {
+  position: relative;
+  flex: 0 0 auto;
+  width: 96px;
+  height: 96px;
+  border-radius: 10px;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 120% at 20% 15%, hsl(var(--hue) 62% 30%) 0%, transparent 60%),
+    linear-gradient(140deg, hsl(var(--hue) 48% 22%), hsl(var(--hue2) 55% 12%));
+  display: grid;
+  place-items: center;
+}
+
+/* 首字母永远存在于底层：图片缺失或加载失败时自然露出 */
+.cover-art__initial {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: rgba(255, 255, 255, 0.86);
+  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.45);
+  user-select: none;
+}
+
+.cover-art img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 图片未就绪时不显示破图图标 / alt 文本 */
+  color: transparent;
+  font-size: 0;
+  overflow: hidden;
+  transition: opacity 0.2s ease;
+}
+
+.cover-art img.is-hidden {
+  display: none;
+}
+
+/* ── 辅助信息 Badge ─────────────────────────────────────────── */
+.badges {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 10px;
+  min-width: 0;
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.badge {
+  display: inline-block;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.71rem;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+/* 评分 / 年份是短文本，优先完整保留；类型较长时允许收缩省略，保证整行不换行 */
+.badge--score,
+.badge--year {
+  flex: 0 0 auto;
+}
+
+.badge--score {
+  color: var(--color-good);
+  background: rgba(74, 222, 128, 0.1);
+  border-color: rgba(74, 222, 128, 0.24);
+}
+
+.badge--year {
+  color: #b6c4da;
+  background: rgba(148, 163, 184, 0.09);
+  border-color: rgba(148, 163, 184, 0.18);
+}
+
+.badge--genre {
+  color: #7cc4ff;
+  background: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.24);
+}
+
+/* ── 感受标签药丸 ───────────────────────────────────────────── */
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(30, 41, 59, 0.72);
+  color: #cbd5e1;
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    transform 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.pill:hover {
+  transform: translateY(-3px);
+  color: #ffffff;
+  border-color: rgba(56, 189, 248, 0.62);
+  background: rgba(56, 189, 248, 0.12);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+}
+
+.pill__count {
+  color: var(--color-dim);
+  font-size: 0.74rem;
+  font-weight: 500;
+}
+
+.pill:hover .pill__count {
+  color: #93c5fd;
+}
+
+/* 标签聚合页：当前所在标签高亮 */
+.pill--active {
+  color: #ffffff;
+  border-color: rgba(56, 189, 248, 0.62);
+  background: rgba(56, 189, 248, 0.14);
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.16);
+}
+
+.pill--active .pill__count {
+  color: #bae6fd;
+}
+
+/* ── 标签聚合页：温和空状态 ─────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding: 54px 28px 48px;
+  border: 1px dashed rgba(148, 163, 184, 0.24);
+  border-radius: 18px;
+  background:
+    radial-gradient(420px 200px at 50% 0%, rgba(56, 189, 248, 0.08), transparent 70%),
+    rgba(30, 41, 59, 0.42);
+}
+
+.empty-state__mark {
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--color-violet);
+  text-shadow: 0 0 22px rgba(167, 139, 250, 0.5);
+}
+
+.empty-state__title {
+  margin: 0;
+  font-size: 1.22rem;
+  font-weight: 700;
+  color: var(--color-frost);
+}
+
+.empty-state__hint {
+  margin: 0 0 6px;
+  max-width: 46ch;
+  color: var(--color-mist);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ── 详情页：感受标签小条 ──────────────────────────────────── */
+.feel-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.feel-strip__label {
+  font-size: 0.76rem;
+  color: var(--color-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-right: 4px;
+}
+
+.chip {
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #c4b5fd;
+  background: rgba(167, 139, 250, 0.1);
+  border: 1px solid rgba(167, 139, 250, 0.24);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--color-mist);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+.back-link:hover {
+  color: var(--color-neon);
+}
+
+/* ── 详情页：单列宽卡（封面固定宽高在左，信息在右） ──────────── */
+.game-grid--detail {
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+.game-card--detail {
+  gap: 22px;
+  padding: 20px;
+}
+
+.game-card--detail .cover-art {
+  width: 176px;
+  height: 196px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.game-card--detail .cover-art__initial {
+  font-size: 4.2rem;
+}
+
+.game-card--detail .game-card__title {
+  margin-bottom: 9px;
+  font-size: 1.16rem;
+}
+
+/* 150 字简介：比标题暗一档、比推荐理由亮一档，形成阅读层次 */
+.game-card__blurb {
+  margin: 0 0 13px;
+  color: #c5d3e6;
+  font-size: 0.865rem;
+  line-height: 1.62;
+}
+
+.game-card--detail .game-card__reason {
+  flex: 0 0 auto;
+  margin: 0 0 14px;
+  padding-left: 12px;
+  border-left: 2px solid rgba(167, 139, 250, 0.5);
+  font-size: 0.84rem;
+  line-height: 1.6;
+}
+
+.game-card__reason-tag {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--color-violet);
+}
+
+.game-card--detail .badges {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+/* Steam 按钮：深色底 + 描边，悬停提亮 */
+.steam-btn {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 9px 16px;
+  border: 1px solid rgba(125, 211, 252, 0.42);
+  border-radius: 9px;
+  background: rgba(9, 16, 30, 0.72);
+  color: #bae6fd;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    transform 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.steam-btn:hover {
+  transform: translateY(-2px);
+  color: #ffffff;
+  border-color: rgba(125, 211, 252, 0.9);
+  background: rgba(56, 189, 248, 0.18);
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.22);
+}
+
+.steam-btn__icon {
+  flex: 0 0 auto;
+}
+
+/* ── SEO 文本块（详情页 / 标签页共用） ───────────────────────── */
+.seo-copy {
+  margin-top: 46px;
+  padding: 32px 34px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 18px;
+  background:
+    radial-gradient(520px 220px at 0% 0%, rgba(56, 189, 248, 0.08), transparent 70%),
+    linear-gradient(160deg, rgba(30, 41, 59, 0.62), rgba(16, 26, 45, 0.72));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.seo-copy__inner {
+  max-width: 76ch;
+}
+
+.seo-copy__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 10px;
+  font-size: 1.08rem;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: var(--color-frost);
+}
+
+.seo-copy__title::before {
+  content: "";
+  width: 3px;
+  height: 16px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--color-neon), var(--color-violet));
+}
+
+.seo-copy p {
+  margin: 0 0 26px;
+  color: #b9c7dc;
+  font-size: 0.9rem;
+  line-height: 1.78;
+}
+
+.seo-copy p:last-child {
+  margin-bottom: 0;
+}
+
+.seo-copy a {
+  color: #93c5fd;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(147, 197, 253, 0.45);
+}
+
+.seo-copy a:hover {
+  color: var(--color-neon);
+}
+
+/* ── 响应式 ─────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .game-grid--popular {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .hero {
+    padding: 32px 24px 30px;
+  }
+  .hero__art {
+    display: none;
+  }
+  .game-grid--recs {
+    grid-template-columns: 1fr;
+  }
+  .game-grid--popular {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .page-main {
+    padding: 28px 16px 56px;
+  }
+  /* 窄屏下宽卡改为封面在上、信息在下，避免文字被挤成细长条 */
+  .game-card--detail {
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px;
+  }
+  .game-card--detail .cover-art {
+    width: 100%;
+    height: 172px;
+  }
+  .seo-copy {
+    padding: 24px 20px;
+  }
+}
+
+@media (max-width: 460px) {
+  .game-grid--popular {
+    grid-template-columns: 1fr;
+  }
+  .cover-art {
+    width: 82px;
+    height: 82px;
+  }
+  .hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .searchbox {
+    width: 100%;
+  }
+}
+
+/* ── 全站统一卡片 GameCard ─────────────────────────────────────
+   首页 / 标签页 / 详情页共用；旧 .game-card* 规则保留但不再被引用。 */
+.gc {
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 16px;
+  background: linear-gradient(160deg, var(--color-panel) 0%, #182437 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 6px 18px rgba(0, 0, 0, 0.22);
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    background 0.22s ease;
+}
+
+.gc:hover {
+  transform: translateY(-5px);
+  border-color: rgba(56, 189, 248, 0.62);
+  background: linear-gradient(160deg, var(--color-panel-hi) 0%, #1b2a41 100%);
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(56, 189, 248, 0.2),
+    0 0 26px rgba(56, 189, 248, 0.16);
+}
+
+.gc__cover {
+  padding: 12px 12px 0;
+}
+
+.gc__cover .cover-art {
+  width: 100%;
+  height: 182px;
+  border-radius: 11px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.gc__cover .cover-art__initial {
+  font-size: 3.7rem;
+}
+
+.gc--compact .gc__cover .cover-art {
+  height: 142px;
+}
+
+/* Steam 实机截图条：3 张横排，点击打开 Lightbox */
+.gc__shots {
+  display: flex;
+  gap: 6px;
+  padding: 10px 12px 0;
+}
+
+.gc__shot {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  background: linear-gradient(140deg, #1b2b45, #171a33);
+  cursor: zoom-in;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gc__shot:hover {
+  border-color: rgba(125, 211, 252, 0.8);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.28);
+}
+
+.gc__shot-ph {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.26);
+  user-select: none;
+}
+
+.gc__shot img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  color: transparent;
+  font-size: 0;
+  transition: transform 0.28s ease;
+}
+
+.gc__shot img.is-hidden {
+  display: none;
+}
+
+.gc__shot:hover img {
+  transform: scale(1.08);
+}
+
+.gc__shot-zoom {
+  position: absolute;
+  right: 4px;
+  bottom: 2px;
+  font-size: 0.78rem;
+  line-height: 1;
+  color: #e0f2fe;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.gc__shot:hover .gc__shot-zoom {
+  opacity: 1;
+}
+
+.gc__body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 14px 16px 18px;
+}
+
+.gc__title {
+  margin: 0 0 10px;
+  font-size: 1.06rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--color-frost);
+  overflow-wrap: anywhere;
+  transition: color 0.2s ease;
+}
+
+.gc__title a {
+  text-decoration: none;
+}
+
+.gc:hover .gc__title {
+  color: #ffffff;
+  text-shadow: 0 0 16px rgba(125, 211, 252, 0.4);
+}
+
+/* 复用现有 .badge 配色，但取消「贴底 + 顶部分隔线」的旧卡片行为 */
+.gc__badges {
+  margin: 0 0 12px;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.gc__blurb {
+  margin: 0 0 12px;
+  color: #c5d3e6;
+  font-size: 0.86rem;
+  line-height: 1.62;
+}
+
+.gc__why {
+  margin: 0 0 16px;
+  padding-left: 12px;
+  border-left: 2px solid rgba(167, 139, 250, 0.5);
+  color: var(--color-mist);
+  font-size: 0.85rem;
+  line-height: 1.62;
+}
+
+.gc__why-tag {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--color-violet);
+}
+
+/* 卡片里的 Steam 按钮做成整行宽按钮，更显眼且多卡等高时底部对齐 */
+.gc .steam-btn {
+  width: 100%;
+  align-self: stretch;
+  justify-content: center;
+  margin-top: auto;
+}
+
+/* ── 截图 Lightbox ─────────────────────────────────────────── */
+.gc-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 56px 24px 32px;
+  background: rgba(4, 8, 18, 0.93);
+  backdrop-filter: blur(8px);
+}
+
+.gc-lightbox.is-open {
+  display: flex;
+}
+
+.gc-lightbox__figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: min(1100px, 84vw);
+}
+
+.gc-lightbox__img {
+  display: block;
+  max-width: 100%;
+  max-height: 76vh;
+  object-fit: contain;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: #101a2d;
+  color: transparent;
+  font-size: 0;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.7);
+}
+
+.gc-lightbox__caption {
+  color: var(--color-mist);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+}
+
+.gc-lightbox__close,
+.gc-lightbox__nav {
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  border-radius: 999px;
+  background: rgba(30, 41, 59, 0.86);
+  color: var(--color-frost);
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.gc-lightbox__close:hover,
+.gc-lightbox__nav:hover {
+  background: rgba(56, 189, 248, 0.22);
+  border-color: rgba(125, 211, 252, 0.8);
+  transform: scale(1.06);
+}
+
+.gc-lightbox__close {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  width: 40px;
+  height: 40px;
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.gc-lightbox__nav {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+@media (max-width: 680px) {
+  .gc__cover .cover-art {
+    height: 158px;
+  }
+  .gc-lightbox {
+    gap: 6px;
+    padding: 56px 10px 24px;
+  }
+  .gc-lightbox__figure {
+    max-width: 78vw;
+  }
+  .gc-lightbox__nav {
+    width: 36px;
+    height: 36px;
+    font-size: 1.35rem;
+  }
+}
+
+/* ── 标签聚合页：3 列网格 / 排序工具栏 / 分页栏 ────────────────── */
+
+/* 桌面端 3 列（1120px 容器下每卡约 340px），紧凑卡片放得下截图条 */
+.game-grid--tag {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+/**
+ * 只有 JS 初始化成功后才允许隐藏卡片。
+ * `.game-grid > li { display: flex }` 会盖掉浏览器默认的 `[hidden] { display:none }`，
+ * 所以这里用更高特异性显式声明；禁用 JS 时全部卡片保持可见，SEO 不受影响。
+ */
+.game-grid.game-grid--tag.is-paginated > li[hidden] {
+  display: none;
+}
+
+/* 3 列下收紧卡片内部留白，避免文字被挤成细长条 */
+.game-grid--tag .gc__cover .cover-art {
+  height: 150px;
+}
+.game-grid--tag .gc__body {
+  padding: 12px 13px 15px;
+}
+.game-grid--tag .gc__title {
+  margin-bottom: 8px;
+  font-size: 0.98rem;
+}
+.game-grid--tag .gc__badges {
+  margin-bottom: 10px;
+}
+
+.tag-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 0 0 18px;
+  padding: 12px 16px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 12px;
+  background: linear-gradient(120deg, rgba(30, 41, 59, 0.85), rgba(24, 36, 55, 0.68));
+  scroll-margin-top: 18px;
+}
+
+.tag-toolbar__sort {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tag-toolbar__label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+}
+
+.tag-select {
+  appearance: none;
+  min-width: 158px;
+  padding: 9px 38px 9px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 9px;
+  background-color: #101c30;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2394a3b8' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 13px center;
+  color: var(--color-frost);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color-scheme: dark;
+  cursor: pointer;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.tag-select:hover {
+  border-color: rgba(125, 211, 252, 0.6);
+}
+
+.tag-select:focus-visible {
+  outline: none;
+  border-color: rgba(125, 211, 252, 0.85);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18), 0 0 18px rgba(56, 189, 248, 0.16);
+}
+
+.tag-toolbar__count {
+  color: var(--color-dim);
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 28px 0 0;
+  padding: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.pager__pages {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pager__btn,
+.pager__num {
+  display: inline-grid;
+  place-items: center;
+  height: 36px;
+  min-width: 38px;
+  padding: 0 12px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 9px;
+  background: #131f33;
+  color: var(--color-mist);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+/* 按钮里是「箭头 span + 文字」两段内容，用 inline-flex 保证排在同一行 */
+.pager__btn {
+  min-width: 82px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.pager__btn:hover:not(:disabled),
+.pager__num:hover:not(.is-active) {
+  border-color: rgba(125, 211, 252, 0.7);
+  background: #1b2b45;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.pager__num.is-active {
+  border-color: rgba(125, 211, 252, 0.85);
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.26), rgba(139, 92, 246, 0.24));
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.24);
+}
+
+.pager__btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+@media (max-width: 900px) {
+  .game-grid--tag {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .game-grid--tag {
+    grid-template-columns: 1fr;
+  }
+  .tag-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .pager {
+    gap: 8px;
+  }
+}

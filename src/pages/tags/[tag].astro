@@ -1,0 +1,466 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import GameCard from '../../components/GameCard.astro';
+import { FEEL_WHITELIST } from '../../../config/feel-whitelist';
+import { buildMetaBadges, type MetaBadge } from '../../utils/tag-translator';
+
+interface GameScreenshot {
+  path_thumbnail: string;
+  path_full: string;
+}
+
+interface GameRecord {
+  slug: string;
+  name: string;
+  background_image: string | null;
+  metacritic: number | null;
+  rating: number | null;
+  released: string | null;
+  genres: string[];
+  steam_url: string;
+  screenshots: GameScreenshot[];
+}
+
+interface TagCard {
+  slug: string;
+  name: string;
+  cover: string | null;
+  /** 占位封面色相，由 slug 稳定派生 */
+  hue: number;
+  badges: MetaBadge[];
+  steam_url: string;
+  screenshots: GameScreenshot[];
+  /** 有站内推荐页时走内链，否则降级到 Steam 外链，避免出现 404 */
+  href: string;
+  external: boolean;
+  /** 前端排序键：直接输出为 data-*，避免 JS 去解析渲染后的文本 */
+  score: number;
+  year: number;
+  sortTitle: string;
+}
+
+interface FeelPill {
+  tag: string;
+  label: string;
+  count: number;
+}
+
+/**
+ * getStaticPaths 会被 Astro 单独抽取到预渲染 chunk，顶层变量与函数不会被
+ * 带过去。因此数据读取、字段守卫、卡片构建全部放在函数内部自包含完成；
+ * SiteLayout / GameCover / tag-translator / feel-whitelist 通过静态 import
+ * 引入，会被打包器正确带进 chunk。props 只传可序列化的字符串、数字与数组。
+ */
+export async function getStaticPaths() {
+  const asStringArray = (value: unknown): string[] =>
+    Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+
+  // 由 slug 稳定派生占位封面色相（与首页、详情页同一套算法）
+  const hueOf = (slug: string): number => {
+    let hash = 0;
+    for (let i = 0; i < slug.length; i++) hash = (hash * 31 + slug.charCodeAt(i)) >>> 0;
+    return hash % 360;
+  };
+
+  const prettyTag = (tag: string): string =>
+    tag.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
+  // 让 "Games with an Atmospheric feel" 这类元音开头的标签语法自然
+  const articleFor = (label: string): string => (/^[aeiou]/i.test(label) ? 'an' : 'a');
+
+  // 排序键：把 released / metacritic 归一成数字，缺失值排到末尾
+  const yearOf = (game: GameRecord): number => {
+    const year = Number.parseInt(
+      typeof game.released === 'string' ? game.released.slice(0, 4) : '',
+      10,
+    );
+    return Number.isFinite(year) ? year : 0;
+  };
+  const scoreOf = (game: GameRecord): number =>
+    typeof game.metacritic === 'number' ? game.metacritic : -1;
+
+  const { readFileSync } = await import('node:fs');
+  const { resolve } = await import('node:path');
+  const dataDir = resolve(process.cwd(), 'data');
+  const games = JSON.parse(
+    readFileSync(resolve(dataDir, 'games.json'), 'utf8'),
+  ) as GameRecord[];
+  const feelTags = JSON.parse(
+    readFileSync(resolve(dataDir, 'feel-tags.json'), 'utf8'),
+  ) as Record<string, string[]>;
+  const matches = JSON.parse(
+    readFileSync(resolve(dataDir, 'matches.json'), 'utf8'),
+  ) as Record<string, unknown[]>;
+
+  const gameBySlug = new Map(games.map((game) => [game.slug, game]));
+  const pageSlugs = new Set(Object.keys(matches));
+
+  // 标签全集 = 白名单 15 词 ∪ feel-tags.json 里实际出现过的唯一标签。
+  // 以白名单为准可保证首页每一颗 pill 都有对应页面；即使某个标签当前
+  // 没有任何游戏，也照样生成页面并渲染温和的空状态。
+  const whitelist = Array.isArray(FEEL_WHITELIST) ? FEEL_WHITELIST : [];
+  const allTags = [...new Set([...whitelist, ...Object.values(feelTags).flat()])]
+    .filter((tag): tag is string => typeof tag === 'string' && tag.length > 0)
+    .sort();
+
+  // 每个标签的游戏数（用于底部药丸导航计数）
+  const countByTag = new Map<string, number>();
+  for (const tags of Object.values(feelTags)) {
+    for (const tag of new Set(asStringArray(tags))) {
+      countByTag.set(tag, (countByTag.get(tag) ?? 0) + 1);
+    }
+  }
+  const pills: FeelPill[] = allTags.map((tag) => ({
+    tag,
+    label: prettyTag(tag),
+    count: countByTag.get(tag) ?? 0,
+  }));
+
+  return allTags.map((tag) => {
+    const label = prettyTag(tag);
+    const article = articleFor(label);
+
+    const cards: TagCard[] = Object.entries(feelTags)
+      .filter(([slug, tags]) => asStringArray(tags).includes(tag) && gameBySlug.has(slug))
+      .map(([slug]) => gameBySlug.get(slug) as GameRecord)
+      // 构建期顺序 = Best Match（评分降序，同分按名字），也是无 JS / 爬虫看到的顺序
+      .sort(
+        (a, b) =>
+          scoreOf(b) - scoreOf(a) ||
+          a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }),
+      )
+      .map((game): TagCard => {
+        const external = !pageSlugs.has(game.slug);
+        const steam = game.steam_url && game.steam_url !== '#' ? game.steam_url : 'https://rawg.io';
+        return {
+          slug: game.slug,
+          name: game.name,
+          cover: game.background_image || null,
+          hue: hueOf(game.slug),
+          steam_url: steam,
+          screenshots: Array.isArray(game.screenshots) ? game.screenshots : [],
+          badges: buildMetaBadges({
+            metacritic: typeof game.metacritic === 'number' ? game.metacritic : null,
+            rating: typeof game.rating === 'number' ? game.rating : null,
+            released: typeof game.released === 'string' ? game.released : null,
+            genres: asStringArray(game.genres),
+          }),
+          href: external ? steam : `/games-like/${game.slug}/`,
+          external,
+          score: scoreOf(game),
+          year: yearOf(game),
+          sortTitle: game.name.toLowerCase(),
+        };
+      });
+
+    return {
+      params: { tag },
+      props: {
+        tag,
+        label,
+        article,
+        cards,
+        pills,
+        total: games.length,
+      },
+    };
+  });
+}
+
+const { tag, label, article, cards, pills, total } = Astro.props as {
+  tag: string;
+  label: string;
+  article: string;
+  cards: TagCard[];
+  pills: FeelPill[];
+  total: number;
+};
+
+const seoTitle = `Games with ${article} ${label} feel | Games by Feel`;
+// 用于 "games that feel story rich" 这类自然语句：保留小写、把连字符还原成空格
+const humanTag = tag.replace(/-/g, ' ');
+const description = cards.length
+  ? `${cards.length} games with ${article} ${label} feel, sourced from our ${total}-game catalog and sorted by critic score.`
+  : `Browse games by how they feel. No games carry a ${label} feel in our catalog yet.`;
+
+// 分页：所有卡片构建期全部输出（SEO），前端按 24 张一页切换显示
+const PAGE_SIZE = 24;
+const pageCount = Math.max(1, Math.ceil(cards.length / PAGE_SIZE));
+const firstPageEnd = Math.min(PAGE_SIZE, cards.length);
+---
+
+<SiteLayout title={seoTitle} description={description} ogTitle={seoTitle}>
+  <a class="back-link" href="/">← Back to home</a>
+
+  <section class="hero">
+    <div class="hero__copy">
+      <p class="eyebrow">Browse by feel</p>
+      <h1 class="hero__title">Games with {article} {label} feel</h1>
+      <p class="hero__lead">
+        {
+          cards.length > 0
+            ? `${cards.length} games in our ${total}-game catalog carry ${article === 'an' ? 'an' : 'a'} ${label} feel. We gathered the whole list below, highest-rated first — each one matched on how it plays, not on a genre checkbox. Use the sort menu to reorder, or page through the collection.`
+            : `This feel lives in our index, but no game in the current catalog carries it yet. Check back as the catalog grows, or explore another feel below.`}
+      </p>
+      <div class="feel-strip">
+        <span class="feel-strip__label">Current feel</span>
+        <span class="chip">{label}</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="section__head">
+    <h2 class="section__title">{cards.length} {cards.length === 1 ? 'game' : 'games'}</h2>
+    <span class="section__note">Matched by feel tags, not genre · {PAGE_SIZE} per page</span>
+  </div>
+
+  {
+    cards.length > 0 && (
+      <div class="tag-toolbar" id="tag-toolbar">
+        <div class="tag-toolbar__sort">
+          <label class="tag-toolbar__label" for="tag-sort">Sort by</label>
+          <select class="tag-select" id="tag-sort" aria-label="Sort games">
+            <option value="best">Best Match</option>
+            <option value="newest">Newest</option>
+            <option value="title">Title (A-Z)</option>
+          </select>
+        </div>
+        <span class="tag-toolbar__count" id="tag-range" aria-live="polite">
+          Showing 1–{firstPageEnd} of {cards.length}
+        </span>
+      </div>
+    )
+  }
+
+  {
+    cards.length > 0 ? (
+      <ul class="game-grid game-grid--tag" id="tag-grid" data-page-size={PAGE_SIZE}>
+        {cards.map((card) => (
+          <li
+            class="tag-card"
+            data-score={card.score}
+            data-year={card.year}
+            data-sort-title={card.sortTitle}
+          >
+            <GameCard
+              name={card.name}
+              slug={card.slug}
+              cover={card.cover}
+              hue={card.hue}
+              badges={card.badges}
+              screenshots={card.screenshots}
+              steamUrl={card.steam_url}
+              href={card.href}
+              hrefExternal={card.external}
+              compact
+            />
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div class="empty-state">
+        <span class="empty-state__mark" aria-hidden="true">◇</span>
+        <p class="empty-state__title">No games found for this feel yet.</p>
+        <p class="empty-state__hint">
+          Our catalog is always growing. In the meantime, try another feel below or head back to the home page.
+        </p>
+        <a class="btn-primary" href="/">Back to home</a>
+      </div>
+    )
+  }
+
+  {
+    cards.length > PAGE_SIZE && (
+      <nav class="pager" id="tag-pager" aria-label="Game list pages">
+        <button class="pager__btn" type="button" data-page-action="prev" disabled>
+          <span aria-hidden="true">‹</span> Prev
+        </button>
+        <div class="pager__pages" id="tag-pager-pages">
+          {Array.from({ length: pageCount }, (_, i) => i + 1).map((page) => (
+            <button
+              class:list={['pager__num', { 'is-active': page === 1 }]}
+              type="button"
+              data-page={page}
+              aria-label={`Go to page ${page}`}
+              aria-current={page === 1 ? 'page' : 'false'}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
+        <button
+          class="pager__btn"
+          type="button"
+          data-page-action="next"
+          disabled={pageCount <= 1}
+        >
+          Next <span aria-hidden="true">›</span>
+        </button>
+      </nav>
+    )
+  }
+
+  <section class="seo-copy" aria-label={`About the ${label} feel`}>
+    <div class="seo-copy__inner">
+      <h2 class="seo-copy__title">About the {label} feel</h2>
+      <p>
+        Explore our curated list of games that feel {humanTag}. Whether you're looking for a
+        specific mood or a gameplay style, these titles deliver. We group games by how they
+        actually play and feel rather than by genre labels, so a {label} pick here can come
+        from anywhere — quiet story-driven adventures, tense puzzle games or punishing action
+        titles. Use the feel collections below to jump to a different mood.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section__head">
+      <h2 class="section__title">Explore other feels</h2>
+      <span class="section__note">Jump between feel collections</span>
+    </div>
+    <div class="pills">
+      {
+        pills.map((pill) => (
+          <a
+            class:list={['pill', { 'pill--active': pill.tag === tag }]}
+            href={`/tags/${pill.tag}`}
+            aria-current={pill.tag === tag ? 'page' : undefined}
+          >
+            <span>{pill.label}</span>
+            <span class="pill__count">{pill.count}</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</SiteLayout>
+
+<script>
+  /**
+   * 排序 + 分页共用一个 render()：
+   *   - 排序：按 select 的值对整个卡片数组重新排序，再一次性重排 DOM
+   *   - 分页：只切换 hidden 属性，不增删节点 → 所有卡片始终留在 HTML 里（SEO）
+   *   - 切换排序时强制 currentPage = 1，然后按每页 pageSize 重新截断
+   *   - 点击分页时平滑滚动回工具栏（列表顶部）
+   * 每页数量由网格的 data-page-size 提供，与构建期生成页码用的是同一个常量。
+   */
+  (() => {
+    const grid = document.getElementById('tag-grid');
+    const select = document.getElementById('tag-sort') as HTMLSelectElement | null;
+    const range = document.getElementById('tag-range');
+    const toolbar = document.getElementById('tag-toolbar');
+    if (!grid || !select) return;
+
+    const PAGE_SIZE = Number(grid.dataset.pageSize) || 24;
+    const cards = Array.from(grid.querySelectorAll<HTMLLIElement>('li.tag-card'));
+    if (!cards.length) return;
+
+    const total = cards.length;
+    const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    // 卡片数不足一页时页面不会输出分页栏；此时分页控件全部为可选，
+    // 但排序下拉框仍必须正常工作，不能因为找不到 pager 就整个退出。
+    const pager = document.getElementById('tag-pager');
+    const pagesWrap = document.getElementById('tag-pager-pages');
+    const prevBtn = pager?.querySelector<HTMLButtonElement>('[data-page-action="prev"]') ?? null;
+    const nextBtn = pager?.querySelector<HTMLButtonElement>('[data-page-action="next"]') ?? null;
+    const pageButtons: HTMLButtonElement[] = pagesWrap
+      ? Array.from(pagesWrap.querySelectorAll<HTMLButtonElement>('[data-page]'))
+      : [];
+
+    let currentPage = 1;
+    let mode = 'best';
+
+    const scoreOf = (li: HTMLLIElement): number => Number(li.dataset.score ?? -1);
+    const yearOf = (li: HTMLLIElement): number => Number(li.dataset.year ?? 0);
+    const titleOf = (li: HTMLLIElement): string => li.dataset.sortTitle ?? '';
+
+    const orderCards = (): HTMLLIElement[] => {
+      const ordered = cards.slice();
+      if (mode === 'newest') {
+        ordered.sort(
+          (a, b) =>
+            yearOf(b) - yearOf(a) ||
+            scoreOf(b) - scoreOf(a) ||
+            titleOf(a).localeCompare(titleOf(b)),
+        );
+      } else if (mode === 'title') {
+        ordered.sort(
+          (a, b) => titleOf(a).localeCompare(titleOf(b)) || scoreOf(b) - scoreOf(a),
+        );
+      } else {
+        // Best Match：评分降序，同分按名字，和构建期默认顺序一致
+        ordered.sort(
+          (a, b) => scoreOf(b) - scoreOf(a) || titleOf(a).localeCompare(titleOf(b)),
+        );
+      }
+      return ordered;
+    };
+
+    const render = (shouldScroll: boolean): void => {
+      const ordered = orderCards();
+
+      // 排序后重排 DOM。用 DocumentFragment 一次性挂载，避免逐项 reflow。
+      const fragment = document.createDocumentFragment();
+      ordered.forEach((li) => fragment.appendChild(li));
+      grid.appendChild(fragment);
+
+      if (currentPage > pageCount) currentPage = pageCount;
+      if (currentPage < 1) currentPage = 1;
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const end = Math.min(start + PAGE_SIZE, total);
+
+      // 只切 hidden，不移除节点：无 JS / 爬虫看到的是完整的全部卡片
+      ordered.forEach((li, index) => {
+        li.hidden = index < start || index >= end;
+      });
+
+      if (prevBtn) prevBtn.disabled = currentPage <= 1;
+      if (nextBtn) nextBtn.disabled = currentPage >= pageCount;
+      pageButtons.forEach((btn) => {
+        const active = Number(btn.dataset.page) === currentPage;
+        btn.classList.toggle('is-active', active);
+        btn.setAttribute('aria-current', active ? 'page' : 'false');
+      });
+      if (range) range.textContent = `Showing ${start + 1}–${end} of ${total}`;
+
+      if (shouldScroll && toolbar) {
+        toolbar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    };
+
+    // 只有 JS 可用时才启用隐藏规则，保证禁用 JS 时 200+ 张卡片全部可见
+    grid.classList.add('is-paginated');
+
+    if (pagesWrap) {
+      pagesWrap.addEventListener('click', (event) => {
+        const target = event.target instanceof Element ? event.target : null;
+        const btn = target?.closest<HTMLButtonElement>('[data-page]') ?? null;
+        if (!btn) return;
+        const page = Number(btn.dataset.page);
+        if (!Number.isFinite(page) || page === currentPage) return;
+        currentPage = page;
+        render(true);
+      });
+    }
+
+    prevBtn?.addEventListener('click', () => {
+      if (currentPage <= 1) return;
+      currentPage -= 1;
+      render(true);
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      if (currentPage >= pageCount) return;
+      currentPage += 1;
+      render(true);
+    });
+
+    select.addEventListener('change', () => {
+      mode = select.value;
+      currentPage = 1; // 排序切换必须重置分页，否则会停在不存在的页码上
+      render(false);
+    });
+
+    render(false);
+  })();
+</script>

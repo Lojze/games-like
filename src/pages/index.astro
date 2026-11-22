@@ -1,0 +1,238 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import GameCard from '../components/GameCard.astro';
+import { FEEL_WHITELIST } from '../../config/feel-whitelist';
+import { buildMetaBadges, type MetaBadge } from '../utils/tag-translator';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
+interface GameScreenshot {
+  path_thumbnail: string;
+  path_full: string;
+}
+
+interface GameRecord {
+  slug: string;
+  name: string;
+  background_image: string | null;
+  metacritic: number | null;
+  rating: number | null;
+  released: string | null;
+  genres: string[];
+  steam_url: string;
+  screenshots: GameScreenshot[];
+}
+
+interface PopularGame {
+  slug: string;
+  name: string;
+  cover: string | null;
+  hue: number;
+  badges: MetaBadge[];
+  steam_url: string;
+  screenshots: GameScreenshot[];
+}
+
+const asStringArray = (value: unknown): string[] =>
+  Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+
+// 由 slug 稳定派生占位封面色相（与详情页同一套算法）
+const hueOf = (slug: string): number => {
+  let hash = 0;
+  for (let i = 0; i < slug.length; i++) hash = (hash * 31 + slug.charCodeAt(i)) >>> 0;
+  return hash % 360;
+};
+
+const prettyTag = (tag: string): string =>
+  tag.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
+const dataDir = resolve(process.cwd(), 'data');
+const games = JSON.parse(readFileSync(resolve(dataDir, 'games.json'), 'utf8')) as GameRecord[];
+const matches = JSON.parse(
+  readFileSync(resolve(dataDir, 'matches.json'), 'utf8'),
+) as Record<string, unknown[]>;
+const feelTags = JSON.parse(
+  readFileSync(resolve(dataDir, 'feel-tags.json'), 'utf8'),
+) as Record<string, string[]>;
+
+// 有详情页的游戏集合：热门卡片只从这里选，避免链接到不存在的页面
+const pageSlugs = new Set(Object.keys(matches));
+const gameBySlug = new Map(games.map((game) => [game.slug, game]));
+
+/**
+ * "Popular right now" 的四级排序：不再让高分的世纪老游戏霸屏。
+ *   1. released 年份落在近年区间的优先
+ *   2. metacritic 达到高分线的优先
+ *   3. feel_tags 数量越多越靠前（感受维度更丰富）
+ *   4. 同档按游戏名字母升序，保证构建结果稳定可复现
+ * 近年区间在构建时按系统当前年份动态计算（滚动窗口），不写死具体年份。
+ * 候选池仍限定在有详情页的 slug，避免卡片链接到不存在的页面。
+ */
+const currentYear = new Date().getFullYear();
+const RECENT_FROM = currentYear - 5;
+const RECENT_TO = currentYear;
+const GOOD_SCORE = 80;
+
+const yearOf = (game: GameRecord): number => {
+  const year = Number.parseInt(
+    typeof game.released === 'string' ? game.released.slice(0, 4) : '',
+    10,
+  );
+  return Number.isFinite(year) ? year : 0;
+};
+
+const isRecent = (game: GameRecord): boolean => {
+  const year = yearOf(game);
+  return year >= RECENT_FROM && year <= RECENT_TO;
+};
+
+const isHighRated = (game: GameRecord): boolean =>
+  typeof game.metacritic === 'number' && game.metacritic >= GOOD_SCORE;
+
+const feelCountOf = (game: GameRecord): number =>
+  new Set(asStringArray(feelTags[game.slug])).size;
+
+const byTier = (a: GameRecord, b: GameRecord, predicate: (g: GameRecord) => boolean): number =>
+  Number(predicate(b)) - Number(predicate(a));
+
+const comparePopular = (a: GameRecord, b: GameRecord): number =>
+  byTier(a, b, isRecent) ||
+  byTier(a, b, isHighRated) ||
+  feelCountOf(b) - feelCountOf(a) ||
+  a.name.localeCompare(b.name, 'en', { sensitivity: 'base' });
+
+const popular: PopularGame[] = [...pageSlugs]
+  .map((slug) => gameBySlug.get(slug))
+  .filter((game): game is GameRecord => Boolean(game))
+  .sort(comparePopular)
+  .slice(0, 12)
+  .map((game) => ({
+    slug: game.slug,
+    name: game.name,
+    cover: game.background_image || null,
+    hue: hueOf(game.slug),
+    steam_url: typeof game.steam_url === 'string' ? game.steam_url : '',
+    screenshots: Array.isArray(game.screenshots) ? game.screenshots : [],
+    badges: buildMetaBadges({
+      metacritic: typeof game.metacritic === 'number' ? game.metacritic : null,
+      rating: typeof game.rating === 'number' ? game.rating : null,
+      released: typeof game.released === 'string' ? game.released : null,
+      genres: asStringArray(game.genres),
+    }),
+  }));
+
+// 每个感受标签下有多少游戏（用于 pills 的计数）
+const feelCounts = new Map<string, number>();
+for (const tags of Object.values(feelTags)) {
+  for (const tag of new Set(tags)) {
+    feelCounts.set(tag, (feelCounts.get(tag) ?? 0) + 1);
+  }
+}
+const pills = FEEL_WHITELIST.map((tag) => ({
+  tag,
+  label: prettyTag(tag),
+  count: feelCounts.get(tag) ?? 0,
+}));
+
+// 纯前端搜索索引：输入游戏名 → 跳转到对应的推荐页；匹配不到时回退到热门第一款
+const gameIndex = [...pageSlugs]
+  .map((slug) => ({ slug, name: gameBySlug.get(slug)?.name ?? slug }))
+  .sort((a, b) => a.name.localeCompare(b.name));
+const fallbackSlug = popular[0]?.slug ?? 'hades-2018';
+
+---
+
+<SiteLayout>
+  <section class="hero">
+    <p class="eyebrow">Feel-matched discovery</p>
+    <h1 class="hero__title">Find Your Next Game by Feel. Not by Genre.</h1>
+    <p class="hero__lead">
+      Type a game you love and we'll show you titles that share its atmosphere, story,
+      and challenge — matched on how they actually feel to play, not a genre checkbox.
+    </p>
+
+    <div class="hero__actions">
+      <form class="searchbox" id="hero-search" role="search">
+        <span class="searchbox__icon" aria-hidden="true">⌕</span>
+        <input
+          id="hero-search-input"
+          type="search"
+          list="game-suggestions"
+          placeholder="Try Hades, Stardew Valley, Celeste…"
+          aria-label="Search for a game"
+          autocomplete="off"
+        />
+        <datalist id="game-suggestions">
+          {gameIndex.map((item) => <option value={item.name} />)}
+        </datalist>
+        <button class="btn-primary" type="submit">Find similar →</button>
+      </form>
+    </div>
+    <p class="hero__hint">
+      {games.length} games · {FEEL_WHITELIST.length} feel tags · {pageSlugs.size} recommendation pages.
+      Or <a href={`/games-like/${fallbackSlug}/`}>jump straight to an example</a>.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section__head">
+      <h2 class="section__title">Popular right now</h2>
+      <span class="section__note">
+        Recent releases first ({RECENT_FROM}–{RECENT_TO}), then critic score and feel depth
+      </span>
+    </div>
+    <ul class="game-grid game-grid--popular">
+      {
+        popular.map((game) => (
+          <li>
+            <GameCard
+              name={game.name}
+              slug={game.slug}
+              cover={game.cover}
+              hue={game.hue}
+              badges={game.badges}
+              screenshots={game.screenshots}
+              steamUrl={game.steam_url}
+              href={`/games-like/${game.slug}/`}
+              compact
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="section">
+    <div class="section__head">
+      <h2 class="section__title">Browse by feel</h2>
+      <span class="section__note">Click a feel to see every game tagged with it</span>
+    </div>
+    <div class="pills">
+      {
+        pills.map((pill) => (
+          <a class="pill" href={`/tags/${pill.tag}`} title={`Browse all ${pill.label} games`}>
+            <span>{pill.label}</span>
+            <span class="pill__count">{pill.count}</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</SiteLayout>
+
+<script define:vars={{ gameIndex, fallbackSlug }}>
+  // 纯前端交互：静态搜索框输入游戏名后跳转到对应推荐页，无需后端
+  const form = document.getElementById('hero-search');
+  const input = document.getElementById('hero-search-input');
+  if (form && input) {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const query = input.value.trim().toLowerCase();
+      const hit = query
+        ? gameIndex.find((item) => item.name.toLowerCase() === query) ??
+          gameIndex.find((item) => item.name.toLowerCase().includes(query))
+        : undefined;
+      window.location.href = `/games-like/${hit ? hit.slug : fallbackSlug}/`;
+    });
+  }
+</script>

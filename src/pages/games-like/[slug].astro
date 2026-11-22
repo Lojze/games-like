@@ -1,0 +1,294 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import GameCover from '../../components/GameCover.astro';
+import GameCard from '../../components/GameCard.astro';
+import {
+  buildQuickAnswer,
+  buildMetaBadges,
+  type MetaBadge,
+} from '../../utils/tag-translator';
+
+interface GameScreenshot {
+  path_thumbnail: string;
+  path_full: string;
+}
+
+interface GameRecord {
+  slug: string;
+  name: string;
+  background_image: string | null;
+  description: string;
+  metacritic: number | null;
+  rating: number | null;
+  tags: string[];
+  steam_url: string;
+  released: string | null;
+  genres: string[];
+  screenshots: GameScreenshot[];
+}
+
+interface Recommendation {
+  slug: string;
+  score: number;
+  shared_tags: string[];
+  reason: string;
+}
+
+interface EnrichedRecommendation {
+  slug: string;
+  name: string;
+  cover: string | null;
+  steam_url: string;
+  /** 清洗后的 description 前 150 字 + ...（纯展示，不参与匹配） */
+  blurb: string;
+  /** Steam 实机截图（前 4 张，组件只展示前 3 张） */
+  screenshots: GameScreenshot[];
+  /** 占位封面色相，由 slug 稳定派生 */
+  hue: number;
+  /** 原始共享标签，供规则引擎兜底生成文案 */
+  sharedTags: string[];
+  /** reasons.json 里的专属推荐语；为空时组件退回规则引擎 */
+  reason: string;
+  /** 发行年份（从 released 前 4 位提取，缺失为 0），仅用于展示层二次排序 */
+  year: number;
+  /** matches.json 的原始匹配得分，作为同年时的次级排序键 */
+  score: number;
+  /** 在 matches.json 中的原始位次，供规则引擎兜底句式轮换，不随二次排序漂移 */
+  fallbackIndex: number;
+  badges: MetaBadge[];
+}
+
+/**
+ * getStaticPaths 会被 Astro 单独抽取到预渲染 chunk，顶层变量与函数都不会被
+ * 带过去。因此数据读取、字段守卫、Quick Answer 生成全部放在函数内部自包含完成；
+ * tag-translator 通过静态 import 引入，会被打包器正确带进 chunk。
+ * props 只传可序列化的字符串、数字与数组。
+ */
+export async function getStaticPaths() {
+  const asStringArray = (value: unknown): string[] =>
+    Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+  // 由 slug 稳定派生一个色相，让占位封面有区分度（纯展示，不参与匹配）
+  const hueOf = (slug: string): number => {
+    let hash = 0;
+    for (let i = 0; i < slug.length; i++) hash = (hash * 31 + slug.charCodeAt(i)) >>> 0;
+    return hash % 360;
+  };
+
+  // RAWG description 是带 \r\n\r\n 段落换行的纯文本，个别条目夹 HTML 标签/实体。
+  // 统一压成单段可读文本，再截前 150 字符作为卡片简介（仅展示，不参与匹配计算）。
+  const NAMED_ENTITIES: Record<string, string> = {
+    '&nbsp;': ' ', '&amp;': '&', '&quot;': '"', '&apos;': "'",
+    '&lt;': '<', '&gt;': '>', '&mdash;': '—', '&ndash;': '–', '&hellip;': '…',
+  };
+  const toPlainText = (raw: string): string =>
+    raw
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/&#(\d+);|&#x([0-9a-f]+);|&[a-z]+;/gi, (entity) => {
+        const named = NAMED_ENTITIES[entity.toLowerCase()];
+        if (named) return named;
+        const dec = /^&#(\d+);$/i.exec(entity);
+        const hex = /^&#x([0-9a-f]+);$/i.exec(entity);
+        const code = dec ? Number(dec[1]) : hex ? parseInt(hex[1], 16) : NaN;
+        return Number.isFinite(code) && code > 0 && code <= 0x10ffff
+          ? String.fromCodePoint(code)
+          : ' ';
+      })
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  const blurbOf = (raw: unknown): string => {
+    const text = typeof raw === 'string' ? toPlainText(raw) : '';
+    if (!text) {
+      return 'No overview is available for this title yet. Open its Steam page for the full description, screenshots and player reviews.';
+    }
+    // 短描述原样展示，只有被截断时才补省略号；
+    // 在 150 字范围内收尾到最近的词边界，避免出现 fightin... 这类半截单词
+    if (text.length <= 150) return text;
+    const head = text.slice(0, 150).replace(/\s+\S*$/, '');
+    return `${head.trimEnd()}...`;
+  };
+
+  // released 形如 "2021-02-05"；缺失 / 非法年份统一记为 0，降序时自然排到最后
+  const yearOf = (released: unknown): number => {
+    if (typeof released !== 'string') return 0;
+    const year = Number.parseInt(released.slice(0, 4), 10);
+    return Number.isFinite(year) ? year : 0;
+  };
+
+  const { readFileSync } = await import('node:fs');
+  const { resolve } = await import('node:path');
+  const dataDir = resolve(process.cwd(), 'data');
+  const games = JSON.parse(
+    readFileSync(resolve(dataDir, 'games.json'), 'utf8'),
+  ) as GameRecord[];
+  const matches = JSON.parse(
+    readFileSync(resolve(dataDir, 'matches.json'), 'utf8'),
+  ) as Record<string, Recommendation[]>;
+  const feelTags = JSON.parse(
+    readFileSync(resolve(dataDir, 'feel-tags.json'), 'utf8'),
+  ) as Record<string, string[]>;
+  // 离线批量生成的专属推荐语；缺失时 GameCard 会用规则引擎现场兜底
+  const reasons = JSON.parse(
+    readFileSync(resolve(dataDir, 'reasons.json'), 'utf8'),
+  ) as Record<string, Record<string, string>>;
+  const gameBySlug = new Map(games.map((game) => [game.slug, game]));
+
+  return Object.entries(matches).map(([slug, recommendations]) => {
+    const game = gameBySlug.get(slug);
+    const ownFeelTags = feelTags[slug] ?? [];
+    const quickAnswer = buildQuickAnswer(game?.name ?? slug, ownFeelTags);
+
+    return {
+      params: { slug },
+      props: {
+        name: game?.name ?? slug,
+        quickAnswer,
+        ownFeelTags,
+        hue: hueOf(slug),
+        cover: game?.background_image || null,
+        recommendations: recommendations.map((rec, i): EnrichedRecommendation => {
+          const other = gameBySlug.get(rec.slug);
+          const genres = asStringArray(other?.genres);
+          const rawSteam = other?.steam_url;
+          const steamUrl =
+            rawSteam && rawSteam !== '#'
+              ? rawSteam
+              : `https://store.steampowered.com/search/?term=${encodeURIComponent(other?.name ?? rec.slug)}`;
+          return {
+            slug: rec.slug,
+            name: other?.name ?? rec.slug,
+            cover: other?.background_image || null,
+            steam_url: steamUrl,
+            blurb: blurbOf(other?.description),
+            screenshots: Array.isArray(other?.screenshots) ? other.screenshots : [],
+            hue: hueOf(rec.slug),
+            sharedTags: asStringArray(rec.shared_tags),
+            reason: reasons[slug]?.[rec.slug] ?? '',
+            year: yearOf(other?.released),
+            score: Number.isFinite(rec.score) ? rec.score : 0,
+            fallbackIndex: i,
+            badges: buildMetaBadges({
+              metacritic: typeof other?.metacritic === 'number' ? other.metacritic : null,
+              rating: typeof other?.rating === 'number' ? other.rating : null,
+              released: typeof other?.released === 'string' ? other.released : null,
+              genres,
+            }),
+          };
+        }),
+      },
+    };
+  });
+}
+
+const { name, quickAnswer, ownFeelTags, hue, cover, recommendations } = Astro.props as {
+  name: string;
+  quickAnswer: string;
+  ownFeelTags: string[];
+  hue: number;
+  cover: string | null;
+  recommendations: EnrichedRecommendation[];
+};
+
+const prettyTag = (tag: string): string =>
+  tag.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
+/**
+ * 展示层的「年份优先」二次排序，只在页面渲染时调整卡片顺序：
+ *   1. 发行年份降序（year 缺失为 0，自动沉到末尾）
+ *   2. 同年 / 都缺年份时，按 matches.json 原始 score 降序
+ *   3. 仍相同则按原始位次，保证构建结果稳定可复现
+ * 排序的是整个 EnrichedRecommendation 对象，reason / blurb / screenshots / badges
+ * 都随各自的游戏一起移动，不会出现「卡片换了但 Why it fits 文案没跟上」。
+ * compute-matches.ts 与 matches.json 均不改动。
+ */
+const sortedRecommendations = [...recommendations].sort(
+  (a, b) => b.year - a.year || b.score - a.score || a.fallbackIndex - b.fallbackIndex,
+);
+
+// 站点级默认元数据由 Layout 提供；详情页只需覆盖 title / og:title / og:description
+const seoTitle = `Games Like ${name} | Games by Feel`;
+---
+
+<SiteLayout
+  title={seoTitle}
+  description={quickAnswer}
+  ogTitle={seoTitle}
+  ogDescription={quickAnswer}
+  narrow
+>
+  <a class="back-link" href="/">← Back to home</a>
+
+  <section class="hero">
+    <div class="hero__body">
+      <div class="hero__copy">
+        <p class="eyebrow">Feel-matched picks</p>
+        <h1 class="hero__title">Games Like {name}</h1>
+        <p class="hero__lead">{quickAnswer}</p>
+        {
+          ownFeelTags.length > 0 && (
+            <div class="feel-strip">
+              <span class="feel-strip__label">The feel</span>
+              {ownFeelTags.map((tag) => (
+                <span class="chip">{prettyTag(tag)}</span>
+              ))}
+            </div>
+          )
+        }
+      </div>
+      <div class="hero__art">
+        <GameCover name={name} cover={cover} hue={hue} />
+      </div>
+    </div>
+  </section>
+
+  <div class="section__head">
+    <h2 class="section__title">Recommended for you</h2>
+    <span class="section__note">{sortedRecommendations.length} games · matched by feel tags, not genre · newest first</span>
+  </div>
+
+  <ul class="game-grid game-grid--detail">
+    {
+      sortedRecommendations.map((rec) => (
+        <li>
+          <GameCard
+            name={rec.name}
+            slug={rec.slug}
+            cover={rec.cover}
+            hue={rec.hue}
+            badges={rec.badges}
+            screenshots={rec.screenshots}
+            steamUrl={rec.steam_url}
+            blurb={rec.blurb}
+            reason={rec.reason}
+            sourceName={name}
+            sharedTags={rec.sharedTags}
+            index={rec.fallbackIndex}
+          />
+        </li>
+      ))
+    }
+  </ul>
+
+  <section class="seo-copy" aria-label="About these recommendations">
+    <div class="seo-copy__inner">
+      <h2 class="seo-copy__title">About these recommendations</h2>
+      <p>
+        These games were selected by matching feel-based tags, not just genres. We look at
+        atmosphere, narrative depth, difficulty and pacing, then weight each shared signal by
+        how distinctive it is — so a rare trait counts for more than a common one. The result
+        is a short list of titles that genuinely resonate with the experience of {name},
+        listed newest first so the freshest picks are easy to spot, with the closest matches
+        taking priority whenever two games share a release year.
+      </p>
+
+      <h2 class="seo-copy__title">What to play after {name}?</h2>
+      <p>
+        If you've exhausted {name} and are looking for a similar emotional or mechanical
+        journey, the list above covers the best alternatives available on Steam right now.
+        Every card links straight to its store page, so you can check the price, player
+        reviews and availability before committing. You can also browse a single feel —
+        punishing, relaxing, story-rich and more — from the <a href="/">home page</a>.
+      </p>
+    </div>
+  </section>
+</SiteLayout>

@@ -1,0 +1,82 @@
+---
+import '../styles/global.css';
+
+/**
+ * 全站唯一的文档骨架 + SEO / 分享卡片元数据。
+ * 页面统一经 SiteLayout 间接使用本组件；只需传入覆盖值，
+ * 缺省时回退到下面这组站点级默认值，保证每个页面都有完整标签。
+ */
+const DEFAULT_TITLE = 'Games by Feel | Find Your Next Game';
+const DEFAULT_DESCRIPTION =
+  'Discover games by how they feel, not by genre. Find titles that share the atmosphere, story, and challenge of your favorite games.';
+const SITE_NAME = 'Games by Feel';
+const DEFAULT_OG_IMAGE = '/og-default.png';
+// 占位图是同一张静态图，alt 描述图片本身，而不是随页面变化的标题
+const OG_IMAGE_ALT = 'Games by Feel | Find your next game by feel, not by genre';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** og:title / twitter:title 缺省继承 title */
+  ogTitle?: string;
+  /** og:description / twitter:description 缺省继承 description */
+  ogDescription?: string;
+  /** 站点内绝对路径或完整 https URL 均可 */
+  ogImage?: string;
+  ogType?: string;
+  noindex?: boolean;
+}
+
+const {
+  title = DEFAULT_TITLE,
+  description = DEFAULT_DESCRIPTION,
+  ogTitle = title,
+  ogDescription = description,
+  ogImage = DEFAULT_OG_IMAGE,
+  ogType = 'website',
+  noindex = false,
+} = Astro.props;
+
+// Astro.site 来自 astro.config.mjs 的站点根 URL（构建期确定），
+// Astro.url 是当前页面 URL。两者组合出稳定的绝对 canonical / og:url，
+// 让带参链接、镜像域名都把权重归到同一个规范地址。
+const base = Astro.site ?? Astro.url;
+const canonicalURL = new URL(Astro.url.pathname, base).href;
+const ogImageURL = new URL(ogImage, base).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b1120" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={OG_IMAGE_ALT} />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={ogDescription} />
+    <meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:image:alt" content={OG_IMAGE_ALT} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

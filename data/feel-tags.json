@@ -1,0 +1,1580 @@
+{
+  "half-life": [
+    "atmospheric",
+    "story-rich",
+    "funny",
+    "difficult"
+  ],
+  "red-dead-redemption-2": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "half-life-2": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "bioshock": [
+    "atmospheric",
+    "story-rich",
+    "dark"
+  ],
+  "divinity-original-sin-2": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "portal-2": [
+    "atmospheric",
+    "story-rich",
+    "funny"
+  ],
+  "grand-theft-auto-iv": [
+    "atmospheric",
+    "funny"
+  ],
+  "red-dead-redemption": [
+    "atmospheric",
+    "story-rich",
+    "combat-focused"
+  ],
+  "elden-ring": [
+    "atmospheric",
+    "difficult",
+    "punishing"
+  ],
+  "the-orange-box": [
+    "puzzle-heavy"
+  ],
+  "grand-theft-auto-vice-city": [
+    "atmospheric",
+    "funny"
+  ],
+  "the-elder-scrolls-iv-oblivion": [
+    "combat-focused",
+    "surreal",
+    "emotional",
+    "exploration-driven"
+  ],
+  "the-elder-scrolls-v-skyrim": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "the-elder-scrolls-iv-oblivion-game-of-the-year-edi": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "bioshock-infinite": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "quake": [
+    "atmospheric"
+  ],
+  "divinity-original-sin-enhanced-edition": [
+    "story-rich"
+  ],
+  "divinity-original-sin-ii-definitive-edition": [
+    "combat-focused",
+    "exploration-driven"
+  ],
+  "jet-set-radio-2012": [
+    "atmospheric"
+  ],
+  "persona-5-royal": [
+    "story-rich",
+    "emotional"
+  ],
+  "mass-effect-2": [
+    "atmospheric",
+    "story-rich",
+    "narrative-choice"
+  ],
+  "god-of-war-2": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "combat-focused",
+    "emotional",
+    "punishing"
+  ],
+  "half-life-alyx": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "cut-the-rope": [
+    "puzzle-heavy"
+  ],
+  "hades-2018": [
+    "atmospheric",
+    "story-rich",
+    "punishing"
+  ],
+  "grand-theft-auto-iii": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "unreal-tournament-2004-editors-choice-edition": [
+    "atmospheric"
+  ],
+  "grand-theft-auto-san-andreas": [
+    "atmospheric",
+    "story-rich",
+    "funny"
+  ],
+  "thief-gold": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "dark"
+  ],
+  "final-fantasy-vi": [
+    "story-rich",
+    "exploration-driven",
+    "emotional"
+  ],
+  "the-walking-dead": [
+    "atmospheric",
+    "story-rich",
+    "narrative-choice"
+  ],
+  "threes": [
+    "cute",
+    "relaxing",
+    "puzzle-heavy"
+  ],
+  "prune": [
+    "relaxing",
+    "emotional"
+  ],
+  "modern-warfare": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "okami-hd-da-shen-jue-jing-ban": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "undertale": [
+    "story-rich",
+    "funny",
+    "dark",
+    "cute",
+    "narrative-choice"
+  ],
+  "splinter-cell-chaos-theory": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "rome-total-war-collection": [
+    "atmospheric"
+  ],
+  "a-monsters-expedition": [
+    "atmospheric",
+    "funny",
+    "exploration-driven",
+    "difficult",
+    "cute",
+    "relaxing",
+    "surreal"
+  ],
+  "forza-motorsport": [
+    "narrative-choice"
+  ],
+  "braid": [
+    "atmospheric",
+    "story-rich",
+    "difficult"
+  ],
+  "grand-theft-auto-v": [
+    "atmospheric",
+    "funny"
+  ],
+  "the-witcher-3-game-of-the-year": [
+    "combat-focused",
+    "exploration-driven"
+  ],
+  "system-shock-2": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "team-fortress-2": [
+    "funny"
+  ],
+  "the-witcher-3-wild-hunt": [
+    "atmospheric",
+    "story-rich",
+    "dark",
+    "narrative-choice"
+  ],
+  "journey": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "dragon-quest-xi": [
+    "story-rich"
+  ],
+  "splinter-cell": [
+    "atmospheric",
+    "difficult"
+  ],
+  "crysis": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "disco-elysium": [
+    "story-rich"
+  ],
+  "fallout-3-game-of-the-year-edition": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "death-road-to-canada": [
+    "funny",
+    "difficult"
+  ],
+  "nier-automata-game-of-the-yorha-edition": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "tumblestone": [
+    "puzzle-heavy"
+  ],
+  "mark-of-the-ninja": [
+    "atmospheric",
+    "story-rich",
+    "dark",
+    "short-session"
+  ],
+  "fez": [
+    "atmospheric",
+    "exploration-driven",
+    "cute",
+    "relaxing"
+  ],
+  "call-of-duty": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "resident-evil-2-2019": [
+    "atmospheric"
+  ],
+  "freespace-2": [
+    "story-rich"
+  ],
+  "dark-souls-ii": [
+    "atmospheric",
+    "exploration-driven",
+    "difficult",
+    "dark"
+  ],
+  "batman-arkham-city-goty": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "deus-ex-human-revolution-directors-cut": [
+    "atmospheric",
+    "story-rich",
+    "combat-focused"
+  ],
+  "the-longest-journey": [
+    "atmospheric",
+    "story-rich",
+    "funny"
+  ],
+  "dragon-quest-xi-s-echoes-of-an-elusive-age-definit": [
+    "story-rich",
+    "funny"
+  ],
+  "ori-and-the-will-of-the-wisps": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "difficult",
+    "cute",
+    "emotional",
+    "punishing"
+  ],
+  "batman-aa-goty": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "celeste": [
+    "story-rich"
+  ],
+  "fallout-3": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "dragon-age-origins": [
+    "atmospheric",
+    "story-rich",
+    "narrative-choice"
+  ],
+  "metal-gear-solid-v-the-phantom-pain": [
+    "atmospheric",
+    "story-rich",
+    "dark"
+  ],
+  "legacy-of-kain-soul-reaver": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "dishonored": [
+    "atmospheric",
+    "story-rich",
+    "dark"
+  ],
+  "n-nplusplus": [
+    "difficult"
+  ],
+  "microsoft-flight-simulator": [
+    "atmospheric",
+    "short-session",
+    "surreal"
+  ],
+  "sea-of-stars-2": [
+    "story-rich"
+  ],
+  "splinter-cell-pandora-tomorrow": [
+    "atmospheric",
+    "story-rich",
+    "combat-focused"
+  ],
+  "dota-2": [
+    "difficult"
+  ],
+  "shadows-die-twice": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "difficult",
+    "punishing"
+  ],
+  "halo-combat-evolved": [
+    "combat-focused"
+  ],
+  "spelunky-2": [
+    "funny",
+    "cute",
+    "narrative-choice",
+    "punishing"
+  ],
+  "final-fantasy-viii": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "diablo-iv": [
+    "story-rich",
+    "exploration-driven"
+  ],
+  "brothers-a-tale-of-two-sons-2": [
+    "atmospheric",
+    "story-rich",
+    "short-session"
+  ],
+  "bayonetta": [
+    "atmospheric"
+  ],
+  "mass-effect-3": [
+    "combat-focused"
+  ],
+  "black-white": [
+    "story-rich"
+  ],
+  "forza-horizon-4": [
+    "atmospheric",
+    "exploration-driven"
+  ],
+  "the-stanley-parable-ultra-deluxe": [
+    "atmospheric",
+    "story-rich",
+    "funny",
+    "exploration-driven",
+    "narrative-choice",
+    "emotional"
+  ],
+  "deus-ex-game-of-the-year-edition": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "spelunky": [
+    "difficult",
+    "punishing"
+  ],
+  "empire-total-war": [
+    "atmospheric"
+  ],
+  "world-of-goo": [
+    "atmospheric",
+    "story-rich",
+    "funny",
+    "difficult",
+    "cute",
+    "surreal",
+    "puzzle-heavy"
+  ],
+  "half-life-2-episode-two": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "portal": [
+    "atmospheric",
+    "story-rich",
+    "funny",
+    "short-session"
+  ],
+  "sid-meiers-civilization-iii-complete": [
+    "exploration-driven"
+  ],
+  "sonic-adventure-2": [
+    "story-rich"
+  ],
+  "nex-machina": [
+    "difficult"
+  ],
+  "chained-echoes": [
+    "exploration-driven"
+  ],
+  "prince-of-persia-the-sands-of-time": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "mass-effect": [
+    "atmospheric",
+    "story-rich",
+    "narrative-choice"
+  ],
+  "labyrinth-2": [
+    "relaxing"
+  ],
+  "pillars-of-eternity": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "morrowind": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "silent-hill-2": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "dark"
+  ],
+  "sacrifice": [
+    "surreal"
+  ],
+  "flower": [
+    "exploration-driven"
+  ],
+  "star-wars-jedi-knight-ii-jedi-outcast": [
+    "atmospheric",
+    "story-rich",
+    "combat-focused"
+  ],
+  "the-curse-of-monkey-island": [
+    "funny"
+  ],
+  "monument-valley": [
+    "exploration-driven"
+  ],
+  "far-cry": [
+    "atmospheric",
+    "story-rich",
+    "difficult"
+  ],
+  "stardew-valley": [
+    "atmospheric",
+    "cute",
+    "relaxing"
+  ],
+  "rise-of-nations-extended-edition": [
+    "atmospheric"
+  ],
+  "chicory-a-colorful-tale": [
+    "story-rich",
+    "cute"
+  ],
+  "persona-4-golden": [
+    "story-rich",
+    "emotional"
+  ],
+  "left-4-dead": [
+    "atmospheric"
+  ],
+  "rayman-legends": [
+    "atmospheric",
+    "funny",
+    "difficult"
+  ],
+  "horizon-zero-dawn": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "xcom-enemy-unknown": [
+    "atmospheric",
+    "difficult",
+    "punishing"
+  ],
+  "dark-souls-iii": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "difficult"
+  ],
+  "monster-hunter-world-2": [
+    "atmospheric",
+    "exploration-driven",
+    "difficult",
+    "punishing"
+  ],
+  "what-remains-of-edith-finch": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "short-session"
+  ],
+  "borderlands-2": [
+    "atmospheric",
+    "funny"
+  ],
+  "thirty-flights-of-loving": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "short-session",
+    "surreal"
+  ],
+  "the-room-two": [
+    "atmospheric",
+    "short-session"
+  ],
+  "eve-online": [
+    "atmospheric",
+    "difficult"
+  ],
+  "steamworld-dig-2": [
+    "puzzle-heavy"
+  ],
+  "hollow-knight": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "difficult",
+    "cute"
+  ],
+  "deathloop-2": [
+    "story-rich"
+  ],
+  "devil-may-cry-5": [
+    "atmospheric"
+  ],
+  "far-cry-3": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "medieval-total-war-collection": [
+    "atmospheric"
+  ],
+  "guacamelee-gold-edition": [
+    "funny",
+    "exploration-driven",
+    "difficult"
+  ],
+  "ratchet-clank-rift-apart": [
+    "funny",
+    "cute",
+    "exploration-driven"
+  ],
+  "counter-strike-source": [
+    "atmospheric",
+    "difficult"
+  ],
+  "it-takes-two-2": [
+    "story-rich",
+    "exploration-driven",
+    "emotional"
+  ],
+  "assassins-creed-brotherhood-2": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "night-in-the-woods": [
+    "atmospheric",
+    "story-rich",
+    "funny",
+    "exploration-driven",
+    "cute"
+  ],
+  "owlboy": [
+    "atmospheric",
+    "story-rich",
+    "funny",
+    "cute"
+  ],
+  "tony-hawks-pro-skater-12": [
+    "punishing"
+  ],
+  "ori-and-the-blind-forest": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "difficult",
+    "cute"
+  ],
+  "torchlight-ii": [
+    "atmospheric"
+  ],
+  "f1-2020": [
+    "difficult"
+  ],
+  "her-story": [
+    "story-rich",
+    "short-session"
+  ],
+  "bioshock-2": [
+    "atmospheric",
+    "story-rich",
+    "dark"
+  ],
+  "metro-redux": [
+    "atmospheric",
+    "story-rich",
+    "dark"
+  ],
+  "the-witcher-2-assassins-of-kings-enhanced-edition": [
+    "atmospheric",
+    "story-rich",
+    "difficult",
+    "dark",
+    "narrative-choice"
+  ],
+  "grindstone-2": [
+    "dark",
+    "narrative-choice",
+    "relaxing"
+  ],
+  "west-of-loathing": [
+    "story-rich",
+    "funny"
+  ],
+  "ori-and-the-blind-forest-definitive-edition": [
+    "atmospheric",
+    "story-rich",
+    "difficult",
+    "cute"
+  ],
+  "dragon-age-origins-ultimate-edition": [
+    "story-rich",
+    "narrative-choice"
+  ],
+  "mafia-the-city-of-lost-heaven": [
+    "story-rich"
+  ],
+  "battlefield-1": [
+    "atmospheric"
+  ],
+  "final-fantasy-xvi": [
+    "atmospheric",
+    "story-rich",
+    "emotional"
+  ],
+  "the-stanley-parable": [
+    "atmospheric",
+    "story-rich",
+    "funny",
+    "exploration-driven",
+    "narrative-choice",
+    "short-session",
+    "surreal"
+  ],
+  "mass-effect-legendary-edition": [
+    "atmospheric",
+    "story-rich",
+    "narrative-choice",
+    "combat-focused"
+  ],
+  "the-witcher-2-assassins-of-kings": [
+    "combat-focused"
+  ],
+  "dead-cells": [
+    "atmospheric",
+    "difficult",
+    "punishing"
+  ],
+  "super-hexagon": [
+    "difficult"
+  ],
+  "rogue-legacy-2": [
+    "difficult"
+  ],
+  "fear": [
+    "atmospheric",
+    "story-rich",
+    "dark"
+  ],
+  "limbo": [
+    "atmospheric",
+    "difficult",
+    "dark",
+    "short-session",
+    "combat-focused",
+    "surreal"
+  ],
+  "return-to-castle-wolfenstein": [
+    "atmospheric"
+  ],
+  "pirates-3": [
+    "atmospheric",
+    "exploration-driven",
+    "difficult",
+    "narrative-choice"
+  ],
+  "there-is-no-game-wd": [
+    "story-rich",
+    "funny"
+  ],
+  "xcom-2": [
+    "atmospheric",
+    "difficult",
+    "punishing"
+  ],
+  "star-wars-knights-of-the-old-republic-2": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "narrative-choice"
+  ],
+  "starfield": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "kerbal-space-program": [
+    "funny",
+    "exploration-driven",
+    "difficult"
+  ],
+  "neon-white": [
+    "story-rich"
+  ],
+  "orcs-must-die-unchained": [
+    "funny"
+  ],
+  "towerfall": [
+    "difficult"
+  ],
+  "thief-ii-the-metal-age": [
+    "atmospheric",
+    "story-rich",
+    "dark"
+  ],
+  "cuphead": [
+    "funny",
+    "difficult"
+  ],
+  "monster-hunter-rise": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "divinity-original-sin": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "doom-3": [
+    "atmospheric",
+    "dark"
+  ],
+  "wasteland-2-directors-cut": [
+    "atmospheric",
+    "exploration-driven"
+  ],
+  "super-meat-boy": [
+    "funny",
+    "difficult"
+  ],
+  "marvels-spider-man": [
+    "atmospheric",
+    "exploration-driven"
+  ],
+  "shadowrun-dragonfall-dc": [
+    "atmospheric",
+    "story-rich",
+    "combat-focused"
+  ],
+  "max-payne-3": [
+    "atmospheric",
+    "story-rich",
+    "dark"
+  ],
+  "rimworld": [
+    "atmospheric"
+  ],
+  "year-walk": [
+    "atmospheric",
+    "story-rich",
+    "dark",
+    "short-session",
+    "surreal"
+  ],
+  "plants-vs-zombies-goty-edition": [
+    "funny",
+    "cute"
+  ],
+  "hitman-2-silent-assassin": [
+    "difficult"
+  ],
+  "dying-light-the-following-enhanced-edition": [
+    "atmospheric"
+  ],
+  "call-of-duty-united-offensive": [
+    "atmospheric"
+  ],
+  "warhammer-40000-dawn-of-war-dark-crusade": [
+    "atmospheric"
+  ],
+  "the-swapper": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "difficult",
+    "puzzle-heavy"
+  ],
+  "battlefield-bad-company-2": [
+    "atmospheric"
+  ],
+  "final-fantasy-xii-the-zodiac-age": [
+    "story-rich"
+  ],
+  "sunless-skies": [
+    "story-rich"
+  ],
+  "the-witness": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "difficult",
+    "relaxing",
+    "surreal"
+  ],
+  "oddworld-new-n-tasty": [
+    "atmospheric",
+    "funny",
+    "difficult"
+  ],
+  "serious-sam-the-first-encounter": [
+    "atmospheric",
+    "funny",
+    "difficult"
+  ],
+  "inside": [
+    "atmospheric",
+    "story-rich",
+    "dark",
+    "short-session"
+  ],
+  "psychonauts": [
+    "story-rich",
+    "funny",
+    "exploration-driven",
+    "cute",
+    "surreal"
+  ],
+  "titanfall-2": [
+    "atmospheric",
+    "exploration-driven",
+    "combat-focused"
+  ],
+  "commandos-2-men-of-courage": [
+    "difficult"
+  ],
+  "steinsgate": [
+    "atmospheric",
+    "story-rich",
+    "narrative-choice"
+  ],
+  "crypt-of-the-necrodancer": [
+    "difficult"
+  ],
+  "final-fantasy-iv": [
+    "story-rich",
+    "exploration-driven",
+    "difficult",
+    "combat-focused",
+    "emotional"
+  ],
+  "monkey-island-2-se": [
+    "funny"
+  ],
+  "burnout-paradise-the-ultimate-box": [
+    "funny",
+    "exploration-driven"
+  ],
+  "half-life-2-episode-one": [
+    "atmospheric",
+    "story-rich",
+    "short-session"
+  ],
+  "dead-space-2": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "final-fantasy-vii-remake": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "total-annihilation": [
+    "atmospheric"
+  ],
+  "battlefield-bad-company-2-vietnam-2": [
+    "atmospheric"
+  ],
+  "tribes-ascend": [
+    "difficult"
+  ],
+  "overcooked-all-you-can-eat": [
+    "funny",
+    "cute"
+  ],
+  "dirt-rally": [
+    "atmospheric",
+    "difficult"
+  ],
+  "bionic-commando-rearmed": [
+    "difficult"
+  ],
+  "florence": [
+    "story-rich",
+    "cute",
+    "relaxing"
+  ],
+  "blazblue-calamity-trigger-2": [
+    "story-rich",
+    "cute"
+  ],
+  "rayman-origins": [
+    "funny",
+    "difficult"
+  ],
+  "inscryption": [
+    "story-rich",
+    "dark",
+    "surreal"
+  ],
+  "assassins-creed-2-deluxe-edition": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "wolfenstein-2-the-new-colossus": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "dragon-age-inquisition": [
+    "atmospheric",
+    "story-rich",
+    "narrative-choice",
+    "combat-focused",
+    "exploration-driven"
+  ],
+  "the-sims-3": [
+    "funny"
+  ],
+  "bug-princess": [
+    "difficult"
+  ],
+  "game-dev-story": [
+    "cute"
+  ],
+  "nba-2k16": [
+    "atmospheric"
+  ],
+  "the-secret-of-monkey-island-special-edition": [
+    "story-rich",
+    "funny"
+  ],
+  "paradigm": [
+    "funny",
+    "surreal"
+  ],
+  "guacamelee-super-turbo-championship-edition": [
+    "funny"
+  ],
+  "rise-of-the-tomb-raider": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "nierautomata": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "the-room-old-sins": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "the-lord-of-the-rings-online": [
+    "story-rich",
+    "exploration-driven"
+  ],
+  "zero-escape-the-nonary-games": [
+    "atmospheric",
+    "story-rich",
+    "narrative-choice"
+  ],
+  "mega-man-x-legacy-collection": [
+    "difficult"
+  ],
+  "teenage-mutant-ninja-turtles-shredders-revenge": [
+    "atmospheric"
+  ],
+  "modern-warfare-2": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "dishonored-2": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "call-of-duty-2": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "black-mesa": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "the-witcher-enhanced-edition-directors-cut": [
+    "atmospheric",
+    "story-rich",
+    "narrative-choice"
+  ],
+  "horizon-zero-dawn-2": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "marvels-spider-man-miles-morales": [
+    "story-rich",
+    "exploration-driven",
+    "combat-focused"
+  ],
+  "astebreed": [
+    "surreal"
+  ],
+  "ender-lilies-quietus-of-the-knights": [
+    "atmospheric",
+    "difficult",
+    "dark",
+    "punishing"
+  ],
+  "total-war-warhammer-ii": [
+    "atmospheric"
+  ],
+  "steinsgate-elite": [
+    "story-rich"
+  ],
+  "oxygen-not-included": [
+    "funny",
+    "exploration-driven",
+    "difficult"
+  ],
+  "bastion": [
+    "atmospheric",
+    "story-rich",
+    "short-session"
+  ],
+  "doom-eternal": [
+    "atmospheric"
+  ],
+  "nioh-2-the-complete-edition": [
+    "atmospheric",
+    "story-rich",
+    "difficult",
+    "dark",
+    "punishing"
+  ],
+  "skate": [
+    "funny",
+    "exploration-driven"
+  ],
+  "day-of-the-tentacle-remastered": [
+    "funny"
+  ],
+  "pony-island": [
+    "atmospheric",
+    "story-rich",
+    "funny",
+    "dark",
+    "cute",
+    "short-session"
+  ],
+  "baba-is-you": [
+    "puzzle-heavy"
+  ],
+  "need-for-speed-hot-pursuit-2": [
+    "atmospheric",
+    "funny"
+  ],
+  "rocket-league": [
+    "funny"
+  ],
+  "dead-space": [
+    "atmospheric",
+    "story-rich",
+    "dark"
+  ],
+  "returnal": [
+    "difficult",
+    "punishing"
+  ],
+  "fallout-2-a-post-nuclear-role-playing-game": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "saints-row-iv": [
+    "funny"
+  ],
+  "tomb-raider": [
+    "atmospheric",
+    "exploration-driven"
+  ],
+  "total-war-warhammer": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "the-binding-of-isaac-rebirth": [
+    "atmospheric",
+    "difficult",
+    "dark"
+  ],
+  "battlefield-3": [
+    "atmospheric"
+  ],
+  "gone-home": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "short-session",
+    "relaxing"
+  ],
+  "homeworld-remastered-collection": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "system-shock-enhanced-version": [
+    "atmospheric",
+    "story-rich",
+    "dark"
+  ],
+  "kingdom-two-crowns": [
+    "atmospheric",
+    "exploration-driven"
+  ],
+  "battleblock-theater": [
+    "funny",
+    "difficult"
+  ],
+  "yakuza-0": [
+    "atmospheric",
+    "story-rich",
+    "funny"
+  ],
+  "yakuza-kiwami-2": [
+    "atmospheric"
+  ],
+  "assassins-creed-iv-black-flag": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "resident-evil-7-biohazard": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "prince-of-persia-the-two-thrones": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "shadow-of-mordor": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "yakuza-7": [
+    "story-rich",
+    "funny",
+    "combat-focused"
+  ],
+  "guacamelee-2": [
+    "funny"
+  ],
+  "mega-man-legacy-collection-2": [
+    "difficult"
+  ],
+  "the-legend-of-heroes-trails-in-the-sky": [
+    "story-rich"
+  ],
+  "audiosurf": [
+    "relaxing"
+  ],
+  "shovel-knight": [
+    "funny",
+    "difficult"
+  ],
+  "trials-evolution-gold-edition": [
+    "difficult"
+  ],
+  "crimzon-clover-world-ignition-2": [
+    "difficult"
+  ],
+  "bittrip-presents-runner2-future-legend-of-rhythm-a": [
+    "difficult"
+  ],
+  "wizardry-8": [
+    "atmospheric",
+    "exploration-driven"
+  ],
+  "dragon-quest-builders-2": [
+    "cute"
+  ],
+  "kotor-ii": [
+    "atmospheric",
+    "story-rich",
+    "narrative-choice"
+  ],
+  "dark-souls-prepare-to-die-edition": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "difficult",
+    "dark"
+  ],
+  "rogue-legacy": [
+    "exploration-driven",
+    "difficult",
+    "punishing"
+  ],
+  "amnesia-the-dark-descent": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "dark"
+  ],
+  "hotline-miami": [
+    "atmospheric",
+    "difficult",
+    "surreal"
+  ],
+  "tales-from-the-borderlands": [
+    "atmospheric",
+    "story-rich",
+    "funny",
+    "narrative-choice"
+  ],
+  "titanfall": [
+    "combat-focused"
+  ],
+  "the-last-door-season-2-collectors-edition-2": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "warhammer-40k-dawn-of-war-ii": [
+    "atmospheric"
+  ],
+  "guilty-gear-2020": [
+    "story-rich",
+    "combat-focused"
+  ],
+  "star-wars-the-old-republic": [
+    "atmospheric",
+    "story-rich",
+    "narrative-choice"
+  ],
+  "oddworld-abes-oddysee": [
+    "atmospheric",
+    "funny",
+    "difficult",
+    "dark"
+  ],
+  "the-talos-principle": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "difficult"
+  ],
+  "far-cry-2-fortunes-edition": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "frostpunk": [
+    "atmospheric",
+    "difficult",
+    "dark",
+    "narrative-choice"
+  ],
+  "shadow-tactics": [
+    "atmospheric",
+    "difficult"
+  ],
+  "sayonara-wild-hearts": [
+    "atmospheric",
+    "story-rich",
+    "short-session"
+  ],
+  "turbo-dismount": [
+    "funny"
+  ],
+  "command-conquer-3-tiberium-wars": [
+    "atmospheric"
+  ],
+  "papers-please": [
+    "atmospheric",
+    "story-rich",
+    "difficult",
+    "surreal"
+  ],
+  "planescape-torment-enhanced-edition": [
+    "atmospheric",
+    "story-rich",
+    "narrative-choice"
+  ],
+  "monument-valley-2": [
+    "puzzle-heavy"
+  ],
+  "thumper": [
+    "atmospheric",
+    "difficult",
+    "dark"
+  ],
+  "halo-the-master-chief-collection": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "final-fantasy-xx-2-hd-remaster": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "valkyria-chronicles": [
+    "story-rich"
+  ],
+  "thief-3-deadly-shadows": [
+    "atmospheric",
+    "story-rich",
+    "dark"
+  ],
+  "assassins-creed-odyssey": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "obsidian": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "a-space-for-the-unbound": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "relaxing",
+    "surreal",
+    "emotional"
+  ],
+  "tales-of-arise": [
+    "story-rich",
+    "combat-focused"
+  ],
+  "blazblue-centralfiction": [
+    "story-rich",
+    "difficult",
+    "cute"
+  ],
+  "frozen-synapse": [
+    "difficult"
+  ],
+  "cities-skylines": [
+    "funny"
+  ],
+  "doom": [
+    "atmospheric",
+    "difficult"
+  ],
+  "dmc": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "machinarium": [
+    "atmospheric",
+    "story-rich",
+    "difficult",
+    "cute"
+  ],
+  "total-war-warhammer-iii": [
+    "atmospheric",
+    "story-rich"
+  ],
+  "giana-sisters-rise-of-the-owlverlord-2": [
+    "difficult"
+  ],
+  "labyrinth-of-galleria-coven-of-dusk": [
+    "dark"
+  ],
+  "shatter": [
+    "story-rich",
+    "exploration-driven",
+    "combat-focused"
+  ],
+  "defcon": [
+    "atmospheric"
+  ],
+  "humanity": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "difficult"
+  ],
+  "80-days": [
+    "atmospheric",
+    "story-rich",
+    "funny",
+    "exploration-driven",
+    "narrative-choice",
+    "short-session",
+    "relaxing"
+  ],
+  "pyre": [
+    "atmospheric",
+    "story-rich",
+    "narrative-choice"
+  ],
+  "speedrunners": [
+    "funny"
+  ],
+  "yakuza-6": [
+    "story-rich",
+    "funny",
+    "combat-focused"
+  ],
+  "trine-2-complete-story": [
+    "atmospheric"
+  ],
+  "persona-3-portable": [
+    "story-rich",
+    "dark",
+    "emotional"
+  ],
+  "unpacking-2": [
+    "atmospheric",
+    "cute",
+    "relaxing"
+  ],
+  "desperados-iii": [
+    "atmospheric",
+    "difficult"
+  ],
+  "salt-and-sanctuary": [
+    "atmospheric",
+    "story-rich",
+    "difficult",
+    "dark"
+  ],
+  "onimusha-2-samurais-destiny": [
+    "story-rich",
+    "exploration-driven",
+    "emotional"
+  ],
+  "spacechem": [
+    "difficult"
+  ],
+  "horizon-zero-dawn-complete-edition": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven"
+  ],
+  "bulb-boy": [
+    "atmospheric",
+    "dark",
+    "cute",
+    "surreal",
+    "puzzle-heavy"
+  ],
+  "moss": [
+    "cute"
+  ],
+  "far-lone-sails": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "short-session"
+  ],
+  "grim-fandango-remastered": [
+    "atmospheric",
+    "story-rich",
+    "funny"
+  ],
+  "the-silent-age": [
+    "atmospheric",
+    "story-rich",
+    "short-session"
+  ],
+  "the-walking-dead-the-telltale-definitive-series": [
+    "atmospheric",
+    "story-rich",
+    "dark",
+    "narrative-choice"
+  ],
+  "south-park-the-stick-of-truth": [
+    "story-rich",
+    "funny",
+    "short-session"
+  ],
+  "darkest-dungeon": [
+    "atmospheric",
+    "difficult",
+    "dark",
+    "punishing"
+  ],
+  "halo-infinite": [
+    "atmospheric",
+    "story-rich",
+    "combat-focused"
+  ],
+  "aliens-go-home-run": [
+    "funny",
+    "cute"
+  ],
+  "dungeon-village": [
+    "cute",
+    "combat-focused"
+  ],
+  "rift": [
+    "atmospheric"
+  ],
+  "pro-evolution-soccer-2018": [
+    "atmospheric"
+  ],
+  "darwinia": [
+    "story-rich"
+  ],
+  "disciples-ii-galleans-return": [
+    "atmospheric"
+  ],
+  "castle-crashers": [
+    "funny"
+  ],
+  "dust-an-elysian-tail": [
+    "atmospheric",
+    "story-rich",
+    "exploration-driven",
+    "cute"
+  ]
+}

@@ -11,7 +11,9 @@
     "astro": "astro",
     "fetch:games": "node scripts/fetch-games.ts",
     "clean:tags": "node scripts/clean-tags.ts",
-    "compute:matches": "node scripts/compute-matches.ts"
+    "compute:matches": "node scripts/compute-matches.ts",
+    "fetch:screenshots": "node scripts/fetch-screenshots.ts",
+    "generate:reasons": "node scripts/generate-reasons.ts"
   },
   "engines": {
     "node": ">=22.23.4"
@@ -23,6 +25,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
     "@tailwindcss/vite": "^4.3.5",
+    "https-proxy-agent": "^9.1.0",
     "tailwindcss": "^4.3.5",
     "typescript": "^5.9.3"
   }
