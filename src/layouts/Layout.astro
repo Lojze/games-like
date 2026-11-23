@@ -52,9 +52,10 @@ const ogImageURL = new URL(ogImage, base).href;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0b1120" />
     <!-- 站点所有权验证改由 Cloudflare DNS TXT 记录完成，不再注入 GSC HTML meta -->
-    <!-- Humble Bundle / Impact 联盟站点验证（按官方给定标签保留 name/value 属性）
+    <!-- Humble Bundle / Impact 联盟站点验证（2026-11-23 按 Humble 后台最新给定标签更新 value）
+         同名验证项只保留一个：验证器常只读取第一个 meta，两个 value 并存会让新值读不到。
          value 不是 HTML meta 的标准属性，用展开写法输出以通过 astro check 的类型检查 -->
-    <meta {...{ name: 'impact-site-verification', value: '778bb8e6-b7a5-4b5d-a865-827b3ba4b5be' }} />
+    <meta {...{ name: 'impact-site-verification', value: '65048ae8-9f65-49ac-b666-f4adcee9c6e1' }} />
 
     <link rel="sitemap" href="/sitemap-index.xml" />
 
