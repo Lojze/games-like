@@ -1120,12 +1120,29 @@ a {
   color: var(--color-violet);
 }
 
-/* 卡片里的 Steam 按钮做成整行宽按钮，更显眼且多卡等高时底部对齐 */
+/* 卡片底部按钮区：容器统一负责排布，不关心里面有几个按钮、各自长什么样。
+   单按钮占满整行；追加第二个按钮后自动等分并排，宽度不足时自动换行，
+   间距由 gap 统一控制；整组仍由 margin-top:auto 保持多卡等高时的贴底对齐。 */
+.gc__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 10px;
+  margin-top: auto;
+}
+
+/* 放进按钮区的任何子元素都参与等分，未来新增按钮无需改 CSS。
+   160px 是单按钮的最小舒适宽度（两按钮合计需 ~330px 才并排），
+   更窄的卡片会换成上下两行以免文字被挤；想让窄卡也并排，把此值调小即可。 */
+.gc__actions > * {
+  flex: 1 1 160px;
+}
+
+/* Steam 按钮在卡片内只保留对齐；宽度与间距交给 .gc__actions */
 .gc .steam-btn {
-  width: 100%;
   align-self: stretch;
   justify-content: center;
-  margin-top: auto;
+  margin-top: 0;
 }
 
 /* ── 截图 Lightbox ─────────────────────────────────────────── */
