@@ -3,6 +3,7 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import GameCard from '../../components/GameCard.astro';
 import { FEEL_WHITELIST } from '../../../config/feel-whitelist';
 import { buildMetaBadges, type MetaBadge } from '../../utils/tag-translator';
+import { pickFeelTags } from '../../utils/feel-tags';
 
 interface GameScreenshot {
   path_thumbnail: string;
@@ -33,6 +34,8 @@ interface TagCard {
   /** 有站内推荐页时走内链，否则降级到 Steam 外链，避免出现 404 */
   href: string;
   external: boolean;
+  /** 卡片上展示的感受标签（与其他页面共用 pickFeelTags 规则） */
+  feels: string[];
   /** 前端排序键：直接输出为 data-*，避免 JS 去解析渲染后的文本 */
   score: number;
   year: number;
@@ -139,6 +142,7 @@ export async function getStaticPaths() {
           hue: hueOf(game.slug),
           steam_url: steam,
           screenshots: Array.isArray(game.screenshots) ? game.screenshots : [],
+          feels: pickFeelTags(feelTags[game.slug]),
           badges: buildMetaBadges({
             metacritic: typeof game.metacritic === 'number' ? game.metacritic : null,
             rating: typeof game.rating === 'number' ? game.rating : null,
@@ -250,6 +254,7 @@ const firstPageEnd = Math.min(PAGE_SIZE, cards.length);
               badges={card.badges}
               screenshots={card.screenshots}
               steamUrl={card.steam_url}
+              feelTags={card.feels}
               href={card.href}
               hrefExternal={card.external}
               compact

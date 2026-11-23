@@ -7,6 +7,7 @@ import {
   buildMetaBadges,
   type MetaBadge,
 } from '../../utils/tag-translator';
+import { pickFeelTags } from '../../utils/feel-tags';
 
 interface GameScreenshot {
   path_thumbnail: string;
@@ -45,6 +46,8 @@ interface EnrichedRecommendation {
   screenshots: GameScreenshot[];
   /** 占位封面色相，由 slug 稳定派生 */
   hue: number;
+  /** 卡片上展示的感受标签（与其他页面共用 pickFeelTags 规则） */
+  feels: string[];
   /** 原始共享标签，供规则引擎兜底生成文案 */
   sharedTags: string[];
   /** reasons.json 里的专属推荐语；为空时组件退回规则引擎 */
@@ -162,6 +165,7 @@ export async function getStaticPaths() {
             blurb: blurbOf(other?.description),
             screenshots: Array.isArray(other?.screenshots) ? other.screenshots : [],
             hue: hueOf(rec.slug),
+            feels: pickFeelTags(feelTags[rec.slug]),
             sharedTags: asStringArray(rec.shared_tags),
             reason: reasons[slug]?.[rec.slug] ?? '',
             year: yearOf(other?.released),
@@ -258,6 +262,7 @@ const seoTitle = `Games Like ${name} | Games by Feel`;
             badges={rec.badges}
             screenshots={rec.screenshots}
             steamUrl={rec.steam_url}
+            feelTags={rec.feels}
             blurb={rec.blurb}
             reason={rec.reason}
             sourceName={name}

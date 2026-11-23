@@ -9,8 +9,10 @@
  *   4. Why it fits：优先用 reasons.json 的专属文案；缺失时调用规则引擎生成
  *   5. 底部按钮区 .gc__actions（flex 容器，已预留多按钮位）：当前仅 View on Steam ↗
  *
- * feelTags 是可选的展示层辅助信息：目前只有首页 Popular 网格传入，
- * 不传时整块不渲染，标签页 / 详情页的卡片保持原样。
+ * feelTags 是可选的展示层辅助信息：首页 / 标签聚合页 / 详情页三个页面
+ * 都通过 utils/feel-tags.ts 的 pickFeelTags() 统一选取（去重、trending 优先、
+ * 最多 3 个）后传入，保证同一款游戏在全站任意位置展示的感受标签一致；
+ * 不传时整块不渲染。
  * Lightbox 脚本用事件委托，整页只初始化一次，可左右切换 / ESC 关闭。
  */
 import GameCover from './GameCover.astro';

@@ -397,7 +397,7 @@ a {
   font-size: 0.84rem;
 }
 
-/* ── 暗黑游戏卡片 ───────────────────────────────────────────── */
+/* ── 卡片栅格（卡片本体样式见下方「全站统一卡片」分节） ────────── */
 .game-grid {
   display: grid;
   gap: 20px;
@@ -421,88 +421,7 @@ a {
   min-width: 0;
 }
 
-.game-card {
-  position: relative;
-  flex: 1 1 auto;
-  display: flex;
-  gap: 15px;
-  align-items: stretch;
-  min-width: 0;
-  width: 100%;
-  padding: 15px;
-  border: 1px solid rgba(148, 163, 184, 0.16);
-  border-radius: 15px;
-  background: linear-gradient(160deg, var(--color-panel) 0%, #182437 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 6px 18px rgba(0, 0, 0, 0.22);
-  text-decoration: none;
-  transition:
-    transform 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.22s ease,
-    background 0.22s ease;
-}
-
-.game-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(56, 189, 248, 0.62);
-  background: linear-gradient(160deg, var(--color-panel-hi) 0%, #1b2a41 100%);
-  box-shadow:
-    0 16px 34px rgba(0, 0, 0, 0.42),
-    0 0 0 1px rgba(56, 189, 248, 0.2),
-    0 0 26px rgba(56, 189, 248, 0.16);
-}
-
-.game-card__info {
-  flex: 1 1 auto;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.game-card__title {
-  margin: 0 0 8px;
-  font-size: 1.02rem;
-  font-weight: 700;
-  line-height: 1.3;
-  letter-spacing: -0.015em;
-  color: var(--color-frost);
-  overflow-wrap: anywhere;
-  transition: color 0.2s ease, text-shadow 0.2s ease;
-}
-
-.game-card:hover .game-card__title {
-  color: #ffffff;
-  text-shadow: 0 0 16px rgba(125, 211, 252, 0.4);
-}
-
-.game-card__title a {
-  text-decoration: none;
-}
-
-.game-card__reason {
-  flex: 1 1 auto;
-  margin: 0 0 10px;
-  color: var(--color-mist);
-  font-size: 0.83rem;
-  line-height: 1.55;
-}
-
-/* 首页热门卡片：封面在上、文字在下 */
-.game-card--tile {
-  flex-direction: column;
-  gap: 12px;
-}
-
-.game-card--tile .cover-art {
-  width: 100%;
-  height: 148px;
-  border-radius: 10px;
-}
-
-.game-card--tile .game-card__title {
-  margin: 0 0 2px;
-  font-size: 0.98rem;
-}
+/* 旧 .game-card* 卡片样式已移除：全站统一由下方 .gc 组件承担 */
 
 /* ── 封面：深色渐变块 + 首字母兜底 ──────────────────────────── */
 .cover-art {
@@ -760,63 +679,10 @@ a {
   color: var(--color-neon);
 }
 
-/* ── 详情页：单列宽卡（封面固定宽高在左，信息在右） ──────────── */
+/* ── 详情页：单列栅格 ───────────────────────────────────────── */
 .game-grid--detail {
   grid-template-columns: 1fr;
   gap: 18px;
-}
-
-.game-card--detail {
-  gap: 22px;
-  padding: 20px;
-}
-
-.game-card--detail .cover-art {
-  width: 176px;
-  height: 196px;
-  border-radius: 12px;
-  border: 1px solid rgba(148, 163, 184, 0.18);
-}
-
-.game-card--detail .cover-art__initial {
-  font-size: 4.2rem;
-}
-
-.game-card--detail .game-card__title {
-  margin-bottom: 9px;
-  font-size: 1.16rem;
-}
-
-/* 150 字简介：比标题暗一档、比推荐理由亮一档，形成阅读层次 */
-.game-card__blurb {
-  margin: 0 0 13px;
-  color: #c5d3e6;
-  font-size: 0.865rem;
-  line-height: 1.62;
-}
-
-.game-card--detail .game-card__reason {
-  flex: 0 0 auto;
-  margin: 0 0 14px;
-  padding-left: 12px;
-  border-left: 2px solid rgba(167, 139, 250, 0.5);
-  font-size: 0.84rem;
-  line-height: 1.6;
-}
-
-.game-card__reason-tag {
-  display: block;
-  margin-bottom: 4px;
-  font-size: 0.67rem;
-  font-weight: 700;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--color-violet);
-}
-
-.game-card--detail .badges {
-  margin-top: auto;
-  padding-top: 12px;
 }
 
 /* Steam 按钮：深色底 + 描边，悬停提亮 */
@@ -934,16 +800,6 @@ a {
   .page-main {
     padding: 28px 16px 56px;
   }
-  /* 窄屏下宽卡改为封面在上、信息在下，避免文字被挤成细长条 */
-  .game-card--detail {
-    flex-direction: column;
-    gap: 14px;
-    padding: 16px;
-  }
-  .game-card--detail .cover-art {
-    width: 100%;
-    height: 172px;
-  }
   .seo-copy {
     padding: 24px 20px;
   }
@@ -967,7 +823,7 @@ a {
 }
 
 /* ── 全站统一卡片 GameCard ─────────────────────────────────────
-   首页 / 标签页 / 详情页共用；旧 .game-card* 规则保留但不再被引用。 */
+   首页 / 标签页 / 详情页共用；旧 .game-card* 规则已全部移除。 */
 .gc {
   position: relative;
   flex: 1 1 auto;

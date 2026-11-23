@@ -13,7 +13,8 @@
     "clean:tags": "node scripts/clean-tags.ts",
     "compute:matches": "node scripts/compute-matches.ts",
     "fetch:screenshots": "node scripts/fetch-screenshots.ts",
-    "generate:reasons": "node scripts/generate-reasons.ts"
+    "generate:reasons": "node scripts/generate-reasons.ts",
+    "build:full": "npm run fetch:games && npm run fetch:screenshots && npm run clean:tags && npm run compute:matches && npm run generate:reasons && npm run build"
   },
   "engines": {
     "node": ">=22.23.4"

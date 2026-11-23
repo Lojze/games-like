@@ -4,6 +4,7 @@ import GameCard from '../components/GameCard.astro';
 import { FEEL_WHITELIST } from '../../config/feel-whitelist';
 import { TRENDING_FEELS } from '../../config/trending-feels';
 import { buildMetaBadges, type MetaBadge } from '../utils/tag-translator';
+import { pickFeelTags } from '../utils/feel-tags';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
@@ -103,20 +104,13 @@ const comparePopular = (a: GameRecord, b: GameRecord): number =>
   feelCountOf(b) - feelCountOf(a) ||
   a.name.localeCompare(b.name, 'en', { sensitivity: 'base' });
 
-// Reddit 验证过的 4 个高频标签，首页标签池与卡片 chip 共用同一份顺序
+// 首页 Browse by feel 的置顶顺序：Reddit 验证过的 4 个高频标签按语料热度靠前
 const TRENDING_RANK = new Map<string, number>(
   TRENDING_FEELS.map((tag, index): [string, number] => [tag, index]),
 );
 
-/**
- * 卡片辅助信息里的感受标签：trending 新词优先，最多 3 个。
- * 这样 cozy / satisfying 等刚验证的词能出现在首页第一屏卡片上，
- * 而不是被游戏已有的 atmospheric / story-rich 挤掉。
- */
-const feelsForCard = (slug: string): string[] =>
-  [...new Set(asStringArray(feelTags[slug]))]
-    .sort((a, b) => (TRENDING_RANK.get(a) ?? 999) - (TRENDING_RANK.get(b) ?? 999))
-    .slice(0, 3);
+// 卡片 chips 与标签页 / 详情页共用 pickFeelTags，选取规则全站统一（见 utils/feel-tags.ts）
+const feelsForCard = (slug: string): string[] => pickFeelTags(feelTags[slug]);
 
 const popular: PopularGame[] = [...pageSlugs]
   .map((slug) => gameBySlug.get(slug))

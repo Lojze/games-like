@@ -51,11 +51,12 @@ const ogImageURL = new URL(ogImage, base).href;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0b1120" />
-    <!-- Google Search Console 站点所有权验证（全站共用的 head，所有页面自动带上） -->
-    <meta name="google-site-verification" content="tioO1xztp2Kmj_vu8v3lT0uMERn3AHHBBztQkFNIwhE" />
+    <!-- 站点所有权验证改由 Cloudflare DNS TXT 记录完成，不再注入 GSC HTML meta -->
     <!-- Humble Bundle / Impact 联盟站点验证（按官方给定标签保留 name/value 属性）
          value 不是 HTML meta 的标准属性，用展开写法输出以通过 astro check 的类型检查 -->
     <meta {...{ name: 'impact-site-verification', value: '778bb8e6-b7a5-4b5d-a865-827b3ba4b5be' }} />
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
