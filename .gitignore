@@ -9,3 +9,8 @@ dist/
 
 # 本地预览截图（仅验证用，不入库）
 .preview-shots/
+
+# Reddit 抓取原始语料：可再生的大文件中间产物，不入库；
+# 报告 data/reddit-analysis.md 与分析脚本 scripts/analyze-reddit.ts 仍会提交。
+# 本地可用 `node scripts/analyze-reddit.ts --skip-fetch` 复用它重跑分析。
+data/reddit_raw.json

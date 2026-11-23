@@ -654,6 +654,34 @@ a {
   color: #bae6fd;
 }
 
+/* 首页 Browse by feel 置顶项：Reddit 玩家语料验证过的高频标签，暖色高亮区分 */
+.pill--trending {
+  color: #ffe8c2;
+  border-color: rgba(251, 146, 60, 0.52);
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.2), rgba(244, 63, 94, 0.12));
+  box-shadow: 0 0 16px rgba(251, 146, 60, 0.14);
+}
+
+.pill--trending:hover {
+  color: #fff7ed;
+  border-color: rgba(251, 146, 60, 0.88);
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.34), rgba(244, 63, 94, 0.2));
+  box-shadow: 0 0 22px rgba(251, 146, 60, 0.3);
+}
+
+.pill--trending .pill__count {
+  color: #fdba74;
+}
+
+.pill--trending:hover .pill__count {
+  color: #fed7aa;
+}
+
+.pill__flame {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
 /* ── 标签聚合页：温和空状态 ─────────────────────────────────── */
 .empty-state {
   display: flex;
@@ -1092,6 +1120,58 @@ a {
   margin: 0 0 12px;
   padding-top: 0;
   border-top: 0;
+}
+
+/* 卡片辅助信息：感受标签 chips。默认紫色，trending 新标签用暖色 + 火苗，
+   与首页 Browse by feel 的置顶高亮保持同一套视觉语言。 */
+.gc__feels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 12px;
+}
+
+.gc__feel {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(167, 139, 250, 0.28);
+  background: rgba(167, 139, 250, 0.1);
+  color: #c4b5fd;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+.gc__feel:hover {
+  color: #ede9fe;
+  border-color: rgba(167, 139, 250, 0.7);
+  background: rgba(167, 139, 250, 0.22);
+}
+
+.gc__feel--trending {
+  border-color: rgba(251, 146, 60, 0.45);
+  background: rgba(251, 146, 60, 0.14);
+  color: #fdba74;
+}
+
+.gc__feel--trending::before {
+  content: "🔥";
+  margin-right: 4px;
+  font-size: 0.66rem;
+}
+
+.gc__feel--trending:hover {
+  color: #fff7ed;
+  border-color: rgba(251, 146, 60, 0.8);
+  background: rgba(251, 146, 60, 0.26);
 }
 
 .gc__blurb {

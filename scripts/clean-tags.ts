@@ -5,8 +5,9 @@
  *
  * 处理流程（对每个游戏的 tags 数组）：
  *   ① 小写归一化：normalizeFeelTag()，统一成小写连字符词形
- *   ② 别名替换：按 config/tag-aliases.ts 把 RAWG 原词换成规范词；表中没有的词保留原样
- *   ③ 白名单过滤：只保留 config/feel-whitelist.ts 的 15 个规范词（严格相等）
+ *   ② 别名替换：按 config/tag-aliases.ts 把 RAWG 原词换成 1..N 个规范词；
+ *      数组值（一对多）可让同一原词既保留原官方词、又贡献新标签；表中没有的词保留原样
+ *   ③ 白名单过滤：只保留 config/feel-whitelist.ts 的规范词（严格相等）
  *   ④ MIN_DF=5：统计映射后的规范词频次（df = 含该词的游戏数），
  *      同一游戏内多个原词映射到同一规范词只计 1 次；df < 5 的词从最终词汇表移除
  *   ⑤ 输出 { "game-slug": ["tag1", "tag2"] }；清洗后无感受标签的游戏不写入，
@@ -68,19 +69,21 @@ async function main(): Promise<void> {
     index.set(key, label);
   }
 
-  // 别名表自检：键必须是归一化词形，值必须落在白名单内，防止配置漂移
+  // 别名表自检：键必须是归一化词形，所有目标值必须落在白名单内，防止配置漂移
   for (const [from, to] of Object.entries(TAG_ALIASES)) {
     if (normalizeFeelTag(from) !== from) {
       throw new Error(`别名键「${from}」不是 normalizeFeelTag() 后的词形`);
     }
-    if (!index.has(normalizeFeelTag(to))) {
-      throw new Error(`别名目标「${to}」不在 FEEL_WHITELIST 中`);
+    for (const target of Array.isArray(to) ? to : [to]) {
+      if (!index.has(normalizeFeelTag(target))) {
+        throw new Error(`别名目标「${target}」不在 FEEL_WHITELIST 中`);
+      }
     }
   }
 
   let rawTagTotal = 0;
   let aliasApplied = 0; // 原始 tag 条目中命中别名表的数量
-  let whitelistHits = 0; // 映射后落在白名单内的原始 tag 条目数（MIN_DF 前）
+  let whitelistHits = 0; // 映射后落在白名单内的 (原词, 规范词) 条目数（MIN_DF 前）
   const df = new Map<string, number>(); // ④ 每个规范词出现在多少个游戏里
   const contributors = new Map<string, Set<string>>(); // 规范词 <- 哪些归一化原词
   const perGame: Array<{ slug: string; keys: string[] }> = [];
@@ -102,23 +105,28 @@ async function main(): Promise<void> {
       const normalized = normalizeFeelTag(tag);
       if (!normalized) continue;
 
-      // ② 别名替换（不在表里的词保留原样）
-      const mapped = TAG_ALIASES[normalized] ?? normalized;
-      if (mapped !== normalized) aliasApplied++;
+      // ② 别名替换（支持一对多；不在表里的词保留原样）
+      const alias = TAG_ALIASES[normalized];
+      const targets = alias === undefined
+        ? [normalized]
+        : Array.isArray(alias) ? alias : [alias];
+      if (alias !== undefined) aliasApplied++;
 
-      // ③ 白名单过滤（严格相等，不做子串匹配）
-      const key = normalizeFeelTag(mapped);
-      if (!index.has(key)) continue;
-      whitelistHits++;
+      for (const mapped of targets) {
+        // ③ 白名单过滤（严格相等，不做子串匹配）
+        const key = normalizeFeelTag(mapped);
+        if (!index.has(key)) continue;
+        whitelistHits++;
 
-      if (!contributors.has(key)) contributors.set(key, new Set());
-      (contributors.get(key) as Set<string>).add(normalized);
+        if (!contributors.has(key)) contributors.set(key, new Set());
+        (contributors.get(key) as Set<string>).add(normalized);
 
-      // ④ df 统计：同一游戏内多个原词映射到同一规范词只计 1 次
-      if (seenInGame.has(key)) continue;
-      seenInGame.add(key);
-      keys.push(key);
-      df.set(key, (df.get(key) ?? 0) + 1);
+        // ④ df 统计：同一游戏内多个原词映射到同一规范词只计 1 次
+        if (seenInGame.has(key)) continue;
+        seenInGame.add(key);
+        keys.push(key);
+        df.set(key, (df.get(key) ?? 0) + 1);
+      }
     }
     perGame.push({ slug, keys });
   }

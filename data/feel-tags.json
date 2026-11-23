@@ -3,7 +3,8 @@
     "atmospheric",
     "story-rich",
     "funny",
-    "difficult"
+    "difficult",
+    "linear"
   ],
   "red-dead-redemption-2": [
     "atmospheric",
@@ -62,7 +63,8 @@
   ],
   "bioshock-infinite": [
     "atmospheric",
-    "story-rich"
+    "story-rich",
+    "linear"
   ],
   "the-elder-scrolls-v-skyrim": [
     "atmospheric",
@@ -94,6 +96,7 @@
     "atmospheric",
     "story-rich",
     "exploration-driven",
+    "satisfying",
     "combat-focused",
     "emotional",
     "punishing"
@@ -112,6 +115,7 @@
   "hades-2018": [
     "atmospheric",
     "story-rich",
+    "satisfying",
     "punishing"
   ],
   "unreal-tournament-2004-editors-choice-edition": [
@@ -126,7 +130,8 @@
     "atmospheric",
     "story-rich",
     "exploration-driven",
-    "dark"
+    "dark",
+    "immersive"
   ],
   "final-fantasy-vi": [
     "story-rich",
@@ -140,16 +145,20 @@
   ],
   "threes": [
     "cute",
+    "cozy",
     "relaxing",
     "puzzle-heavy"
   ],
   "prune": [
     "relaxing",
+    "cozy",
+    "linear",
     "emotional"
   ],
   "modern-warfare": [
     "atmospheric",
-    "story-rich"
+    "story-rich",
+    "linear"
   ],
   "okami-hd-da-shen-jue-jing-ban": [
     "atmospheric",
@@ -160,6 +169,7 @@
     "funny",
     "dark",
     "cute",
+    "cozy",
     "narrative-choice"
   ],
   "splinter-cell-chaos-theory": [
@@ -171,6 +181,7 @@
     "funny",
     "exploration-driven",
     "difficult",
+    "cozy",
     "cute",
     "relaxing",
     "surreal"
@@ -185,7 +196,9 @@
     "exploration-driven"
   ],
   "forza-motorsport": [
-    "narrative-choice"
+    "cozy",
+    "narrative-choice",
+    "immersive"
   ],
   "rome-total-war-collection": [
     "atmospheric"
@@ -200,11 +213,13 @@
   "journey": [
     "atmospheric",
     "story-rich",
-    "exploration-driven"
+    "exploration-driven",
+    "cozy"
   ],
   "system-shock-2": [
     "atmospheric",
-    "story-rich"
+    "story-rich",
+    "immersive"
   ],
   "the-witcher-3-wild-hunt": [
     "atmospheric",
@@ -237,7 +252,8 @@
   ],
   "nier-automata-game-of-the-yorha-edition": [
     "atmospheric",
-    "story-rich"
+    "story-rich",
+    "satisfying"
   ],
   "tumblestone": [
     "puzzle-heavy"
@@ -246,14 +262,19 @@
     "atmospheric",
     "exploration-driven",
     "cute",
+    "cozy",
     "relaxing"
+  ],
+  "ticket-to-ride": [
+    "cozy"
   ],
   "resident-evil-2-2019": [
     "atmospheric"
   ],
   "call-of-duty": [
     "atmospheric",
-    "story-rich"
+    "story-rich",
+    "linear"
   ],
   "mark-of-the-ninja": [
     "atmospheric",
@@ -289,6 +310,7 @@
     "exploration-driven",
     "difficult",
     "cute",
+    "cozy",
     "emotional",
     "punishing"
   ],
@@ -317,7 +339,8 @@
   "dragon-age-origins": [
     "atmospheric",
     "story-rich",
-    "narrative-choice"
+    "narrative-choice",
+    "satisfying"
   ],
   "legacy-of-kain-soul-reaver": [
     "atmospheric",
@@ -333,8 +356,12 @@
   ],
   "microsoft-flight-simulator": [
     "atmospheric",
+    "cozy",
     "short-session",
     "surreal"
+  ],
+  "nba-2k17": [
+    "cozy"
   ],
   "sea-of-stars-2": [
     "story-rich"
@@ -360,17 +387,20 @@
   "spelunky-2": [
     "funny",
     "cute",
+    "cozy",
     "narrative-choice",
     "punishing"
   ],
   "diablo-iv": [
     "story-rich",
-    "exploration-driven"
+    "exploration-driven",
+    "satisfying"
   ],
   "brothers-a-tale-of-two-sons-2": [
     "atmospheric",
     "story-rich",
-    "short-session"
+    "short-session",
+    "linear"
   ],
   "final-fantasy-viii": [
     "atmospheric",
@@ -380,7 +410,8 @@
     "combat-focused"
   ],
   "bayonetta": [
-    "atmospheric"
+    "atmospheric",
+    "satisfying"
   ],
   "black-white": [
     "story-rich"
@@ -395,11 +426,13 @@
   ],
   "deus-ex-game-of-the-year-edition": [
     "atmospheric",
-    "story-rich"
+    "story-rich",
+    "immersive"
   ],
   "forza-horizon-4": [
     "atmospheric",
-    "exploration-driven"
+    "exploration-driven",
+    "cozy"
   ],
   "spelunky": [
     "difficult",
@@ -413,6 +446,7 @@
     "story-rich",
     "funny",
     "difficult",
+    "cozy",
     "cute",
     "surreal",
     "puzzle-heavy"
@@ -430,8 +464,12 @@
     "funny",
     "short-session"
   ],
+  "monster-hunter-world-iceborne": [
+    "satisfying"
+  ],
   "sonic-adventure-2": [
-    "story-rich"
+    "story-rich",
+    "cozy"
   ],
   "nex-machina": [
     "difficult"
@@ -441,7 +479,8 @@
   ],
   "prince-of-persia-the-sands-of-time": [
     "atmospheric",
-    "story-rich"
+    "story-rich",
+    "satisfying"
   ],
   "mass-effect": [
     "atmospheric",
@@ -449,7 +488,8 @@
     "narrative-choice"
   ],
   "labyrinth-2": [
-    "relaxing"
+    "relaxing",
+    "cozy"
   ],
   "pillars-of-eternity": [
     "atmospheric",
@@ -486,6 +526,7 @@
   "stardew-valley": [
     "atmospheric",
     "cute",
+    "cozy",
     "relaxing"
   ],
   "the-curse-of-monkey-island": [
@@ -503,12 +544,14 @@
   ],
   "chicory-a-colorful-tale": [
     "story-rich",
-    "cute"
+    "cute",
+    "cozy"
   ],
   "rayman-legends": [
     "atmospheric",
     "funny",
-    "difficult"
+    "difficult",
+    "cozy"
   ],
   "horizon-zero-dawn": [
     "atmospheric",
@@ -519,6 +562,7 @@
     "atmospheric",
     "exploration-driven",
     "difficult",
+    "satisfying",
     "punishing"
   ],
   "left-4-dead": [
@@ -543,7 +587,8 @@
   ],
   "borderlands-2": [
     "atmospheric",
-    "funny"
+    "funny",
+    "satisfying"
   ],
   "thirty-flights-of-loving": [
     "atmospheric",
@@ -560,7 +605,8 @@
     "puzzle-heavy"
   ],
   "deathloop-2": [
-    "story-rich"
+    "story-rich",
+    "immersive"
   ],
   "eve-online": [
     "atmospheric",
@@ -575,10 +621,12 @@
     "story-rich",
     "exploration-driven",
     "difficult",
-    "cute"
+    "cute",
+    "cozy"
   ],
   "devil-may-cry-5": [
-    "atmospheric"
+    "atmospheric",
+    "satisfying"
   ],
   "medieval-total-war-collection": [
     "atmospheric"
@@ -588,7 +636,8 @@
     "story-rich",
     "funny",
     "exploration-driven",
-    "cute"
+    "cute",
+    "cozy"
   ],
   "counter-strike-source": [
     "atmospheric",
@@ -605,6 +654,7 @@
   ],
   "ratchet-clank-rift-apart": [
     "funny",
+    "cozy",
     "cute",
     "exploration-driven"
   ],
@@ -617,7 +667,8 @@
     "atmospheric",
     "story-rich",
     "funny",
-    "cute"
+    "cute",
+    "cozy"
   ],
   "f1-2020": [
     "difficult"
@@ -631,6 +682,7 @@
     "story-rich",
     "exploration-driven",
     "difficult",
+    "cozy",
     "cute"
   ],
   "the-witcher-2-assassins-of-kings-enhanced-edition": [
@@ -648,18 +700,22 @@
   "bioshock-2": [
     "atmospheric",
     "story-rich",
-    "dark"
+    "dark",
+    "linear"
   ],
   "torchlight-ii": [
-    "atmospheric"
+    "atmospheric",
+    "satisfying"
   ],
   "tony-hawks-pro-skater-12": [
     "punishing"
   ],
   "grindstone-2": [
     "dark",
+    "satisfying",
     "narrative-choice",
-    "relaxing"
+    "relaxing",
+    "cozy"
   ],
   "west-of-loathing": [
     "story-rich",
@@ -689,12 +745,14 @@
   "dead-cells": [
     "atmospheric",
     "difficult",
+    "satisfying",
     "punishing"
   ],
   "ori-and-the-blind-forest-definitive-edition": [
     "atmospheric",
     "story-rich",
     "difficult",
+    "cozy",
     "cute"
   ],
   "final-fantasy-xvi": [
@@ -747,6 +805,7 @@
     "dark",
     "short-session",
     "combat-focused",
+    "linear",
     "surreal"
   ],
   "fear": [
@@ -771,7 +830,8 @@
   "thief-ii-the-metal-age": [
     "atmospheric",
     "story-rich",
-    "dark"
+    "dark",
+    "immersive"
   ],
   "monster-hunter-rise": [
     "atmospheric",
@@ -812,7 +872,8 @@
   "max-payne-3": [
     "atmospheric",
     "story-rich",
-    "dark"
+    "dark",
+    "linear"
   ],
   "rimworld": [
     "atmospheric"
@@ -826,6 +887,7 @@
   ],
   "plants-vs-zombies-goty-edition": [
     "funny",
+    "cozy",
     "cute"
   ],
   "call-of-duty-united-offensive": [
@@ -874,6 +936,7 @@
     "exploration-driven",
     "difficult",
     "relaxing",
+    "cozy",
     "surreal"
   ],
   "psychonauts": [
@@ -881,6 +944,7 @@
     "funny",
     "exploration-driven",
     "cute",
+    "cozy",
     "surreal"
   ],
   "battlefield-bad-company-2": [
@@ -942,6 +1006,7 @@
   ],
   "overcooked-all-you-can-eat": [
     "funny",
+    "cozy",
     "cute"
   ],
   "bionic-commando-rearmed": [
@@ -949,12 +1014,14 @@
   ],
   "florence": [
     "story-rich",
+    "cozy",
     "cute",
     "relaxing"
   ],
   "blazblue-calamity-trigger-2": [
     "story-rich",
-    "cute"
+    "cute",
+    "cozy"
   ],
   "wolfenstein-2-the-new-colossus": [
     "atmospheric",
@@ -977,21 +1044,25 @@
     "exploration-driven"
   ],
   "the-sims-3": [
-    "funny"
+    "funny",
+    "cozy"
   ],
   "rayman-origins": [
     "funny",
-    "difficult"
+    "difficult",
+    "cozy"
   ],
   "dirt-rally": [
     "atmospheric",
-    "difficult"
+    "difficult",
+    "cozy"
   ],
   "bug-princess": [
     "difficult"
   ],
   "game-dev-story": [
-    "cute"
+    "cute",
+    "cozy"
   ],
   "nba-2k16": [
     "atmospheric"
@@ -1011,7 +1082,8 @@
   ],
   "nierautomata": [
     "atmospheric",
-    "story-rich"
+    "story-rich",
+    "satisfying"
   ],
   "guacamelee-super-turbo-championship-edition": [
     "funny"
@@ -1020,6 +1092,9 @@
     "atmospheric",
     "story-rich",
     "exploration-driven"
+  ],
+  "dungeon-siege": [
+    "satisfying"
   ],
   "the-lord-of-the-rings-online": [
     "story-rich",
@@ -1035,12 +1110,14 @@
   ],
   "modern-warfare-2": [
     "atmospheric",
-    "story-rich"
+    "story-rich",
+    "linear"
   ],
   "dishonored-2": [
     "atmospheric",
     "story-rich",
-    "exploration-driven"
+    "exploration-driven",
+    "immersive"
   ],
   "the-witcher-enhanced-edition-directors-cut": [
     "atmospheric",
@@ -1056,7 +1133,8 @@
     "story-rich"
   ],
   "teenage-mutant-ninja-turtles-shredders-revenge": [
-    "atmospheric"
+    "atmospheric",
+    "cozy"
   ],
   "black-mesa": [
     "atmospheric",
@@ -1087,6 +1165,7 @@
     "story-rich",
     "difficult",
     "dark",
+    "satisfying",
     "punishing"
   ],
   "oxygen-not-included": [
@@ -1096,11 +1175,13 @@
   ],
   "skate": [
     "funny",
-    "exploration-driven"
+    "exploration-driven",
+    "immersive"
   ],
   "bastion": [
     "atmospheric",
     "story-rich",
+    "satisfying",
     "short-session"
   ],
   "doom-eternal": [
@@ -1112,6 +1193,7 @@
     "funny",
     "dark",
     "cute",
+    "cozy",
     "short-session"
   ],
   "day-of-the-tentacle-remastered": [
@@ -1131,7 +1213,11 @@
     "story-rich",
     "exploration-driven",
     "short-session",
-    "relaxing"
+    "relaxing",
+    "cozy"
+  ],
+  "path-of-exile": [
+    "satisfying"
   ],
   "fallout-2-a-post-nuclear-role-playing-game": [
     "atmospheric",
@@ -1174,7 +1260,8 @@
   "system-shock-enhanced-version": [
     "atmospheric",
     "story-rich",
-    "dark"
+    "dark",
+    "immersive"
   ],
   "kingdom-two-crowns": [
     "atmospheric",
@@ -1207,7 +1294,8 @@
   ],
   "prince-of-persia-the-two-thrones": [
     "atmospheric",
-    "story-rich"
+    "story-rich",
+    "satisfying"
   ],
   "yakuza-0": [
     "atmospheric",
@@ -1216,13 +1304,15 @@
   ],
   "shadow-of-mordor": [
     "atmospheric",
-    "story-rich"
+    "story-rich",
+    "satisfying"
   ],
   "mega-man-legacy-collection-2": [
     "difficult"
   ],
   "audiosurf": [
-    "relaxing"
+    "relaxing",
+    "cozy"
   ],
   "shovel-knight": [
     "funny",
@@ -1242,7 +1332,8 @@
     "exploration-driven"
   ],
   "dragon-quest-builders-2": [
-    "cute"
+    "cute",
+    "cozy"
   ],
   "dark-souls-prepare-to-die-edition": [
     "atmospheric",
@@ -1296,7 +1387,8 @@
   "far-cry-2-fortunes-edition": [
     "atmospheric",
     "story-rich",
-    "exploration-driven"
+    "exploration-driven",
+    "immersive"
   ],
   "frostpunk": [
     "atmospheric",
@@ -1308,6 +1400,9 @@
     "atmospheric",
     "difficult"
   ],
+  "call-of-duty-modern-warfare-3": [
+    "linear"
+  ],
   "guilty-gear-2020": [
     "story-rich",
     "combat-focused"
@@ -1317,6 +1412,9 @@
     "funny",
     "difficult",
     "dark"
+  ],
+  "sonic-mania": [
+    "cozy"
   ],
   "the-talos-principle": [
     "atmospheric",
@@ -1328,7 +1426,8 @@
     "atmospheric"
   ],
   "turbo-dismount": [
-    "funny"
+    "funny",
+    "cozy"
   ],
   "command-conquer-3-tiberium-wars": [
     "atmospheric"
@@ -1342,7 +1441,8 @@
   "thief-3-deadly-shadows": [
     "atmospheric",
     "story-rich",
-    "dark"
+    "dark",
+    "immersive"
   ],
   "assassins-creed-odyssey": [
     "atmospheric",
@@ -1371,7 +1471,11 @@
   ],
   "final-fantasy-xx-2-hd-remaster": [
     "atmospheric",
-    "story-rich"
+    "story-rich",
+    "linear"
+  ],
+  "amid-evil": [
+    "satisfying"
   ],
   "halo-the-master-chief-collection": [
     "atmospheric",
@@ -1379,13 +1483,15 @@
   ],
   "obsidian": [
     "atmospheric",
-    "story-rich"
+    "story-rich",
+    "cozy"
   ],
   "a-space-for-the-unbound": [
     "atmospheric",
     "story-rich",
     "exploration-driven",
     "relaxing",
+    "cozy",
     "surreal",
     "emotional"
   ],
@@ -1395,10 +1501,12 @@
   "blazblue-centralfiction": [
     "story-rich",
     "difficult",
-    "cute"
+    "cute",
+    "cozy"
   ],
   "cities-skylines": [
-    "funny"
+    "funny",
+    "cozy"
   ],
   "total-war-warhammer-iii": [
     "atmospheric",
@@ -1406,7 +1514,8 @@
   ],
   "dmc": [
     "atmospheric",
-    "story-rich"
+    "story-rich",
+    "satisfying"
   ],
   "tales-of-arise": [
     "story-rich",
@@ -1416,7 +1525,8 @@
     "atmospheric",
     "story-rich",
     "difficult",
-    "cute"
+    "cute",
+    "cozy"
   ],
   "doom": [
     "atmospheric",
@@ -1428,6 +1538,7 @@
   "shatter": [
     "story-rich",
     "exploration-driven",
+    "cozy",
     "combat-focused"
   ],
   "defcon": [
@@ -1446,6 +1557,9 @@
   ],
   "speedrunners": [
     "funny"
+  ],
+  "icey": [
+    "satisfying"
   ],
   "persona-3-portable": [
     "story-rich",
@@ -1472,16 +1586,19 @@
     "exploration-driven",
     "narrative-choice",
     "short-session",
-    "relaxing"
+    "relaxing",
+    "cozy"
   ],
   "unpacking-2": [
     "atmospheric",
+    "cozy",
     "cute",
     "relaxing"
   ],
   "onimusha-2-samurais-destiny": [
     "story-rich",
     "exploration-driven",
+    "satisfying",
     "emotional"
   ],
   "yakuza-6": [
@@ -1495,6 +1612,9 @@
   "trine-2-complete-story": [
     "atmospheric"
   ],
+  "castlevania-lords-of-shadow": [
+    "satisfying"
+  ],
   "horizon-zero-dawn-complete-edition": [
     "atmospheric",
     "story-rich",
@@ -1504,11 +1624,13 @@
     "atmospheric",
     "dark",
     "cute",
+    "cozy",
     "surreal",
     "puzzle-heavy"
   ],
   "moss": [
-    "cute"
+    "cute",
+    "cozy"
   ],
   "far-lone-sails": [
     "atmospheric",
@@ -1550,14 +1672,18 @@
   ],
   "aliens-go-home-run": [
     "funny",
-    "cute"
+    "cute",
+    "cozy"
   ],
   "dungeon-village": [
     "cute",
-    "combat-focused"
+    "cozy",
+    "combat-focused",
+    "satisfying"
   ],
   "rift": [
-    "atmospheric"
+    "atmospheric",
+    "satisfying"
   ],
   "pro-evolution-soccer-2018": [
     "atmospheric"
@@ -1572,6 +1698,11 @@
     "atmospheric",
     "story-rich",
     "exploration-driven",
-    "cute"
+    "satisfying",
+    "cute",
+    "cozy"
+  ],
+  "pinball-fx2": [
+    "cozy"
   ]
 }

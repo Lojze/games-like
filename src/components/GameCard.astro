@@ -5,15 +5,18 @@
  * 结构（自上而下）：
  *   1. 主封面（GameCover，自带首字母渐变兜底）
  *   2. 截图条：screenshots 前 3 张缩略图，点击打开全屏 Lightbox；无截图时整块不渲染
- *   3. 文本区：游戏名（可链到站内推荐页）、评分/年份/类型 Badge、可选简介
+ *   3. 文本区：游戏名（可链到站内推荐页）、评分/年份/类型 Badge、感受标签 chips、可选简介
  *   4. Why it fits：优先用 reasons.json 的专属文案；缺失时调用规则引擎生成
  *   5. 底部按钮区 .gc__actions（flex 容器，已预留多按钮位）：当前仅 View on Steam ↗
  *
+ * feelTags 是可选的展示层辅助信息：目前只有首页 Popular 网格传入，
+ * 不传时整块不渲染，标签页 / 详情页的卡片保持原样。
  * Lightbox 脚本用事件委托，整页只初始化一次，可左右切换 / ESC 关闭。
  */
 import GameCover from './GameCover.astro';
 import type { MetaBadge } from '../utils/tag-translator';
 import { generateWhyItFits } from '../../config/why-it-fits';
+import { TRENDING_FEELS } from '../../config/trending-feels';
 
 export interface GameScreenshot {
   path_thumbnail: string;
@@ -34,6 +37,8 @@ interface Props {
   hrefExternal?: boolean;
   /** reasons.json 里的专属推荐文案；不传则由规则引擎现场生成 */
   reason?: string;
+  /** 卡片辅助信息里展示的感受标签（按优先级排好序传入）；不传则不渲染 */
+  feelTags?: string[];
   /** 详情页用的 150 字简介 */
   blurb?: string;
   /** 规则引擎兜底所需的上下文 */
@@ -50,6 +55,7 @@ const {
   hue,
   badges = [],
   screenshots = [],
+  feelTags = [],
   steamUrl,
   href,
   hrefExternal = false,
@@ -84,6 +90,10 @@ const steam =
 
 // 同一张卡片的 3 张截图归为一组，Lightbox 内可左右切换
 const group = `shots-${slug.replace(/[^a-zA-Z0-9-]/g, '')}`;
+
+// 感受标签 chip 的展示文案：把内部连字符词形还原成可读标题
+const prettyTag = (tag: string): string =>
+  tag.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 ---
 
 <article class:list={['gc', { 'gc--compact': compact }]}>
@@ -139,6 +149,22 @@ const group = `shots-${slug.replace(/[^a-zA-Z0-9-]/g, '')}`;
             <span class:list={['badge', `badge--${badge.tone}`]} title={badge.text}>
               {badge.text}
             </span>
+          ))}
+        </div>
+      )
+    }
+
+    {
+      feelTags.length > 0 && (
+        <div class="gc__feels" aria-label="Feel tags">
+          {feelTags.map((tag) => (
+            <a
+              class:list={['gc__feel', { 'gc__feel--trending': TRENDING_FEELS.includes(tag) }]}
+              href={`/tags/${tag}`}
+              title={`Browse all ${prettyTag(tag)} games`}
+            >
+              {prettyTag(tag)}
+            </a>
           ))}
         </div>
       )

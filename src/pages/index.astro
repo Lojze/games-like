@@ -2,6 +2,7 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import GameCard from '../components/GameCard.astro';
 import { FEEL_WHITELIST } from '../../config/feel-whitelist';
+import { TRENDING_FEELS } from '../../config/trending-feels';
 import { buildMetaBadges, type MetaBadge } from '../utils/tag-translator';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -31,6 +32,7 @@ interface PopularGame {
   badges: MetaBadge[];
   steam_url: string;
   screenshots: GameScreenshot[];
+  feels: string[];
 }
 
 const asStringArray = (value: unknown): string[] =>
@@ -101,6 +103,21 @@ const comparePopular = (a: GameRecord, b: GameRecord): number =>
   feelCountOf(b) - feelCountOf(a) ||
   a.name.localeCompare(b.name, 'en', { sensitivity: 'base' });
 
+// Reddit 验证过的 4 个高频标签，首页标签池与卡片 chip 共用同一份顺序
+const TRENDING_RANK = new Map<string, number>(
+  TRENDING_FEELS.map((tag, index): [string, number] => [tag, index]),
+);
+
+/**
+ * 卡片辅助信息里的感受标签：trending 新词优先，最多 3 个。
+ * 这样 cozy / satisfying 等刚验证的词能出现在首页第一屏卡片上，
+ * 而不是被游戏已有的 atmospheric / story-rich 挤掉。
+ */
+const feelsForCard = (slug: string): string[] =>
+  [...new Set(asStringArray(feelTags[slug]))]
+    .sort((a, b) => (TRENDING_RANK.get(a) ?? 999) - (TRENDING_RANK.get(b) ?? 999))
+    .slice(0, 3);
+
 const popular: PopularGame[] = [...pageSlugs]
   .map((slug) => gameBySlug.get(slug))
   .filter((game): game is GameRecord => Boolean(game))
@@ -113,6 +130,7 @@ const popular: PopularGame[] = [...pageSlugs]
     hue: hueOf(game.slug),
     steam_url: typeof game.steam_url === 'string' ? game.steam_url : '',
     screenshots: Array.isArray(game.screenshots) ? game.screenshots : [],
+    feels: feelsForCard(game.slug),
     badges: buildMetaBadges({
       metacritic: typeof game.metacritic === 'number' ? game.metacritic : null,
       rating: typeof game.rating === 'number' ? game.rating : null,
@@ -128,11 +146,21 @@ for (const tags of Object.values(feelTags)) {
     feelCounts.set(tag, (feelCounts.get(tag) ?? 0) + 1);
   }
 }
+// Browse by feel：Reddit 验证的 4 个高频新标签按语料热度置顶，其余保持白名单原顺序
+// （Array.prototype.sort 稳定，非置顶项之间的相对顺序不变）
 const pills = FEEL_WHITELIST.map((tag) => ({
   tag,
   label: prettyTag(tag),
   count: feelCounts.get(tag) ?? 0,
-}));
+  trending: TRENDING_FEELS.includes(tag),
+})).sort((a, b) => {
+  const ai = TRENDING_RANK.get(a.tag);
+  const bi = TRENDING_RANK.get(b.tag);
+  if (ai === undefined && bi === undefined) return 0;
+  if (ai === undefined) return 1;
+  if (bi === undefined) return -1;
+  return ai - bi;
+});
 
 // 纯前端搜索索引：输入游戏名 → 跳转到对应的推荐页；匹配不到时回退到热门第一款
 const gameIndex = [...pageSlugs]
@@ -192,6 +220,7 @@ const fallbackSlug = popular[0]?.slug ?? 'hades-2018';
               hue={game.hue}
               badges={game.badges}
               screenshots={game.screenshots}
+              feelTags={game.feels}
               steamUrl={game.steam_url}
               href={`/games-like/${game.slug}/`}
               compact
@@ -205,12 +234,19 @@ const fallbackSlug = popular[0]?.slug ?? 'hades-2018';
   <section class="section">
     <div class="section__head">
       <h2 class="section__title">Browse by feel</h2>
-      <span class="section__note">Click a feel to see every game tagged with it</span>
+      <span class="section__note">
+        🔥 Trending = most requested by real players · Click a feel to see every game tagged with it
+      </span>
     </div>
     <div class="pills">
       {
         pills.map((pill) => (
-          <a class="pill" href={`/tags/${pill.tag}`} title={`Browse all ${pill.label} games`}>
+          <a
+            class:list={['pill', { 'pill--trending': pill.trending }]}
+            href={`/tags/${pill.tag}`}
+            title={`Browse all ${pill.label} games`}
+          >
+            {pill.trending && <span class="pill__flame" aria-hidden="true">🔥</span>}
             <span>{pill.label}</span>
             <span class="pill__count">{pill.count}</span>
           </a>
