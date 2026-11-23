@@ -49,6 +49,11 @@ jobs:
       - name: Compute matches
         run: npm run compute:matches
 
+      # 依赖上一步新生成的 matches.json：为新配对补齐 "Why it fits" 高质文案，
+      # 必须在构建之前执行，否则新配对只能退回卡片里的规则引擎兜底文案
+      - name: Generate "Why it fits" reasons
+        run: npm run generate:reasons
+
       # 任一前置步骤失败都会终止 job，因此构建不成功时不会执行下面的提交步骤
       - name: Verify build
         run: npm run build
