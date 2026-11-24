@@ -6,7 +6,9 @@
  *   1. 主封面（GameCover，自带首字母渐变兜底）
  *   2. 截图条：screenshots 前 3 张缩略图，点击打开全屏 Lightbox；无截图时整块不渲染
  *   3. 文本区：游戏名（可链到站内推荐页）、评分/年份/类型 Badge、感受标签 chips、可选简介
- *   4. Why it fits：优先用 reasons.json 的专属文案；缺失时调用规则引擎生成
+ *   4. Why it fits：优先用 reasons.json 的专属文案；缺失时调用规则引擎生成。
+ *      传入 whyHeading 时，标签升级为语义化的 <h3>Why {游戏名} feels similar</h3>，
+ *      供 AI 爬虫 / 屏幕阅读器识别「这张卡为什么被推荐」的逻辑层级（详情页使用）。
  *   5. 底部按钮区 .gc__actions（flex 容器，已预留多按钮位）：
  *      View on Steam ↗，以及有预告片时的 ▶ Watch Trailer
  *
@@ -52,6 +54,12 @@ interface Props {
   hrefExternal?: boolean;
   /** reasons.json 里的专属推荐文案；不传则由规则引擎现场生成 */
   reason?: string;
+  /**
+   * GEO 语义标题：传入后 "Why it fits" 标签换成
+   * <h3>{whyHeading}</h3>（视觉仍是 .gc__why-tag 小标签样式）。
+   * 只在详情页传入，首页 / 标签页保持原来的 "Why it fits" 文案。
+   */
+  whyHeading?: string;
   /** 卡片辅助信息里展示的感受标签（按优先级排好序传入）；不传则不渲染 */
   feelTags?: string[];
   /** HLS 预告片；有可用 hlsUrl 时显示 Watch Trailer 按钮 */
@@ -78,6 +86,7 @@ const {
   href,
   hrefExternal = false,
   reason,
+  whyHeading,
   blurb,
   sourceName,
   sharedTags = [],
@@ -197,10 +206,14 @@ const trailer = movies.find(
 
     {
       why && (
-        <p class="gc__why">
-          <span class="gc__why-tag">Why it fits</span>
-          {why}
-        </p>
+        <div class="gc__why">
+          {whyHeading ? (
+            <h3 class="gc__why-tag gc__why-tag--heading">{whyHeading}</h3>
+          ) : (
+            <span class="gc__why-tag">Why it fits</span>
+          )}
+          <p class="gc__why-text">{why}</p>
+        </div>
       )
     }
 

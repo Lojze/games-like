@@ -175,6 +175,10 @@ export async function getStaticPaths() {
         ownFeelTags,
         hue: hueOf(slug),
         cover: game?.background_image || null,
+        /** GEO: VideoGame 结构化数据的真实字段，全部来自 games.json，不做推测 */
+        metacritic: typeof game?.metacritic === 'number' ? game.metacritic : null,
+        genres: asStringArray(game?.genres),
+        released: typeof game?.released === 'string' ? game.released : null,
         /** 主游戏自己的预告片，Hero 区的 Watch Trailer 用 */
         ownMovies: asMovies(game?.movies),
         recommendations: recommendations.map((rec, i): EnrichedRecommendation => {
@@ -213,12 +217,26 @@ export async function getStaticPaths() {
   });
 }
 
-const { name, quickAnswer, ownFeelTags, hue, cover, ownMovies, recommendations } = Astro.props as {
+const {
+  name,
+  quickAnswer,
+  ownFeelTags,
+  hue,
+  cover,
+  metacritic,
+  genres,
+  released,
+  ownMovies,
+  recommendations,
+} = Astro.props as {
   name: string;
   quickAnswer: string;
   ownFeelTags: string[];
   hue: number;
   cover: string | null;
+  metacritic: number | null;
+  genres: string[];
+  released: string | null;
   ownMovies: GameMovie[];
   recommendations: EnrichedRecommendation[];
 };
@@ -246,13 +264,27 @@ const sortedRecommendations = [...recommendations].sort(
 const seoTitle = `Games Like ${name} | Games by Feel`;
 
 /**
- * ItemList 结构化数据：当前游戏 + 8 个推荐，全部指向站内详情页。
- * 让 Google / AI 爬虫把这一页理解成「一份有序的游戏推荐清单」，而不是一段纯文本。
+ * GEO（生成式引擎优化）：详情页输出两份互相引用的结构化数据。
+ *   1. ItemList —— 让 AI 把本页理解成「一份有序的相似游戏清单」；
+ *   2. VideoGame —— 把当前游戏本身定义成可被引用、可被复述的实体，
+ *      附带评分、封面、体裁、发行日期与官方预告片（VideoObject）。
+ * 两者通过 @id / item 关联到同一个实体，避免被当成两个重复条目。
+ * 所有取值都来自 games.json 的真实数据；字段缺失时整块省略，绝不填猜测值。
  * URL 统一用 Astro.site 拼绝对地址，和 canonical / sitemap 保持同一规范域名。
  */
 const siteBase = Astro.site ?? Astro.url;
 const pageURL = new URL(Astro.url.pathname, siteBase).href;
+const gameId = `${pageURL}#game`;
 const shareText = `Games like ${name} by feel, not genre.`;
+
+// Steam 不提供预告片上传日期；静态站每次构建都会重新核对媒体链接，
+// 用构建日期作为 uploadDate 是可靠的保守近似（YYYY-MM-DD）。
+const buildDate = new Date().toISOString().slice(0, 10);
+const coverURL =
+  cover && /^https?:\/\//i.test(cover)
+    ? cover
+    : new URL('/og-default.png', siteBase).href;
+
 const itemListSchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
@@ -260,7 +292,8 @@ const itemListSchema = {
   description: quickAnswer,
   numberOfItems: sortedRecommendations.length + 1,
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name, url: pageURL },
+    // 第一项引用本页的 VideoGame 实体，与下方独立的 JSON-LD 共用 @id
+    { '@type': 'ListItem', position: 1, name, url: pageURL, item: { '@id': gameId } },
     ...sortedRecommendations.map((rec, index) => ({
       '@type': 'ListItem',
       position: index + 2,
@@ -269,8 +302,54 @@ const itemListSchema = {
     })),
   ],
 };
-// 游戏名若含 "</script>" 会提前闭合脚本标签，转义掉所有 < 再注入
-const itemListJson = JSON.stringify(itemListSchema).replace(/</g, '\\u003c');
+
+/**
+ * aggregateRating 只写 games.json 里真实存在的 metacritic（0–100 制）。
+ * 数据源未保留评价人数，因此不伪造 ratingCount / reviewCount——Google
+ * 富媒体星级可能因此不展示，但评分值本身仍可被 AI 爬虫与知识图谱读取。
+ */
+const videoGameSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoGame',
+  '@id': gameId,
+  name,
+  url: pageURL,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': pageURL },
+  description: quickAnswer,
+  image: coverURL,
+  ...(genres.length > 0 ? { genre: genres } : {}),
+  ...(released ? { datePublished: released } : {}),
+  ...(typeof metacritic === 'number'
+    ? {
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: metacritic,
+          bestRating: 100,
+          worstRating: 0,
+        },
+      }
+    : {}),
+  ...(heroTrailer
+    ? {
+        trailer: {
+          '@type': 'VideoObject',
+          name: `${name} — official trailer`,
+          description: `Official Steam trailer for ${name}.`,
+          ...(heroTrailer.thumbnail ? { thumbnailUrl: heroTrailer.thumbnail } : {}),
+          uploadDate: buildDate,
+          // HLS 清单本身就是可播放的视频源；embedUrl 指向承载播放器的本页
+          contentUrl: heroTrailer.hlsUrl,
+          embedUrl: pageURL,
+        },
+      }
+    : {}),
+};
+
+// 游戏名 / 文案若含 "</script>" 会提前闭合脚本标签，转义掉所有 < 再注入
+const serializeLd = (schema: unknown): string =>
+  JSON.stringify(schema).replace(/</g, '\\u003c');
+const itemListJson = serializeLd(itemListSchema);
+const videoGameJson = serializeLd(videoGameSchema);
 ---
 
 <SiteLayout
@@ -281,7 +360,9 @@ const itemListJson = JSON.stringify(itemListSchema).replace(/</g, '\\u003c');
   narrow
 >
   <Fragment slot="head">
+    {/* 两份独立 JSON-LD：清单语义 + 当前游戏实体语义，通过 @id 互相引用 */}
     <script is:inline type="application/ld+json" set:html={itemListJson} />
+    <script is:inline type="application/ld+json" set:html={videoGameJson} />
   </Fragment>
 
   <a class="back-link" href="/">← Back to home</a>
@@ -328,7 +409,7 @@ const itemListJson = JSON.stringify(itemListSchema).replace(/</g, '\\u003c');
   </section>
 
   <div class="section__head">
-    <h2 class="section__title">Recommended for you</h2>
+    <h2 class="section__title">Games Like {name}</h2>
     <span class="section__note">{sortedRecommendations.length} games · matched by feel tags, not genre · newest first</span>
   </div>
 
@@ -348,6 +429,7 @@ const itemListJson = JSON.stringify(itemListSchema).replace(/</g, '\\u003c');
             feelTags={rec.feels}
             blurb={rec.blurb}
             reason={rec.reason}
+            whyHeading={`Why ${rec.name} feels similar`}
             sourceName={name}
             sharedTags={rec.sharedTags}
             index={rec.fallbackIndex}
@@ -369,13 +451,16 @@ const itemListJson = JSON.stringify(itemListSchema).replace(/</g, '\\u003c');
         taking priority whenever two games share a release year.
       </p>
 
-      <h2 class="seo-copy__title">What to play after {name}?</h2>
+      <h2 class="seo-copy__title">FAQ: What to play after {name}?</h2>
       <p>
-        If you've exhausted {name} and are looking for a similar emotional or mechanical
-        journey, the list above covers the best alternatives available on Steam right now.
-        Every card links straight to its store page, so you can check the price, player
-        reviews and availability before committing. You can also browse a single feel —
-        punishing, relaxing, story-rich and more — from the <a href="/">home page</a>.
+        In short: if {name} left you wanting more of the same feeling, start with the
+        {sortedRecommendations.length} feel-matched games listed above. They are ordered
+        newest first, with the closest tag overlap taking priority within each release year.
+        Every pick carries its own "Why it feels similar" note, feel tags, in-game screenshots
+        and — when Steam provides one — an official trailer, so you can judge the mood before
+        you commit. Each card links straight to its store page for the current price, player
+        reviews and availability, and you can also browse a single feel — punishing, relaxing,
+        story-rich and more — from the <a href="/">home page</a>.
       </p>
     </div>
   </section>

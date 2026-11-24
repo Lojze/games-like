@@ -1048,12 +1048,26 @@ a {
 
 .gc__why-tag {
   display: block;
-  margin-bottom: 4px;
+  /* 详情页会把这个标签升级成 <h3>，显式归零以抵消浏览器默认 margin */
+  margin: 0 0 4px;
   font-size: 0.67rem;
   font-weight: 700;
   letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--color-violet);
+}
+
+/* GEO 语义标题：h3 里是较长的 "Why {游戏名} feels similar"，
+   保留小标签的字号与颜色，但取消全大写和宽字距，避免挤成多行。 */
+.gc__why-tag--heading {
+  font-size: 0.74rem;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+/* 文案从裸文本节点换成 <p>，抵消默认的上下外边距 */
+.gc__why-text {
+  margin: 0;
 }
 
 /* 卡片底部按钮区：容器统一负责排布，不关心里面有几个按钮、各自长什么样。
