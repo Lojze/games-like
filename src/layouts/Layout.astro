@@ -82,6 +82,9 @@ const ogImageURL = new URL(ogImage, base).href;
     <meta name="twitter:description" content={ogDescription} />
     <meta name="twitter:image" content={ogImageURL} />
     <meta name="twitter:image:alt" content={OG_IMAGE_ALT} />
+
+    <!-- 页面级结构化数据（JSON-LD）注入点：SiteLayout 会把 head 具名槽透传到这里 -->
+    <slot name="head" />
   </head>
   <body>
     <slot />

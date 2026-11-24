@@ -211,6 +211,33 @@ const sortedRecommendations = [...recommendations].sort(
 
 // 站点级默认元数据由 Layout 提供；详情页只需覆盖 title / og:title / og:description
 const seoTitle = `Games Like ${name} | Games by Feel`;
+
+/**
+ * ItemList 结构化数据：当前游戏 + 8 个推荐，全部指向站内详情页。
+ * 让 Google / AI 爬虫把这一页理解成「一份有序的游戏推荐清单」，而不是一段纯文本。
+ * URL 统一用 Astro.site 拼绝对地址，和 canonical / sitemap 保持同一规范域名。
+ */
+const siteBase = Astro.site ?? Astro.url;
+const pageURL = new URL(Astro.url.pathname, siteBase).href;
+const shareText = `Games like ${name} by feel, not genre.`;
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: shareText,
+  description: quickAnswer,
+  numberOfItems: sortedRecommendations.length + 1,
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name, url: pageURL },
+    ...sortedRecommendations.map((rec, index) => ({
+      '@type': 'ListItem',
+      position: index + 2,
+      name: rec.name,
+      url: new URL(`/games-like/${rec.slug}/`, siteBase).href,
+    })),
+  ],
+};
+// 游戏名若含 "</script>" 会提前闭合脚本标签，转义掉所有 < 再注入
+const itemListJson = JSON.stringify(itemListSchema).replace(/</g, '\\u003c');
 ---
 
 <SiteLayout
@@ -220,6 +247,10 @@ const seoTitle = `Games Like ${name} | Games by Feel`;
   ogDescription={quickAnswer}
   narrow
 >
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={itemListJson} />
+  </Fragment>
+
   <a class="back-link" href="/">← Back to home</a>
 
   <section class="hero">
@@ -296,4 +327,42 @@ const seoTitle = `Games Like ${name} | Games by Feel`;
       </p>
     </div>
   </section>
+
+  <div class="share-bar" data-share-text={shareText}>
+    <span class="share-bar__label">Share this list</span>
+    <button class="share-btn" type="button" data-share="twitter">
+      Share on X
+    </button>
+    <button class="share-btn" type="button" data-share="reddit">
+      Share on Reddit
+    </button>
+  </div>
 </SiteLayout>
+
+<script>
+  /**
+   * 两个极简分享按钮：点击时用 window.open 打开预填文案的分享页。
+   * 用事件委托 + data-* 传值，避免把动态游戏名内联进 onclick 字符串。
+   * 文案固定为 "Games like {name} by feel, not genre."，URL 取当前页面地址。
+   */
+  (() => {
+    const bar = document.querySelector<HTMLElement>('.share-bar');
+    if (!bar) return;
+    const text = bar.dataset.shareText ?? '';
+    const pageUrl = window.location.href;
+
+    bar.addEventListener('click', (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      const button = target?.closest<HTMLButtonElement>('[data-share]');
+      if (!button) return;
+      const isReddit = button.dataset.share === 'reddit';
+      const share = new URL(
+        isReddit ? 'https://www.reddit.com/submit' : 'https://twitter.com/intent/tweet',
+      );
+      share.searchParams.set('url', pageUrl);
+      if (isReddit) share.searchParams.set('title', text);
+      else share.searchParams.set('text', text);
+      window.open(share.href, '_blank', 'noopener,noreferrer,width=680,height=560');
+    });
+  })();
+</script>

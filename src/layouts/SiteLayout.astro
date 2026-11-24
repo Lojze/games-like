@@ -21,6 +21,9 @@ const { title, description, ogTitle, ogDescription, ogImage, narrow = false } = 
   ogDescription={ogDescription}
   ogImage={ogImage}
 >
+  {/* 把页面的 head 具名槽透传给 Layout 的 <head>，用于 JSON-LD 等结构化数据 */}
+  <slot name="head" slot="head" />
+
   <header class="site-header">
     <div class="site-header__inner">
       <a class="brand" href="/">

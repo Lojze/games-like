@@ -191,9 +191,35 @@ const description = cards.length
 const PAGE_SIZE = 24;
 const pageCount = Math.max(1, Math.ceil(cards.length / PAGE_SIZE));
 const firstPageEnd = Math.min(PAGE_SIZE, cards.length);
+
+/**
+ * ItemList 结构化数据：把该标签下的全部游戏（含被前端分页隐藏的）列成清单。
+ * 卡片可能没有站内详情页，href 已由 getStaticPaths 降级成 Steam 外链，
+ * new URL(href, siteBase) 对站内相对路径与完整 URL 都能正确解析。
+ */
+const siteBase = Astro.site ?? Astro.url;
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: `Games with ${article} ${label} feel`,
+  description,
+  numberOfItems: cards.length,
+  itemListElement: cards.map((card, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: card.name,
+    url: new URL(card.href, siteBase).href,
+  })),
+};
+// 游戏名若含 "</script>" 会提前闭合脚本标签，转义掉所有 < 再注入
+const itemListJson = JSON.stringify(itemListSchema).replace(/</g, '\\u003c');
 ---
 
 <SiteLayout title={seoTitle} description={description} ogTitle={seoTitle}>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={itemListJson} />
+  </Fragment>
+
   <a class="back-link" href="/">← Back to home</a>
 
   <section class="hero">

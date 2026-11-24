@@ -1,0 +1,4 @@
+# 旧 Cloudflare Pages 预览域名 -> 正式域名，永久重定向（保留路径与查询串）
+# Cloudflare Pages 支持在 _redirects 里用绝对 URL 作为源站匹配，:splat 承接通配符内容。
+# 前提：games-by-feel.pages.dev 仍绑定在这个 Pages 项目上，否则旧域名请求不会命中本规则。
+https://games-by-feel.pages.dev/* https://playbyfeel.fun/:splat 301

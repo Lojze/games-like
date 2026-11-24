@@ -1366,3 +1366,42 @@ a {
     gap: 8px;
   }
 }
+
+/* ── 详情页分享条（SEO 文本块下方） ─────────────────────────── */
+.share-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.share-bar__label {
+  margin-right: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+}
+
+.share-btn {
+  padding: 8px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 10px;
+  background: rgba(30, 41, 59, 0.55);
+  color: #cbd5e1;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+}
+
+.share-btn:hover,
+.share-btn:focus-visible {
+  border-color: rgba(125, 211, 252, 0.7);
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--color-frost);
+  outline: none;
+}

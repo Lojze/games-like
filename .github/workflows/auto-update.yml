@@ -54,6 +54,15 @@ jobs:
       - name: Generate "Why it fits" reasons
         run: npm run generate:reasons
 
+      # Reddit 玩家需求词挖掘：独立分析工具，只读白名单、不写核心数据、不参与匹配，
+      # 产物 data/reddit-analysis.md 会随下面的 git add data/ 一并提交。
+      # 原始语料 data/reddit_raw.json 已被 .gitignore 排除，不会入库。
+      # 这是辅助分析，Arctic Shift 偶发 422 / 限流不应阻断每月核心数据刷新，
+      # 因此失败只告警不终止 job。
+      - name: Analyze Reddit feel demand
+        run: node scripts/analyze-reddit.ts
+        continue-on-error: true
+
       # 任一前置步骤失败都会终止 job，因此构建不成功时不会执行下面的提交步骤
       - name: Verify build
         run: npm run build
