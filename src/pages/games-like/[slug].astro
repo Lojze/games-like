@@ -14,6 +14,12 @@ interface GameScreenshot {
   path_full: string;
 }
 
+/** Steam HLS 预告片，与 GameCard 的 GameMovie 结构一致 */
+interface GameMovie {
+  hlsUrl: string;
+  thumbnail: string;
+}
+
 interface GameRecord {
   slug: string;
   name: string;
@@ -26,6 +32,8 @@ interface GameRecord {
   released: string | null;
   genres: string[];
   screenshots: GameScreenshot[];
+  /** 由 fetch-screenshots.ts 写入；缺失 / 结构异常时按空数组处理 */
+  movies?: GameMovie[];
 }
 
 interface Recommendation {
@@ -44,6 +52,8 @@ interface EnrichedRecommendation {
   blurb: string;
   /** Steam 实机截图（前 4 张，组件只展示前 3 张） */
   screenshots: GameScreenshot[];
+  /** HLS 预告片（最多 2 个），有可用链接时卡片显示 Watch Trailer */
+  movies: GameMovie[];
   /** 占位封面色相，由 slug 稳定派生 */
   hue: number;
   /** 卡片上展示的感受标签（与其他页面共用 pickFeelTags 规则） */
@@ -70,6 +80,22 @@ interface EnrichedRecommendation {
 export async function getStaticPaths() {
   const asStringArray = (value: unknown): string[] =>
     Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+  // 预告片数据来自外部 API，逐条校验，坏数据不能让整页构建失败
+  const asMovies = (value: unknown): GameMovie[] =>
+    Array.isArray(value)
+      ? value
+          .filter(
+            (movie): movie is GameMovie =>
+              Boolean(movie) &&
+              typeof movie === 'object' &&
+              typeof (movie as GameMovie).hlsUrl === 'string' &&
+              (movie as GameMovie).hlsUrl.length > 0,
+          )
+          .map((movie) => ({
+            hlsUrl: movie.hlsUrl,
+            thumbnail: typeof movie.thumbnail === 'string' ? movie.thumbnail : '',
+          }))
+      : [];
   // 由 slug 稳定派生一个色相，让占位封面有区分度（纯展示，不参与匹配）
   const hueOf = (slug: string): number => {
     let hash = 0;
@@ -149,6 +175,8 @@ export async function getStaticPaths() {
         ownFeelTags,
         hue: hueOf(slug),
         cover: game?.background_image || null,
+        /** 主游戏自己的预告片，Hero 区的 Watch Trailer 用 */
+        ownMovies: asMovies(game?.movies),
         recommendations: recommendations.map((rec, i): EnrichedRecommendation => {
           const other = gameBySlug.get(rec.slug);
           const genres = asStringArray(other?.genres);
@@ -164,6 +192,7 @@ export async function getStaticPaths() {
             steam_url: steamUrl,
             blurb: blurbOf(other?.description),
             screenshots: Array.isArray(other?.screenshots) ? other.screenshots : [],
+            movies: asMovies(other?.movies),
             hue: hueOf(rec.slug),
             feels: pickFeelTags(feelTags[rec.slug]),
             sharedTags: asStringArray(rec.shared_tags),
@@ -184,14 +213,18 @@ export async function getStaticPaths() {
   });
 }
 
-const { name, quickAnswer, ownFeelTags, hue, cover, recommendations } = Astro.props as {
+const { name, quickAnswer, ownFeelTags, hue, cover, ownMovies, recommendations } = Astro.props as {
   name: string;
   quickAnswer: string;
   ownFeelTags: string[];
   hue: number;
   cover: string | null;
+  ownMovies: GameMovie[];
   recommendations: EnrichedRecommendation[];
 };
+
+// Hero 只播第一条可用预告片；卡片各自取自己 movies 里的第一条
+const heroTrailer = (ownMovies ?? []).find((movie) => movie?.hlsUrl);
 
 const prettyTag = (tag: string): string =>
   tag.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
@@ -269,6 +302,24 @@ const itemListJson = JSON.stringify(itemListSchema).replace(/</g, '\\u003c');
             </div>
           )
         }
+        {
+          heroTrailer && (
+            <div class="hero__actions">
+              <button
+                class="trailer-btn trailer-btn--hero js-trailer"
+                type="button"
+                data-hls={heroTrailer.hlsUrl}
+                data-poster={heroTrailer.thumbnail}
+                data-title={`${name} — official trailer`}
+                aria-label={`Watch the ${name} trailer`}
+              >
+                <span aria-hidden="true">▶</span>
+                <span>Watch Trailer</span>
+              </button>
+              <span class="hero__hint">Official Steam trailer · plays in a popup</span>
+            </div>
+          )
+        }
       </div>
       <div class="hero__art">
         <GameCover name={name} cover={cover} hue={hue} />
@@ -292,6 +343,7 @@ const itemListJson = JSON.stringify(itemListSchema).replace(/</g, '\\u003c');
             hue={rec.hue}
             badges={rec.badges}
             screenshots={rec.screenshots}
+            movies={rec.movies}
             steamUrl={rec.steam_url}
             feelTags={rec.feels}
             blurb={rec.blurb}

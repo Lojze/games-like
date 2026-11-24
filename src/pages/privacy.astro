@@ -1,0 +1,123 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+
+const lastUpdated = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+}).format(new Date());
+---
+
+<SiteLayout
+  title="Privacy Policy | Games by Feel"
+  description="Privacy policy for Games by Feel, including our affiliate disclosure, the data we do not collect and the third-party services used on this static site."
+  narrow
+>
+  <a class="back-link" href="/">← Back to home</a>
+
+  <section class="hero legal-hero">
+    <div class="hero__body">
+      <div class="hero__copy">
+        <p class="eyebrow">Privacy Policy</p>
+        <h1 class="hero__title">A static site, minimal data.</h1>
+        <p class="hero__lead">
+          Games by Feel is a statically generated website. There is no account system, no
+          newsletter form, no comment box and no behavioural analytics. This page explains
+          exactly what that means — including how our affiliate links work.
+        </p>
+        <nav class="legal-nav" aria-label="Site information">
+          <a href="/about/">About</a>
+          <a href="/privacy/" aria-current="page">Privacy</a>
+          <a href="/cookies/">Cookie Policy</a>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <section class="seo-copy seo-copy--legal" aria-label="Affiliate disclosure">
+    <div class="seo-copy__inner">
+      <h2 class="seo-copy__title">Affiliate Disclosure</h2>
+      <p>
+        <strong>Games by Feel participates in affiliate marketing programmes, including the
+        Humble Bundle / Impact affiliate programme.</strong> Some outbound links on this site —
+        for example links to a game's store page or to a bundle offer — are affiliate links.
+        If you click one of those links and make a purchase, we may receive a commission from
+        the retailer.
+      </p>
+      <p>
+        <strong>This costs you nothing extra.</strong> The price you pay is set entirely by the
+        retailer and is the same whether you arrive through an affiliate link or directly.
+        Not every link on this site is an affiliate link.
+      </p>
+      <p>
+        <strong>Affiliate relationships do not influence our recommendations.</strong> Game
+        rankings, feel tags and "why it fits" text are produced by an automated tag-matching
+        model from public metadata. We do not accept payment to place, rank or describe a game,
+        and we do not boost titles because they pay a higher commission. Commissions help cover
+        the cost of running the site.
+      </p>
+      <p>
+        As an Amazon-style disclosure in plain terms: we may earn from qualifying purchases
+        made through links on this page. The retailer, not us, processes your order, payment
+        and any personal data involved in that purchase.
+      </p>
+    </div>
+  </section>
+
+  <section class="seo-copy seo-copy--legal" aria-label="Data we collect">
+    <div class="seo-copy__inner">
+      <h2 class="seo-copy__title">Information we collect</h2>
+      <p>
+        We do not ask you for, and do not store, names, email addresses, passwords, payment
+        details or any other personal information. There is no login, no user profile, no
+        advertising identifier and no analytics script that builds a history of your visits.
+      </p>
+      <p>
+        Like any website, our hosting provider (Cloudflare Pages) processes standard technical
+        request data — such as IP address, browser user agent, requested URL and timestamps —
+        in order to deliver pages and protect the site from abuse. These logs are handled under
+        <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">Cloudflare's privacy policy</a>
+        and are not used by us to build profiles or to personalise recommendations.
+      </p>
+
+      <h2 class="seo-copy__title">Third-party content and links</h2>
+      <ul>
+        <li>
+          Game metadata originates from the
+          <a href="https://rawg.io" target="_blank" rel="noopener noreferrer">RAWG API</a> and is
+          baked into static HTML at build time.
+        </li>
+        <li>
+          Covers, screenshots and trailers are loaded from Steam's
+          <code>steamstatic.com</code> CDN. Playing a trailer makes a request to that CDN.
+        </li>
+        <li>
+          Share buttons open twitter.com / reddit.com in a new window; outbound store and
+          bundle links go to the respective retailer, including Humble Bundle / Impact.
+        </li>
+      </ul>
+      <p>
+        Once you follow an outbound link or interact with an embedded third-party service,
+        that third party's own privacy policy and cookie practices apply. We do not control
+        those services and do not receive the personal data you give them. See our
+        <a href="/cookies/">Cookie Policy</a> for more detail.
+      </p>
+
+      <h2 class="seo-copy__title">Children's privacy</h2>
+      <p>
+        This site is a general-audience game discovery catalogue and is not directed at children
+        under 13. Because we do not knowingly collect personal information from anyone, there is
+        no personal data about children for us to delete.
+      </p>
+
+      <h2 class="seo-copy__title">Changes and contact</h2>
+      <p>
+        This policy may be updated as the site evolves; the revision date below always reflects
+        the latest version. If you have a question about this policy or about a recommendation,
+        the store page linked from any game card is the fastest route to authoritative
+        information about that title.
+      </p>
+    </div>
+  </section>
+
+  <p class="legal-updated">Last updated {lastUpdated}.</p>
+</SiteLayout>

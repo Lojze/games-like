@@ -1,0 +1,81 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+
+// 构建时生成，避免把日期写死在源码里
+const lastUpdated = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+}).format(new Date());
+---
+
+<SiteLayout
+  title="About | Games by Feel"
+  description="How Games by Feel matches games by atmosphere, pacing and emotion instead of genre, and where the data comes from."
+  narrow
+>
+  <a class="back-link" href="/">← Back to home</a>
+
+  <section class="hero legal-hero">
+    <div class="hero__body">
+      <div class="hero__copy">
+        <p class="eyebrow">About</p>
+        <h1 class="hero__title">Games by feel, not genre.</h1>
+        <p class="hero__lead">
+          Most recommendation engines sort by genre. We think the reason you loved a game is
+          more specific than that — the dread of a dark corridor, the calm of a slow morning,
+          the satisfaction of a perfectly tuned loop. This site matches those feelings.
+        </p>
+        <nav class="legal-nav" aria-label="Site information">
+          <a href="/about/" aria-current="page">About</a>
+          <a href="/privacy/">Privacy</a>
+          <a href="/cookies/">Cookie Policy</a>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <section class="seo-copy seo-copy--legal" aria-label="How matching works">
+    <div class="seo-copy__inner">
+      <h2 class="seo-copy__title">How matching works</h2>
+      <p>
+        We start from community tags, then translate them into a small vocabulary of
+        <strong>feel tags</strong> — words like <em>punishing</em>, <em>cozy</em>,
+        <em>atmospheric</em> or <em>satisfying</em>. Two games are compared by the feel tags
+        they share, and rarer traits are weighted more heavily than common ones, so a distinctive
+        quality counts for more than a generic one. The result is a short, ordered list of
+        titles that resonate with the experience of a game rather than just its category.
+      </p>
+      <p>
+        Pages are generated ahead of time as plain HTML. Sorting, filtering and pagination on
+        the page happen entirely in your browser — there is no account, no recommendation
+        profile built about you and no server-side tracking of what you click.
+      </p>
+
+      <h2 class="seo-copy__title">Where the data comes from</h2>
+      <p>
+        Game metadata, descriptions and community tags come from the
+        <a href="https://rawg.io" target="_blank" rel="noopener noreferrer">RAWG API</a>.
+        Cover art, screenshots and official trailers are served from
+        <a href="https://store.steampowered.com" target="_blank" rel="noopener noreferrer">Steam</a>
+        so that images and video load reliably even on networks where the original RAWG media
+        host is slow or unreachable. Every card links back to the game's Steam store page,
+        where you can check the current price, reviews and availability.
+      </p>
+
+      <h2 class="seo-copy__title">What we don't do</h2>
+      <ul>
+        <li>We don't sell games, process payments or handle orders.</li>
+        <li>We don't run ads, behavioural analytics or retargeting.</li>
+        <li>We don't use your clicks to personalise results — rankings come from the feel-tag model.</li>
+        <li>We don't publish scores or reviews written by us; ratings shown are third-party metadata.</li>
+      </ul>
+      <p>
+        Recommendations are editorial output of an automated model and can be imperfect. If a
+        match looks wrong, the Steam store page is always the authoritative source for what a
+        game actually is.
+      </p>
+    </div>
+  </section>
+
+  <p class="legal-updated">Last updated {lastUpdated}.</p>
+</SiteLayout>

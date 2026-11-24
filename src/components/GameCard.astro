@@ -7,13 +7,20 @@
  *   2. 截图条：screenshots 前 3 张缩略图，点击打开全屏 Lightbox；无截图时整块不渲染
  *   3. 文本区：游戏名（可链到站内推荐页）、评分/年份/类型 Badge、感受标签 chips、可选简介
  *   4. Why it fits：优先用 reasons.json 的专属文案；缺失时调用规则引擎生成
- *   5. 底部按钮区 .gc__actions（flex 容器，已预留多按钮位）：当前仅 View on Steam ↗
+ *   5. 底部按钮区 .gc__actions（flex 容器，已预留多按钮位）：
+ *      View on Steam ↗，以及有预告片时的 ▶ Watch Trailer
  *
  * feelTags 是可选的展示层辅助信息：首页 / 标签聚合页 / 详情页三个页面
  * 都通过 utils/feel-tags.ts 的 pickFeelTags() 统一选取（去重、trending 优先、
  * 最多 3 个）后传入，保证同一款游戏在全站任意位置展示的感受标签一致；
  * 不传时整块不渲染。
  * Lightbox 脚本用事件委托，整页只初始化一次，可左右切换 / ESC 关闭。
+ *
+ * movies 是可选的 HLS 预告片数据（{ hlsUrl, thumbnail }）。传入且有可用
+ * hlsUrl 时，按钮区多出一个 "▶ Watch Trailer"。播放器弹窗脚本也在本组件里，
+ * 用 .js-trailer + data-* 事件委托统一驱动：详情页 Hero 区的按钮复用同一套
+ * 逻辑；首页 / 标签页不传 movies，因此不会出现点了没反应的按钮。
+ * 关闭弹窗会 destroy hls.js 实例、pause 并清空 src，防止后台继续拉流。
  */
 import GameCover from './GameCover.astro';
 import type { MetaBadge } from '../utils/tag-translator';
@@ -23,6 +30,12 @@ import { TRENDING_FEELS } from '../../config/trending-feels';
 export interface GameScreenshot {
   path_thumbnail: string;
   path_full: string;
+}
+
+/** Steam appdetails 的 HLS 预告片（由 scripts/fetch-screenshots.ts 写入） */
+export interface GameMovie {
+  hlsUrl: string;
+  thumbnail: string;
 }
 
 interface Props {
@@ -41,6 +54,8 @@ interface Props {
   reason?: string;
   /** 卡片辅助信息里展示的感受标签（按优先级排好序传入）；不传则不渲染 */
   feelTags?: string[];
+  /** HLS 预告片；有可用 hlsUrl 时显示 Watch Trailer 按钮 */
+  movies?: GameMovie[];
   /** 详情页用的 150 字简介 */
   blurb?: string;
   /** 规则引擎兜底所需的上下文 */
@@ -58,6 +73,7 @@ const {
   badges = [],
   screenshots = [],
   feelTags = [],
+  movies = [],
   steamUrl,
   href,
   hrefExternal = false,
@@ -96,6 +112,11 @@ const group = `shots-${slug.replace(/[^a-zA-Z0-9-]/g, '')}`;
 // 感受标签 chip 的展示文案：把内部连字符词形还原成可读标题
 const prettyTag = (tag: string): string =>
   tag.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
+// 一个播放器一次只播一个视频：取第一条带 HLS 流的预告片
+const trailer = movies.find(
+  (movie) => movie && typeof movie.hlsUrl === 'string' && movie.hlsUrl.length > 0,
+);
 ---
 
 <article class:list={['gc', { 'gc--compact': compact }]}>
@@ -184,8 +205,23 @@ const prettyTag = (tag: string): string =>
     }
 
     <!-- 底部购买/外链按钮区：排布由 .gc__actions 统一负责（等分、换行、贴底对齐）。
-         未来追加联盟购买按钮时，只需在此容器内再加一个链接，无需改动 CSS。 -->
+         Watch Trailer 与联盟购买按钮都可在此容器内直接追加，无需改动 CSS。 -->
     <div class="gc__actions">
+      {
+        trailer && (
+          <button
+            class="trailer-btn gc__trailer js-trailer"
+            type="button"
+            data-hls={trailer.hlsUrl}
+            data-poster={trailer.thumbnail}
+            data-title={`${name} — official trailer`}
+            aria-label={`Watch the ${name} trailer`}
+          >
+            <span aria-hidden="true">▶</span>
+            <span>Watch Trailer</span>
+          </button>
+        )
+      }
       <a
         class="steam-btn"
         href={steam}
@@ -303,5 +339,143 @@ const prettyTag = (tag: string): string =>
     }
     guardShots();
     document.addEventListener('astro:page-load', guardShots);
+  })();
+</script>
+
+<script>
+  /**
+   * HLS 预告片弹窗（整页只初始化一次，事件委托覆盖卡片 + 详情页 Hero 的
+   * 所有 .js-trailer 按钮，按钮通过 data-hls / data-poster / data-title 传值）。
+   *
+   * 播放策略：
+   *   - Safari / iOS 原生支持 HLS → 直接把 m3u8 交给 <video src>；
+   *   - 其它浏览器 → 动态 import('hls.js') 走 MSE（不影响首屏体积）；
+   *   - 两者都不支持时仍把 m3u8 交给 <video>，由浏览器自行决定。
+   * 关闭时 destroy hls.js 实例 + pause + 移除 src + load()，彻底断开拉流，
+   * 避免弹窗关掉后视频仍在后台占用带宽。
+   */
+  (() => {
+    const root = document.documentElement;
+    if (root.dataset.trailerPlayer === '1') return;
+    root.dataset.trailerPlayer = '1';
+
+    // 只依赖结构类型的 destroy()，避免把 hls.js 的类型静态拉进主包
+    let hls: { destroy(): void } | null = null;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'trailer-modal';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', 'Game trailer player');
+    overlay.innerHTML = `
+      <div class="trailer-modal__backdrop" data-trailer-close></div>
+      <div class="trailer-modal__panel">
+        <div class="trailer-modal__bar">
+          <span class="trailer-modal__title"></span>
+          <button class="trailer-modal__close" type="button" data-trailer-close aria-label="Close trailer">✕ Close</button>
+        </div>
+        <video class="trailer-modal__video" controls playsinline preload="none"></video>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    const video = overlay.querySelector('video') as HTMLVideoElement;
+    const title = overlay.querySelector('.trailer-modal__title') as HTMLElement;
+
+    function destroyHls(): void {
+      if (hls) {
+        hls.destroy();
+        hls = null;
+      }
+    }
+
+    function close(): void {
+      destroyHls();
+      video.pause();
+      video.removeAttribute('src');
+      video.removeAttribute('poster');
+      video.load(); // 释放已缓冲的分片 / MSE 连接
+      overlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+      title.textContent = '';
+    }
+
+    function tryPlay(): void {
+      const attempt = video.play();
+      if (attempt && typeof attempt.catch === 'function') {
+        attempt.catch(() => {
+          // 自动播放策略常要求静音：静音后重试，控件里仍可手动打开声音
+          video.muted = true;
+          void video.play().catch(() => {});
+        });
+      }
+    }
+
+    async function open(button: HTMLElement): Promise<void> {
+      const url = button.dataset.hls ?? '';
+      if (!url) return;
+
+      // 切换视频前先清掉上一个实例
+      destroyHls();
+      video.pause();
+      video.removeAttribute('src');
+      video.muted = false;
+
+      title.textContent = button.dataset.title ?? 'Game trailer';
+      const poster = button.dataset.poster ?? '';
+      if (poster) video.poster = poster;
+      else video.removeAttribute('poster');
+
+      overlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+
+      const nativeHls = Boolean(video.canPlayType('application/vnd.apple.mpegurl'));
+      if (nativeHls) {
+        video.src = url;
+        tryPlay();
+        return;
+      }
+
+      const { default: Hls } = await import('hls.js');
+      // 动态 import 期间用户可能已经关掉弹窗，此时不要再创建实例拉流
+      if (!overlay.classList.contains('is-open')) return;
+
+      if (!Hls.isSupported()) {
+        video.src = url;
+        tryPlay();
+        return;
+      }
+
+      const instance = new Hls({ enableWorker: true });
+      hls = instance;
+      instance.loadSource(url);
+      instance.attachMedia(video);
+      instance.on(Hls.Events.MANIFEST_PARSED, () => tryPlay());
+      instance.on(Hls.Events.ERROR, (_event, data) => {
+        if (data.fatal) destroyHls();
+      });
+    }
+
+    document.addEventListener('click', (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      if (!target) return;
+      const trigger = target.closest<HTMLElement>('.js-trailer');
+      if (trigger) {
+        void open(trigger);
+        return;
+      }
+      if (overlay.classList.contains('is-open') && target.closest('[data-trailer-close]')) {
+        close();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && overlay.classList.contains('is-open')) close();
+    });
+
+    document.addEventListener('astro:page-load', () => {
+      if (overlay.classList.contains('is-open')) close();
+    });
+    window.addEventListener('pagehide', close);
   })();
 </script>

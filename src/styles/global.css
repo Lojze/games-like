@@ -1405,3 +1405,226 @@ a {
   color: var(--color-frost);
   outline: none;
 }
+
+/* ── Watch Trailer 按钮 ─────────────────────────────────────── */
+.trailer-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border: 1px solid rgba(167, 139, 250, 0.55);
+  border-radius: 9px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.14), rgba(167, 139, 250, 0.2));
+  color: #e9d5ff;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    transform 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.trailer-btn:hover,
+.trailer-btn:focus-visible {
+  transform: translateY(-2px);
+  color: #ffffff;
+  border-color: rgba(196, 181, 253, 0.92);
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.26), rgba(167, 139, 250, 0.32));
+  box-shadow: 0 6px 20px rgba(167, 139, 250, 0.24);
+  outline: none;
+}
+
+/* 卡片按钮区由 .gc__actions > * 等分，这里只补对齐 */
+.gc .trailer-btn {
+  align-self: stretch;
+}
+
+/* Hero 里的按钮做得更显眼 */
+.trailer-btn--hero {
+  padding: 12px 22px;
+  border-radius: 11px;
+  font-size: 0.9rem;
+}
+
+.hero__actions .hero__hint {
+  margin: 0;
+  align-self: center;
+}
+
+/* ── HLS 预告片弹窗 ────────────────────────────────────────── */
+.trailer-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.trailer-modal.is-open {
+  display: flex;
+}
+
+.trailer-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 8, 18, 0.93);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.trailer-modal__panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(960px, 94vw);
+  padding: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 16px;
+  background: #101a2d;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.7);
+}
+
+.trailer-modal__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.trailer-modal__title {
+  color: var(--color-frost);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.trailer-modal__close {
+  flex: 0 0 auto;
+  padding: 7px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  border-radius: 999px;
+  background: rgba(30, 41, 59, 0.86);
+  color: var(--color-frost);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.trailer-modal__close:hover,
+.trailer-modal__close:focus-visible {
+  background: rgba(56, 189, 248, 0.22);
+  border-color: rgba(125, 211, 252, 0.8);
+  outline: none;
+}
+
+.trailer-modal__video {
+  display: block;
+  width: 100%;
+  max-height: 72vh;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  background: #000;
+}
+
+/* ── 合规页面（About / Privacy / Cookie Policy） ─────────────── */
+.legal-hero {
+  margin-bottom: 8px;
+}
+
+.legal-hero .hero__title {
+  font-size: clamp(1.9rem, 4.5vw, 2.7rem);
+}
+
+.legal-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.legal-nav a {
+  padding: 7px 13px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 999px;
+  color: var(--color-mist);
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.legal-nav a:hover,
+.legal-nav a[aria-current='page'] {
+  color: var(--color-frost);
+  border-color: rgba(125, 211, 252, 0.65);
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.seo-copy--legal + .seo-copy--legal {
+  margin-top: 22px;
+}
+
+.seo-copy ul {
+  margin: 0 0 26px;
+  padding-left: 20px;
+  color: #b9c7dc;
+  font-size: 0.9rem;
+  line-height: 1.78;
+}
+
+.seo-copy li {
+  margin-bottom: 8px;
+}
+
+.seo-copy strong {
+  color: var(--color-frost);
+}
+
+.legal-updated {
+  margin: 24px 0 0;
+  color: var(--color-dim);
+  font-size: 0.8rem;
+}
+
+/* 页脚合规链接 */
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.site-footer__links a {
+  color: var(--color-mist);
+  font-size: 0.82rem;
+  text-decoration: none;
+}
+
+.site-footer__links a:hover {
+  color: var(--color-neon);
+  text-decoration: underline;
+}
+
+.site-footer__links span {
+  color: var(--color-dim);
+}
+
+@media (max-width: 680px) {
+  .trailer-modal {
+    padding: 10px;
+  }
+  .trailer-modal__panel {
+    padding: 12px;
+  }
+}

@@ -5,6 +5,10 @@
  * games.json 的字段白名单（其余字段一律不写入）：
  *   slug, name, background_image, description, metacritic, rating, tags, steam_url,
  *   released, genres
+ * 【无损合并】screenshots / movies 由管道后续的 fetch-screenshots.ts 写入，
+ * background_image 也会被它换成国内可直连的 Steam CDN 封面。本脚本重建
+ * games.json 时若直接覆盖会把这些增强数据全部洗掉，因此写盘前会以 slug 为键
+ * 从旧文件把它们合并回来（见 mergePreservedMedia）。
  * 其中 steam_url 是从 stores 里提取出来的唯一商店字段；stores / developers /
  * publishers / platforms 以及内部使用的 RAWG id 都不落盘。
  * released / genres 是「纯展示字段」，只供 src/pages/games-like/[slug].astro 渲染
@@ -22,7 +26,7 @@
  *   对候选游戏再请求 /games/{id} 详情；详情仍无直链时才回退 /games/{id}/stores。
  * - 所有 HTTP 请求（列表分页 / 详情 / 商店 / 重试）之间统一保证 >= 200ms 间隔。
  */
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -96,6 +100,9 @@ interface GameRecord {
   released: string | null;
   /** 纯展示字段：只保留 genres[].name，不保存完整对象 */
   genres: string[];
+  /** 以下两项由 fetch-screenshots.ts 写入，本脚本不生成，只做无损继承 */
+  screenshots?: unknown[];
+  movies?: unknown[];
 }
 
 interface HttpFailure extends Error {
@@ -226,6 +233,86 @@ function releaseDate(value: string | null | undefined): string | null {
   return trimmed ? trimmed : null;
 }
 
+interface MergeReport {
+  oldCount: number;
+  matched: number;
+  restored: { screenshots: number; movies: number; cover: number };
+}
+
+/**
+ * 【无损合并】RAWG 只提供基础字段，screenshots / movies / Steam CDN 封面都是
+ * 后续 fetch-screenshots.ts 写入的增强数据。重建 games.json 时以 slug 为键，
+ * 把旧文件里已有的这些字段合并回新数据，避免一次月度刷新把图片和视频洗掉。
+ *
+ * 规则：
+ * - screenshots / movies：旧值是非空数组、且新数据缺失或为空时才继承；
+ *   新数据自己带了值就一律以新数据为准，不覆盖。
+ * - background_image：只在旧值是 Steam CDN（*.steamstatic.com）而新值不是时
+ *   继承，避免把上一轮刚换好的国内可直连封面打回 media.rawg.io。
+ * - 旧文件不存在 / 解析失败 / 结构异常时不阻断本次抓取，只打印告警。
+ */
+async function mergePreservedMedia(outputPath: string, fresh: GameRecord[]): Promise<MergeReport> {
+  const report: MergeReport = {
+    oldCount: 0,
+    matched: 0,
+    restored: { screenshots: 0, movies: 0, cover: 0 },
+  };
+
+  let previous: unknown;
+  try {
+    previous = JSON.parse(await readFile(outputPath, 'utf8'));
+  } catch (err) {
+    console.warn(`  ! 读不到旧 games.json，跳过无损合并（首次抓取属正常情况）：${message(err)}`);
+    return report;
+  }
+  if (!Array.isArray(previous)) {
+    console.warn('  ! 旧 games.json 不是数组，跳过无损合并');
+    return report;
+  }
+  report.oldCount = previous.length;
+
+  const oldBySlug = new Map<string, Record<string, unknown>>();
+  for (const entry of previous) {
+    if (typeof entry === 'object' && entry !== null && !Array.isArray(entry)) {
+      const record = entry as Record<string, unknown>;
+      if (typeof record.slug === 'string') oldBySlug.set(record.slug, record);
+    }
+  }
+
+  for (const game of fresh) {
+    const old = oldBySlug.get(game.slug);
+    if (!old) continue;
+    report.matched++;
+
+    const oldShots = old.screenshots;
+    if (
+      Array.isArray(oldShots) && oldShots.length > 0 &&
+      !(Array.isArray(game.screenshots) && game.screenshots.length > 0)
+    ) {
+      game.screenshots = oldShots;
+      report.restored.screenshots++;
+    }
+
+    const oldMovies = old.movies;
+    if (
+      Array.isArray(oldMovies) && oldMovies.length > 0 &&
+      !(Array.isArray(game.movies) && game.movies.length > 0)
+    ) {
+      game.movies = oldMovies;
+      report.restored.movies++;
+    }
+
+    const oldCover = old.background_image;
+    const isSteam = (value: unknown): boolean =>
+      typeof value === 'string' && /(^|\.)steamstatic\.com/i.test(value);
+    if (isSteam(oldCover) && !isSteam(game.background_image)) {
+      game.background_image = oldCover as string;
+      report.restored.cover++;
+    }
+  }
+  return report;
+}
+
 async function main(): Promise<void> {
   const games: GameRecord[] = [];
   const seen = new Set<number>();
@@ -320,10 +407,16 @@ async function main(): Promise<void> {
   }
 
   const outputPath = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'data', 'games.json');
+  // 写盘前先做无损合并：把旧文件里的媒体增强字段接回新拉取的条目。
+  const merge = await mergePreservedMedia(outputPath, games);
   await mkdir(dirname(outputPath), { recursive: true });
   await writeFile(outputPath, `${JSON.stringify(games, null, 2)}\n`, 'utf8');
 
   console.log(`\n完成：写入 ${games.length} 个游戏 -> ${outputPath}`);
+  console.log(
+    `无损合并：旧文件 ${merge.oldCount} 条 | slug 命中 ${merge.matched} 条 | ` +
+      `继承 screenshots ${merge.restored.screenshots} / movies ${merge.restored.movies} / Steam 封面 ${merge.restored.cover}`,
+  );
   console.log(
     `扫描 ${pages} 页 / ${scanned} 个候选；跳过：非 Steam ${skipped.noSteam}，无可用直链 ${skipped.noUrl}，` +
       `描述不足 ${MIN_DESCRIPTION_LENGTH} 字 ${skipped.shortDescription}，无 tags ${skipped.noTags}，请求失败 ${skipped.failed}`,

@@ -1,0 +1,90 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+
+const lastUpdated = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+}).format(new Date());
+---
+
+<SiteLayout
+  title="Cookie Policy | Games by Feel"
+  description="Cookie policy for Games by Feel: this static site sets no cookies of its own, and explains which third parties may set them when you follow outbound links or play a trailer."
+  narrow
+>
+  <a class="back-link" href="/">← Back to home</a>
+
+  <section class="hero legal-hero">
+    <div class="hero__body">
+      <div class="hero__copy">
+        <p class="eyebrow">Cookie Policy</p>
+        <h1 class="hero__title">No cookies of our own.</h1>
+        <p class="hero__lead">
+          Games by Feel is served as pre-built static HTML. We do not set cookies, run an
+          analytics or advertising script, or keep a session for you. Here is what that means
+          in practice, and where third-party cookies can still appear.
+        </p>
+        <nav class="legal-nav" aria-label="Site information">
+          <a href="/about/">About</a>
+          <a href="/privacy/">Privacy</a>
+          <a href="/cookies/" aria-current="page">Cookie Policy</a>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <section class="seo-copy seo-copy--legal" aria-label="First-party cookies">
+    <div class="seo-copy__inner">
+      <h2 class="seo-copy__title">Cookies we set</h2>
+      <p>
+        <strong>None.</strong> There is no consent banner on this site because there is nothing
+        to consent to: no login session, no shopping cart, no "remember me" preference, no
+        advertising identifier and no tracking pixel.
+      </p>
+      <p>
+        On-page features such as sorting, filtering and pagination are plain browser-side
+        interactions. They hold their state only in the current page's DOM and are discarded
+        as soon as you leave or reload — nothing is written to cookies, local storage or
+        session storage.
+      </p>
+
+      <h2 class="seo-copy__title">Third-party cookies</h2>
+      <p>
+        Cookies can still be set by services you reach from this site. We do not control these
+        and they only come into play when you interact with them:
+      </p>
+      <ul>
+        <li>
+          <strong>Game stores and bundles</strong> — following a Steam, Humble Bundle / Impact
+          or other retailer link takes you to that retailer's site, which may set cookies for
+          sessions, preferences and affiliate attribution. See our
+          <a href="/privacy/">Privacy Policy</a> for the affiliate disclosure.
+        </li>
+        <li>
+          <strong>Steam media CDN</strong> — covers, screenshots and trailers load from
+          <code>steamstatic.com</code>; playing a trailer requests video segments from that CDN.
+        </li>
+        <li>
+          <strong>Share buttons</strong> — the X and Reddit buttons open those sites in a new
+          window. Their own cookie policies apply once you are there.
+        </li>
+        <li>
+          <strong>Hosting</strong> — Cloudflare Pages delivers the site and may use technical
+          cookies for security and performance, as described in
+          <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">Cloudflare's privacy policy</a>.
+        </li>
+      </ul>
+
+      <h2 class="seo-copy__title">Managing cookies</h2>
+      <p>
+        You can block or delete third-party cookies in your browser settings, and most browsers
+        let you do this for a specific site. Because this site's own functionality does not
+        depend on cookies, blocking them will not break browsing, sorting or the recommendation
+        lists. Trailer playback and outbound retailer sites may behave differently under strict
+        cookie blocking — that behaviour belongs to those services, not to us.
+      </p>
+    </div>
+  </section>
+
+  <p class="legal-updated">Last updated {lastUpdated}.</p>
+</SiteLayout>
