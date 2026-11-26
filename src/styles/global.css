@@ -561,6 +561,53 @@ a {
   color: #93c5fd;
 }
 
+/* 首页 Feel × Genre 入口：inline 流式 chip，名称与计数同一行、同一基线 */
+.cross-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cross-links > li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(30, 41, 59, 0.72);
+}
+
+.cross-links > li > a {
+  color: #cbd5e1;
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: normal;
+}
+
+.cross-links > li > a:hover {
+  color: #ffffff;
+}
+
+.cross-links__count {
+  color: #9ca3af;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+@media (max-width: 767px) {
+  .cross-links {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
 /* 标签聚合页：当前所在标签高亮 */
 .pill--active {
   color: #ffffff;
