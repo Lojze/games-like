@@ -27,6 +27,8 @@ import {
 } from '../../config/cross-pages';
 import { buildMetaBadges, type MetaBadge } from '../../utils/tag-translator';
 import { pickFeelTags } from '../../utils/feel-tags';
+import { crossReasons } from '../../data/cross-reasons';
+import { crossExclusions } from '../../data/cross-exclusions';
 
 interface GameScreenshot {
   path_thumbnail: string;
@@ -50,6 +52,8 @@ interface CrossCard {
   feels: string[];
   href: string;
   external: boolean;
+  reason?: string;
+  sourceName: string;
 }
 
 /**
@@ -68,6 +72,17 @@ export async function getStaticPaths() {
 
   const scoreOf = (metacritic: unknown): number =>
     typeof metacritic === 'number' ? metacritic : -1;
+
+  const ratingOf = (rating: unknown): number =>
+    typeof rating === 'number' ? rating : -1;
+
+  /** 目标 genre 在 genres 数组中的下标（0 起）；不含则 Infinity。 */
+  const genreRankOf = (genres: unknown, genre: string): number => {
+    const values = asStringArray(genres);
+    const needle = genre.trim().toLowerCase();
+    const index = values.findIndex((value) => value.toLowerCase() === needle);
+    return index >= 0 ? index : Number.POSITIVE_INFINITY;
+  };
 
   const { readFileSync } = await import('node:fs');
   const { resolve } = await import('node:path');
@@ -95,20 +110,33 @@ export async function getStaticPaths() {
   const pageSlugs = new Set(Object.keys(matches));
 
   return [...CROSS_BY_SLUG].map(([, config]) => {
+    const pageKey = `${config.feelWord}-${config.genre.toLowerCase()}`;
+    const excluded = new Set(crossExclusions[pageKey] ?? []);
+    const reasons = crossReasons[pageKey] ?? {};
+
     const cards: CrossCard[] = Object.entries(feelTags)
-      // 严格交集：同时含 feel 标签与 genre，与摸底脚本同口径
+      // 严格交集：同时含 feel 标签与 genre，与摸底脚本同口径（筛选条件不动）
       .filter(
         ([gameSlug, tags]) =>
           asStringArray(tags).includes(config.feelTag) &&
           gameBySlug.has(gameSlug) &&
           asStringArray(gameBySlug.get(gameSlug)!.genres).includes(config.genre),
       )
+      // 最小剔除：只影响交叉页渲染，不写回 games.json（Florence 等一律保留）
+      .filter(([gameSlug]) => !excluded.has(gameSlug))
       .map(([gameSlug]) => gameBySlug.get(gameSlug)!)
-      .sort(
-        (a, b) =>
+      // 排序：genre 相关度优先（目标 genre 在 genres 里越靠前越相关），
+      // 其次 critic 评分、rating，最后 name 保证稳定排序。
+      .sort((a, b) => {
+        const rankA = genreRankOf(a.genres, config.genre);
+        const rankB = genreRankOf(b.genres, config.genre);
+        if (rankA !== rankB) return rankA - rankB;
+        return (
           scoreOf(b.metacritic) - scoreOf(a.metacritic) ||
-          a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }),
-      )
+          ratingOf(b.rating) - ratingOf(a.rating) ||
+          a.name.localeCompare(b.name, 'en', { sensitivity: 'base' })
+        );
+      })
       .map((game): CrossCard => {
         const external = !pageSlugs.has(game.slug);
         const steam = game.steam_url && game.steam_url !== '#' ? game.steam_url : 'https://rawg.io';
@@ -121,16 +149,28 @@ export async function getStaticPaths() {
           screenshots: Array.isArray(game.screenshots) ? game.screenshots : [],
           movies: Array.isArray(game.movies) ? game.movies : [],
           feels: pickFeelTags(feelTags[game.slug]),
-          badges: buildMetaBadges({
-            metacritic: typeof game.metacritic === 'number' ? game.metacritic : null,
-            rating: typeof game.rating === 'number' ? game.rating : null,
-            released: typeof game.released === 'string' ? game.released : null,
-            genres: asStringArray(game.genres),
-          }),
+          badges: buildMetaBadges(
+            {
+              metacritic: typeof game.metacritic === 'number' ? game.metacritic : null,
+              rating: typeof game.rating === 'number' ? game.rating : null,
+              released: typeof game.released === 'string' ? game.released : null,
+              genres: asStringArray(game.genres),
+            },
+            config.genre,
+            game.slug,
+          ),
           href: external ? steam : `/games-like/${game.slug}/`,
           external,
+          reason: reasons[game.slug],
+          sourceName: `${config.feelWord.replace(/\b\w/g, (c) => c.toUpperCase())} × ${config.genre}`,
         };
       });
+
+    if (cards.length < 8) {
+      console.warn(
+        `[cross-exclusions] page "${pageKey}" has only ${cards.length} games after exclusions — needs manual review`,
+      );
+    }
 
     // 同 feel 的其他交叉页（用于页内横向导航，强化内链网络）
     const siblings = crossPagesForFeel(config.feelTag)
@@ -219,6 +259,8 @@ const feelLabel = config.feelWord.replace(/\b\w/g, (c) => c.toUpperCase());
               feelTags={card.feels}
               href={card.href}
               hrefExternal={card.external}
+              reason={card.reason}
+              sourceName={card.sourceName}
               compact
             />
           </li>

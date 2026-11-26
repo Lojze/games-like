@@ -203,11 +203,39 @@ function formatYear(released: string | null): string {
   return /^\d{4}$/.test(year) ? `${year} 年` : '未知年份';
 }
 
-function formatGenres(genres: readonly string[]): string {
-  const picked = genres
+/**
+ * 品类徽章文案。
+ *
+ * targetGenre 缺省时保持历史行为不变（trim → filter → slice(0,2) → 原顺序），
+ * 首页 / 标签页 / 详情页都不传这个参数，输出与改动前逐字节一致。
+ *
+ * 交叉页会传入当前页的品类：若该品类在 genres 中，把它前置到第 1 位
+ * （其余元素保持原相对顺序）再取前两位，避免「标题写 Puzzle、卡片却只显示
+ * 前两位 genres」的自我矛盾；比较时大小写与首尾空格归一化，显示仍用原始拼写。
+ * 若目标品类不在列表里，保持原逻辑并 warn，绝不伪造或补数据。
+ */
+function formatGenres(genres: readonly string[], targetGenre?: string, slug?: string): string {
+  const cleaned = genres
     .map((genre) => genre?.trim())
-    .filter((genre): genre is string => Boolean(genre))
-    .slice(0, 2);
+    .filter((genre): genre is string => Boolean(genre));
+
+  if (targetGenre === undefined) {
+    const picked = cleaned.slice(0, 2);
+    return picked.length > 0 ? picked.join(', ') : '未知类型';
+  }
+
+  const needle = targetGenre.trim().toLowerCase();
+  const index = cleaned.findIndex((genre) => genre.toLowerCase() === needle);
+  if (index >= 0) {
+    const reordered = [cleaned[index], ...cleaned.filter((_, i) => i !== index)];
+    const picked = reordered.slice(0, 2);
+    return picked.length > 0 ? picked.join(', ') : '未知类型';
+  }
+
+  console.warn(
+    `[cross-genre] target genre "${targetGenre}" not in genres for slug="${slug ?? '(unknown)'}": ${JSON.stringify(genres)}`,
+  );
+  const picked = cleaned.slice(0, 2);
   return picked.length > 0 ? picked.join(', ') : '未知类型';
 }
 
@@ -225,10 +253,10 @@ export interface MetaBadge {
  * 缺失字段仍走「暂无评分 / 未知年份 / 未知类型」兜底，
  * 文案长度差异由 CSS 的 nowrap 处理，不会破坏卡片对齐。
  */
-export function buildMetaBadges(meta: GameMeta): MetaBadge[] {
+export function buildMetaBadges(meta: GameMeta, targetGenre?: string, slug?: string): MetaBadge[] {
   return [
     { text: formatScore(meta), tone: 'score' },
     { text: formatYear(meta.released), tone: 'year' },
-    { text: formatGenres(meta.genres), tone: 'genre' },
+    { text: formatGenres(meta.genres, targetGenre, slug), tone: 'genre' },
   ];
 }
