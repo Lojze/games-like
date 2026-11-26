@@ -95,6 +95,20 @@ export const CROSS_PAGES: readonly CrossPageConfig[] = [
   },
 ];
 
+/**
+ * 首页固定展示的 6 个交叉页入口（本期不做轮换）。
+ * 只存 slug：标题、URL、命中数一律由 CROSS_BY_SLUG 与运行时数据派生，
+ * 避免首页再维护一份可能与交叉页失同步的硬编码列表。
+ */
+export const homeFeaturedCross = [
+  'cozy-puzzle',
+  'cozy-simulation',
+  'atmospheric-shooter',
+  'hard-puzzle',
+  'atmospheric-strategy',
+  'cozy-platformer',
+] as const;
+
 /** 供交叉页按 params 反查配置：key 为 `${feelWord}-${genre.toLowerCase()}` */
 export const CROSS_BY_SLUG: ReadonlyMap<string, CrossPageConfig> = new Map(
   CROSS_PAGES.map((config) => [

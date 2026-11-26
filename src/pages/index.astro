@@ -5,6 +5,13 @@ import { FEEL_WHITELIST } from '../../config/feel-whitelist';
 import { TRENDING_FEELS } from '../../config/trending-feels';
 import { buildMetaBadges, type MetaBadge } from '../utils/tag-translator';
 import { pickFeelTags } from '../utils/feel-tags';
+import {
+  CROSS_BY_SLUG,
+  crossHref,
+  homeFeaturedCross,
+  type CrossPageConfig,
+} from '../config/cross-pages';
+import { crossExclusions } from '../data/cross-exclusions';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
@@ -162,6 +169,32 @@ const gameIndex = [...pageSlugs]
   .sort((a, b) => a.name.localeCompare(b.name));
 const fallbackSlug = popular[0]?.slug ?? 'hades-2018';
 
+/**
+ * 首页固定交叉页入口：标题 / URL 取自交叉页配置（source of truth），
+ * 命中数按交叉页同一套 feel ∩ genres 过滤并计入 crossExclusions，
+ * 保证与对应页面实际展示的卡片数一致；配置缺失则跳过，不产生空链接。
+ */
+interface FeaturedCross {
+  href: string;
+  h1: string;
+  count: number;
+}
+const featuredCross: FeaturedCross[] = homeFeaturedCross
+  .map((slug) => CROSS_BY_SLUG.get(slug))
+  .filter((config): config is CrossPageConfig => Boolean(config))
+  .map((config) => {
+    const pageKey = `${config.feelWord}-${config.genre.toLowerCase()}`;
+    const excluded = new Set(crossExclusions[pageKey] ?? []);
+    const count = Object.entries(feelTags).filter(
+      ([gameSlug, tags]) =>
+        asStringArray(tags).includes(config.feelTag) &&
+        gameBySlug.has(gameSlug) &&
+        asStringArray(gameBySlug.get(gameSlug)!.genres).includes(config.genre) &&
+        !excluded.has(gameSlug),
+    ).length;
+    return { href: crossHref(config), h1: config.h1, count };
+  });
+
 ---
 
 <SiteLayout>
@@ -247,6 +280,21 @@ const fallbackSlug = popular[0]?.slug ?? 'hades-2018';
         ))
       }
     </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section__title">Browse by feel and genre</h2>
+    <p class="section__note">Narrow a mood down to a way of playing.</p>
+    <ul class="game-grid">
+      {
+        featuredCross.map((item) => (
+          <li>
+            <a class="pill" href={item.href}>{item.h1}</a>
+            <span class="pill__count">{item.count} games</span>
+          </li>
+        ))
+      }
+    </ul>
   </section>
 </SiteLayout>
 
