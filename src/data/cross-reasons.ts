@@ -31,7 +31,7 @@ export const crossReasons: Record<string, Record<string, string>> = {
     'labyrinth-2':
       'A bright square has to reach a transparent exit through grids that grow from ten by ten upward. The mazes escalate in complexity, but there is no countdown and no penalty for a wrong turn. Tracing a route at your own pace gives this one a calm, almost meditative pull.',
     'grindstone-2':
-      'Matches are made by connecting runs of identical creeps before a turn ends, turning each board into a small tactical tidy-up. The pace is turn-based, so you can study the grid without pressure. Upgrading gear between climbs adds a slow, steady sense of progress beneath the puzzle work.',
+      'You trace paths through runs of identical creeps to cut huge combos, then spend the grindstones you earn on new gear for the climb. Enemies turn hostile the longer you linger, so each board asks for a quick read of the colour layout. The growing arsenal gives the puzzle battles a steady sense of progress.',
     'the-witness':
       'You draw a single continuous line across a panel to satisfy a set of visual rules, one puzzle at a time. Nothing times you and nothing punishes a wrong attempt; you simply lift and try again. Wandering the island between panels keeps the whole experience unhurried and reflective.',
     florence:
@@ -79,7 +79,7 @@ export const crossReasons: Record<string, Record<string, string>> = {
     'stardew-valley':
       'Stardew Valley gives you a farm, a village and a flexible daily routine of planting, fishing and talking to neighbours. Nothing forces you to optimise, and seasons pass slowly. Its pixel-art charm and gentle music turn routine chores into a comforting habit.',
     'overcooked-all-you-can-eat':
-      'Overcooked asks you to chop, cook and pass dishes across increasingly inventive kitchens. The all-you-can-eat set lets you revisit stages until a layout clicks, so practice replaces pressure. Bright, toy-like kitchens keep the chaos good-natured rather than grim, and you can always try a shorter order again.',
+      'Overcooked asks you to chop, cook and pass dishes across increasingly inventive kitchens, each built around a tight service window. The all-you-can-eat set lets you revisit stages until a layout clicks, so a rough first try is not the end of it. Bright, toy-like kitchens keep the chaos good-natured rather than grim, and the hand-offs make a crowded counter feel like a shared joke.',
     'the-sims-3':
       'You build a household and watch small simulated lives unfold, from careers to awkward neighbourhood parties. There is no win condition pulling you along. The freedom to decorate and simply observe gives the game a relaxed, dollhouse kind of calm.',
     'dirt-rally':
@@ -87,7 +87,7 @@ export const crossReasons: Record<string, Record<string, string>> = {
     'game-dev-story':
       'You run a tiny games studio, hiring staff and choosing genres while your releases climb the charts. Progress happens in gentle, readable steps with no live pressure. The playful screenshots and steady growth loop give the management a cosy, hobbyist charm.',
     'turbo-dismount':
-      'Turbo Dismount stages elaborate crashes and then lets you replay them from any angle with a slow-motion camera. There is no score chase, just experiments with vehicles and physics. The dry, slapstick tone keeps the destruction oddly relaxing to watch.',
+      'Turbo Dismount stages elaborate crashes and then lets you replay them from any angle with a slow-motion camera. The appeal is less about a high score than about experiments with vehicles and physics. The dry, slapstick tone keeps the destruction oddly relaxing to watch.',
     'cities-skylines':
       'You zone a blank map into a working city, laying roads and watching neighbourhoods grow around your choices. Problems appear gradually and can be solved at your own pace. The satisfying part is the slow, visible hum of a place you built yourself.',
     '80-days':
@@ -171,7 +171,7 @@ export const crossReasons: Record<string, Record<string, string>> = {
     'portal-2':
       "Portal 2's atmosphere is built from vast, sterile test chambers and the dry echo of a machine left empty far too long. Aperture's clean white corridors slowly reveal decay underneath. The mood comes from the place, not just from the puzzles.",
     'call-of-duty':
-      'Call of Duty opens with a shipboard assault where smoke, shouted orders and rocking decks do as much work as your rifle. The cinematic staging gives each mission a distinct, heavy mood. Its atmosphere lives in those carefully framed opening minutes.',
+      'Call of Duty moves from the Camp Toccoa training grounds to airborne drops over Normandy and on into Berlin, with three armies carrying the campaign. Briefings and slideshows set up each mission, and the WWII staging leans on squad chatter and smoke. Its atmosphere lives in that careful build to each battle.',
     'fallout-3':
       'Fallout 3 asks you to cross a sun-bleached Capital Wasteland of ruined suburbs and dust storms, an old radio playing softly as you go. The silences between encounters are as memorable as the fights. Its desolation is the reason to keep exploring.',
     'return-to-castle-wolfenstein':
