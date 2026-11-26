@@ -1,0 +1,274 @@
+---
+/**
+ * 感受 × 品类交叉长尾页（8 个经人工复核的组合）。
+ *
+ * URL 语序：/feels/{feelWord}-{genre}/，例如 /feels/cozy-puzzle/，
+ * H1 为自然搜索语序 "Cozy Puzzle Games"。文件名用 [feel]-[genre] 而不是
+ * [genre]-[feel]，是为了让 Astro 的两个 params 与 URL 两段语义一致。
+ *
+ * 数据口径：严格取 feel-tags.json 含 feelTag 且 games.json 的 genres
+ * 含该 genre 的游戏 —— 与第一阶段摸底脚本完全相同的交集口径。
+ * 注意 hard 页面在数据侧筛的是 difficult（见 config/cross-pages.ts）。
+ *
+ * 防门页设计：
+ *   - 每页一段 100-150 词专属英文导语（config 的 intro），非模板拼接；
+ *   - 复用全站唯一的 GameCard，保留封面 / 截图 / Why it fits / 评分标签；
+ *   - 底部回链到全量单标签页，单标签页也有 Top Genres 反向指向这里，
+ *     形成双向内链网络而不是孤立页面。
+ */
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import GameCard from '../../components/GameCard.astro';
+import {
+  CROSS_BY_SLUG,
+  crossPagesForFeel,
+  crossHref,
+  crossLabel,
+  type CrossPageConfig,
+} from '../../config/cross-pages';
+import { buildMetaBadges, type MetaBadge } from '../../utils/tag-translator';
+import { pickFeelTags } from '../../utils/feel-tags';
+
+interface GameScreenshot {
+  path_thumbnail: string;
+  path_full: string;
+}
+
+interface GameMovie {
+  hlsUrl: string;
+  thumbnail: string;
+}
+
+interface CrossCard {
+  slug: string;
+  name: string;
+  cover: string | null;
+  hue: number;
+  badges: MetaBadge[];
+  screenshots: GameScreenshot[];
+  movies: GameMovie[];
+  steamUrl: string;
+  feels: string[];
+  href: string;
+  external: boolean;
+}
+
+/**
+ * getStaticPaths 在独立 chunk 里执行，数据读取与构建逻辑必须自包含。
+ * SiteLayout / GameCard / cross-pages / tag-translator / feel-tags 走静态 import。
+ */
+export async function getStaticPaths() {
+  const asStringArray = (value: unknown): string[] =>
+    Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+
+  const hueOf = (slug: string): number => {
+    let hash = 0;
+    for (let i = 0; i < slug.length; i++) hash = (hash * 31 + slug.charCodeAt(i)) >>> 0;
+    return hash % 360;
+  };
+
+  const scoreOf = (metacritic: unknown): number =>
+    typeof metacritic === 'number' ? metacritic : -1;
+
+  const { readFileSync } = await import('node:fs');
+  const { resolve } = await import('node:path');
+  const dataDir = resolve(process.cwd(), 'data');
+  const games = JSON.parse(readFileSync(resolve(dataDir, 'games.json'), 'utf8')) as Array<{
+    slug: string;
+    name: string;
+    background_image: string | null;
+    metacritic: number | null;
+    rating: number | null;
+    released: string | null;
+    genres: string[];
+    steam_url: string;
+    screenshots: GameScreenshot[];
+    movies: GameMovie[];
+  }>;
+  const feelTags = JSON.parse(
+    readFileSync(resolve(dataDir, 'feel-tags.json'), 'utf8'),
+  ) as Record<string, string[]>;
+  const matches = JSON.parse(
+    readFileSync(resolve(dataDir, 'matches.json'), 'utf8'),
+  ) as Record<string, unknown[]>;
+
+  const gameBySlug = new Map(games.map((game) => [game.slug, game]));
+  const pageSlugs = new Set(Object.keys(matches));
+
+  return [...CROSS_BY_SLUG].map(([, config]) => {
+    const cards: CrossCard[] = Object.entries(feelTags)
+      // 严格交集：同时含 feel 标签与 genre，与摸底脚本同口径
+      .filter(
+        ([gameSlug, tags]) =>
+          asStringArray(tags).includes(config.feelTag) &&
+          gameBySlug.has(gameSlug) &&
+          asStringArray(gameBySlug.get(gameSlug)!.genres).includes(config.genre),
+      )
+      .map(([gameSlug]) => gameBySlug.get(gameSlug)!)
+      .sort(
+        (a, b) =>
+          scoreOf(b.metacritic) - scoreOf(a.metacritic) ||
+          a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }),
+      )
+      .map((game): CrossCard => {
+        const external = !pageSlugs.has(game.slug);
+        const steam = game.steam_url && game.steam_url !== '#' ? game.steam_url : 'https://rawg.io';
+        return {
+          slug: game.slug,
+          name: game.name,
+          cover: game.background_image || null,
+          hue: hueOf(game.slug),
+          steamUrl: steam,
+          screenshots: Array.isArray(game.screenshots) ? game.screenshots : [],
+          movies: Array.isArray(game.movies) ? game.movies : [],
+          feels: pickFeelTags(feelTags[game.slug]),
+          badges: buildMetaBadges({
+            metacritic: typeof game.metacritic === 'number' ? game.metacritic : null,
+            rating: typeof game.rating === 'number' ? game.rating : null,
+            released: typeof game.released === 'string' ? game.released : null,
+            genres: asStringArray(game.genres),
+          }),
+          href: external ? steam : `/games-like/${game.slug}/`,
+          external,
+        };
+      });
+
+    // 同 feel 的其他交叉页（用于页内横向导航，强化内链网络）
+    const siblings = crossPagesForFeel(config.feelTag)
+      .filter((c) => c.genre !== config.genre)
+      .map((c) => ({ href: crossHref(c), label: crossLabel(c) }));
+
+    return {
+      params: { feel: config.feelWord, genre: config.genre.toLowerCase() },
+      props: { config, cards, siblings, total: games.length },
+    };
+  });
+}
+
+const { config, cards, siblings, total } = Astro.props as {
+  config: CrossPageConfig;
+  cards: CrossCard[];
+  siblings: { href: string; label: string }[];
+  total: number;
+};
+
+const seoTitle = `${config.h1} | Games by Feel`;
+const description = `${config.intro.slice(0, 155).replace(/\s+\S*$/, '')}…`;
+
+// ItemList 结构化数据：列出本交叉页全部游戏（含完整 URL），利于抓取与 GEO
+const siteBase = Astro.site ?? Astro.url;
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: config.h1,
+  description,
+  numberOfItems: cards.length,
+  itemListElement: cards.map((card, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: card.name,
+    url: new URL(card.href, siteBase).href,
+  })),
+};
+const itemListJson = JSON.stringify(itemListSchema).replace(/</g, '\\u003c');
+
+const feelLabel = config.feelWord.replace(/\b\w/g, (c) => c.toUpperCase());
+---
+
+<SiteLayout title={seoTitle} description={description} ogTitle={seoTitle}>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={itemListJson} />
+  </Fragment>
+
+  <a class="back-link" href={`/tags/${config.feelTag}`}>← All {feelLabel} games</a>
+
+  <section class="hero">
+    <div class="hero__copy">
+      <p class="eyebrow">Feel × Genre</p>
+      <h1 class="hero__title">{config.h1}</h1>
+      <p class="hero__lead">{config.intro}</p>
+      <div class="feel-strip">
+        <span class="feel-strip__label">This list</span>
+        <span class="chip">{feelLabel}</span>
+        <span class="chip">{config.genre}</span>
+        <span class="chip">{cards.length} games</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="section__head">
+    <h2 class="section__title">{cards.length} {cards.length === 1 ? 'game' : 'games'}</h2>
+    <span class="section__note">
+      Tagged {config.feelWord} · {config.genre} genre · out of {total} games · critic score order
+    </span>
+  </div>
+
+  {
+    cards.length > 0 ? (
+      <ul class="game-grid game-grid--tag">
+        {cards.map((card) => (
+          <li class="tag-card">
+            <GameCard
+              name={card.name}
+              slug={card.slug}
+              cover={card.cover}
+              hue={card.hue}
+              badges={card.badges}
+              screenshots={card.screenshots}
+              movies={card.movies}
+              steamUrl={card.steamUrl}
+              feelTags={card.feels}
+              href={card.href}
+              hrefExternal={card.external}
+              compact
+            />
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div class="empty-state">
+        <span class="empty-state__mark" aria-hidden="true">◇</span>
+        <p class="empty-state__title">No games found for this combination yet.</p>
+        <p class="empty-state__hint">
+          Our catalog is always growing. In the meantime, browse the full {feelLabel} list instead.
+        </p>
+        <a class="btn-primary" href={`/tags/${config.feelTag}`}>All {feelLabel} games</a>
+      </div>
+    )
+  }
+
+  {
+    siblings.length > 0 && (
+      <section class="seo-copy" aria-label={`More ${feelLabel} games by genre`}>
+        <div class="seo-copy__inner">
+          <h2 class="seo-copy__title">More {feelLabel} games by genre</h2>
+          <p>
+            This page covers {feelLabel} games in the {config.genre} genre. Explore the same feel
+            in other genres:{' '}
+            {siblings.map((s, i) => (
+              <Fragment>
+                {i > 0 && ' · '}
+                <a href={s.href}>{s.label}</a>
+              </Fragment>
+            ))}
+            .
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="seo-copy" aria-label={`About ${config.h1}`}>
+    <div class="seo-copy__inner">
+      <h2 class="seo-copy__title">About this list</h2>
+      <p>
+        Every game above carries the {config.feelWord} feel tag and the {config.genre} genre label
+        in our {total}-game catalog. We group games by how they play and feel rather than by a
+        single checkbox, so this page is a narrow slice of the wider {feelLabel} collection.
+      </p>
+      <p>
+        Looking for all {config.feelWord} games regardless of genre?{' '}
+        <a href={`/tags/${config.feelTag}`}>View the full {feelLabel} list.</a>
+      </p>
+    </div>
+  </section>
+</SiteLayout>

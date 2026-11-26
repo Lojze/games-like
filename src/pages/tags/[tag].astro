@@ -4,6 +4,7 @@ import GameCard from '../../components/GameCard.astro';
 import { FEEL_WHITELIST } from '../../../config/feel-whitelist';
 import { buildMetaBadges, type MetaBadge } from '../../utils/tag-translator';
 import { pickFeelTags } from '../../utils/feel-tags';
+import { crossPagesForFeel, crossHref, crossLabel } from '../../config/cross-pages';
 
 interface GameScreenshot {
   path_thumbnail: string;
@@ -157,6 +158,18 @@ export async function getStaticPaths() {
         };
       });
 
+    // Top Genres：本 feel 下已建好的交叉页，供单标签页反向导流
+    const crossLinks = crossPagesForFeel(tag).map((config) => ({
+      href: crossHref(config),
+      label: crossLabel(config),
+      hits: Object.entries(feelTags).filter(
+        ([gameSlug, tags]) =>
+          asStringArray(tags).includes(tag) &&
+          gameBySlug.has(gameSlug) &&
+          asStringArray(gameBySlug.get(gameSlug)!.genres).includes(config.genre),
+      ).length,
+    }));
+
     return {
       params: { tag },
       props: {
@@ -165,18 +178,20 @@ export async function getStaticPaths() {
         article,
         cards,
         pills,
+        crossLinks,
         total: games.length,
       },
     };
   });
 }
 
-const { tag, label, article, cards, pills, total } = Astro.props as {
+const { tag, label, article, cards, pills, crossLinks, total } = Astro.props as {
   tag: string;
   label: string;
   article: string;
   cards: TagCard[];
   pills: FeelPill[];
+  crossLinks: { href: string; label: string; hits: number }[];
   total: number;
 };
 
@@ -343,6 +358,28 @@ const itemListJson = JSON.stringify(itemListSchema).replace(/</g, '\\u003c');
       </p>
     </div>
   </section>
+
+  {
+    crossLinks.length > 0 && (
+      <section class="seo-copy" aria-label={`Top genres for ${label} games`}>
+        <div class="seo-copy__inner">
+          <h2 class="seo-copy__title">Top Genres</h2>
+          <p>
+            Prefer {humanTag} games in a particular genre? These narrower collections pair the
+            {label} feel with one genre:
+          </p>
+          <div class="pills">
+            {crossLinks.map((link) => (
+              <a class="pill" href={link.href}>
+                <span>{link.label}</span>
+                <span class="pill__count">{link.hits}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   <section class="section">
     <div class="section__head">
